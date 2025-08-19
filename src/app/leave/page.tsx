@@ -3,19 +3,17 @@ import { leave } from '@/apis/auth.api';
 import { REASON_CODES } from '@/constants/snackbar';
 import Button from '@/components/Button';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 import LeaveReasonDropdown from './LeaveReasonDropdown';
 import { useState } from 'react';
 import { LEAVE_REASON } from '@/constants/leaveReason';
 
 export default function Leave() {
-    const router = useRouter();
     const [selectedReason, setSelectedReason] = useState(0);
 
     const { mutate: leaveKakao } = useMutation({
         mutationFn: (reason: string) => leave({ provider: 'kakao', reason }),
         onSuccess: () => {
-            router.push(`/?reason=${REASON_CODES.LEAVE}`);
+            window.location.href = `/?reason=${REASON_CODES.LEAVE}`;
         },
         onError: error => {
             console.error('탈퇴 오류:', error);

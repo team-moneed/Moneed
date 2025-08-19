@@ -27,7 +27,8 @@ export async function GET(request: NextRequest) {
     const result = await kakaoAuthService.login({ code });
 
     if (result.success) {
-        return NextResponse.redirect(new URL('/', request.url));
+        const redirectUrl = result.data.isNewUser ? `/selectstocktype?url=${encodeURIComponent('/welcome')}` : '/';
+        return NextResponse.redirect(new URL(redirectUrl, request.url));
     } else {
         return NextResponse.redirect(new URL(`/auth/error?error=${result.error}`, request.url));
     }

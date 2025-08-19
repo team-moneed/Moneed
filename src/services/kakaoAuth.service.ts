@@ -42,6 +42,7 @@ export class KakaoAuthService {
             let payload: TokenPayload = {
                 userId: '',
                 nickname: '',
+                isNewUser: false,
             };
 
             if (existingUser.isExisting) {
@@ -57,6 +58,7 @@ export class KakaoAuthService {
                 payload = {
                     userId: user.id,
                     nickname: user.nickname,
+                    isNewUser: false,
                 };
             } else {
                 const user: Omit<RequiredUserInfo, 'nickname'> = {
@@ -80,6 +82,7 @@ export class KakaoAuthService {
                 payload = {
                     userId: newUser.id,
                     nickname: newUser.nickname,
+                    isNewUser: true,
                 };
             }
 
