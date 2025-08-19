@@ -1,5 +1,4 @@
-import axios from 'axios';
-import { httpWithCredentials } from './client';
+import { http, httpWithCredentials } from './client';
 
 type KakaoTokenParams = {
     code: string;
@@ -12,10 +11,7 @@ type KakaoTokenResponse = {
 };
 
 export const login = async ({ code, state, provider }: KakaoTokenParams) => {
-    const res = await axios.post<KakaoTokenResponse>(
-        `${process.env.NEXT_PUBLIC_MONEED_BASE_URL}/api/auth/${provider}/login`,
-        { code, state },
-    );
+    const res = await http.post<KakaoTokenResponse>(`/api/auth/${provider}/login`, { code, state });
     return res.data;
 };
 
