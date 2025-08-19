@@ -1,13 +1,13 @@
 import { UserRepository } from '@/repositories/user.repository';
 import { OAuthAccount, User } from '@/generated/prisma';
 import { deleteSession } from '@/lib/session';
-import { getKakaoToken, getKakaoUserInfo, leaveKakao, logoutKakao } from '@/apis/kakao.api';
+import { getKakaoToken, getKakaoUserInfo, leaveKakao } from '@/apis/kakao.api';
 import { ProviderRepository } from '@/repositories/provider.repository';
-import { AxiosError } from 'axios';
 import { RequiredUserInfo, UserInfo } from '@/types/user';
 import { NicknameService } from '@/services/nickname.service';
-import { ProviderInfo } from '@/types/auth';
+import { ProviderInfo, Providers } from '@/types/auth';
 import LeaveReasonRepository from '@/repositories/leaveReason.repository';
+import { ERROR_MSG } from '@/constants/errorMsg';
 
 // TODO: 추상화 (카카오 로그인 외 다른 로그인 추가 시 수정 필요)
 export class AuthService {
@@ -19,6 +19,11 @@ export class AuthService {
         this.userRepository = new UserRepository();
         this.providerRepository = new ProviderRepository();
         this.nicknameService = new NicknameService();
+    }
+
+    createDefaultProfileImage(): string {
+        const randomNumber = Math.floor(Math.random() * 15) + 1;
+        return `${process.env.NEXT_PUBLIC_MONEED_BASE_URL}/profile/profile-${randomNumber}.svg`;
     }
 
     async checkExistingUser({
@@ -90,28 +95,41 @@ export class AuthService {
         return this.userRepository.create(providerData, userWithNickname);
     }
 
-    async logoutWithKakao(userId: string) {
-        try {
-            const providerInfo = await this.providerRepository.findProviderInfo(userId, 'kakao');
-            if (!providerInfo) {
-                await deleteSession();
-                return;
-            }
-
-            const { accessToken, providerUserId } = providerInfo;
-            if (!accessToken) {
-                await deleteSession();
-                return;
-            }
-
-            await logoutKakao({ accessToken, providerUserId });
+    async logout(
+        userId: string,
+        provider: Providers,
+    ): Promise<
+        | { success: true; data: { accessToken: string; providerUserId: string }; status: number }
+        | { success: false; error: string; status: number }
+    > {
+        const providerInfo = await this.providerRepository.findProviderInfo(userId, provider);
+        if (!providerInfo) {
             await deleteSession();
-        } catch (e) {
-            const error = e as AxiosError<{ msg: string; code: number }>;
-            if (error.response?.data?.code === -401) {
-                await deleteSession();
-            }
+            return {
+                success: false,
+                error: ERROR_MSG.KAKAO_PROVIDER_INFO_NOT_FOUND,
+                status: 400,
+            };
         }
+
+        if (!providerInfo.accessToken) {
+            await deleteSession();
+            return {
+                success: false,
+                error: ERROR_MSG.KAKAO_ACCESS_TOKEN_NOT_FOUND,
+                status: 400,
+            };
+        }
+
+        await deleteSession();
+        return {
+            success: true,
+            data: {
+                accessToken: providerInfo.accessToken,
+                providerUserId: providerInfo.providerUserId,
+            },
+            status: 200,
+        };
     }
 
     async leaveWithKakao({ userId, reason }: { userId: string; reason: string }) {

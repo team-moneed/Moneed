@@ -1,5 +1,5 @@
 import { getSession } from '@/lib/session';
-import { AuthService } from '@/services/auth.service';
+import { KakaoAuthService } from '@/services/kakaoAuth.service';
 import { NextResponse } from 'next/server';
 
 export async function POST() {
@@ -8,7 +8,11 @@ export async function POST() {
         return NextResponse.json({ message: '로그아웃 성공' }, { status: 200 });
     }
 
-    const authService = new AuthService();
-    await authService.logoutWithKakao(session.userId);
-    return NextResponse.json({ message: '로그아웃 성공' }, { status: 200 });
+    const kakaoAuthService = new KakaoAuthService();
+    const result = await kakaoAuthService.logout(session.userId);
+    if (result.success) {
+        return NextResponse.json({ message: result.message }, { status: result.status });
+    } else {
+        return NextResponse.json({ message: result.error }, { status: result.status });
+    }
 }

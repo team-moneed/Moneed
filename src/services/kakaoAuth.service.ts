@@ -1,34 +1,24 @@
-import { AuthService } from '@/services/auth.service';
+import { TokenPayload } from '@/types/auth';
+import { AuthService } from './auth.service';
+import { RequiredUserInfo } from '@/types/user';
+import { createSession, deleteSession } from '@/lib/session';
 import { JWTExpired } from 'jose/errors';
 import { TOKEN_ERROR } from '@/constants/token';
+import { AxiosError, isAxiosError } from 'axios';
 import { ERROR_MSG } from '@/constants/errorMsg';
-import { AxiosError } from 'axios';
-import { createSession } from '@/lib/session';
-import { RequiredUserInfo } from '@/types/user';
-import { TokenPayload } from '@/types/auth';
+import { ProviderRepository } from '@/repositories/provider.repository';
+import { logoutKakao } from '@/apis/kakao.api';
 
-/**
- * 카카오 OAuth 인증을 처리하는 컨트롤러
- */
-export class KakaoAuthController {
+export class KakaoAuthService {
     private authService: AuthService;
+    private providerRepository: ProviderRepository;
 
     constructor() {
         this.authService = new AuthService();
+        this.providerRepository = new ProviderRepository();
     }
 
-    /**
-     * 기본 프로필 이미지 URL을 생성합니다.
-     */
-    private getDefaultProfileImage(): string {
-        const randomNumber = Math.floor(Math.random() * 15) + 1;
-        return `${process.env.NEXT_PUBLIC_MONEED_BASE_URL}/profile/profile-${randomNumber}.svg`;
-    }
-
-    /**
-     * 카카오 로그인 프로세스를 처리합니다.
-     */
-    async handleKakaoLogin({
+    async login({
         code,
     }: {
         code: string;
@@ -78,7 +68,7 @@ export class KakaoAuthController {
                     email: kakaoUserInfo.kakao_account.email,
                     birthyear: kakaoUserInfo.kakao_account.birthyear,
                     birthday: kakaoUserInfo.kakao_account.birthday,
-                    profileImage: this.getDefaultProfileImage(),
+                    profileImage: this.authService.createDefaultProfileImage(),
                     ageRange: kakaoUserInfo.kakao_account.age_range,
                     gender: kakaoUserInfo.kakao_account.gender,
                 };
@@ -114,7 +104,7 @@ export class KakaoAuthController {
                 };
             }
 
-            if (error instanceof AxiosError) {
+            if (isAxiosError(error)) {
                 console.error('OAuth callback error:', error.response?.data);
                 return {
                     success: false,
@@ -123,6 +113,43 @@ export class KakaoAuthController {
                 };
             }
 
+            return {
+                success: false,
+                error: ERROR_MSG.KAKAO_INTERNAL_ERROR,
+                status: 500,
+            };
+        }
+    }
+
+    async logout(
+        userId: string,
+    ): Promise<{ success: true; message: string; status: number } | { success: false; error: string; status: number }> {
+        try {
+            const result = await this.authService.logout(userId, 'kakao');
+            if (!result.success) {
+                return result;
+            }
+
+            await deleteSession();
+            await logoutKakao({
+                accessToken: result.data.accessToken,
+                providerUserId: result.data.providerUserId,
+            });
+            return {
+                success: result.success,
+                message: '로그아웃 성공',
+                status: result.status,
+            };
+        } catch (e) {
+            const error = e as AxiosError<{ msg: string; code: number }>;
+            if (error.response?.data?.code === -401) {
+                await deleteSession();
+                return {
+                    success: false,
+                    error: error.response?.data?.msg,
+                    status: error.response?.status || 500,
+                };
+            }
             return {
                 success: false,
                 error: ERROR_MSG.KAKAO_INTERNAL_ERROR,

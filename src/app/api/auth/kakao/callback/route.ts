@@ -1,5 +1,5 @@
 import { AUTH_ERROR_PATHS } from '@/constants/errorMsg';
-import { KakaoAuthController } from '@/controllers/kakaoAuth.controller';
+import { KakaoAuthService } from '@/services/kakaoAuth.service';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {
@@ -23,8 +23,8 @@ export async function GET(request: NextRequest) {
         return NextResponse.redirect(new URL(AUTH_ERROR_PATHS.INVALID_STATE, request.url));
     }
 
-    const kakaoAuthController = new KakaoAuthController();
-    const result = await kakaoAuthController.handleKakaoLogin({ code });
+    const kakaoAuthService = new KakaoAuthService();
+    const result = await kakaoAuthService.login({ code });
 
     if (result.success) {
         return NextResponse.redirect(new URL('/', request.url));

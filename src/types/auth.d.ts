@@ -13,3 +13,5 @@ export type ProviderInfo = {
     provider: string;
     providerUserId: string;
 };
+
+type Providers = 'kakao';
