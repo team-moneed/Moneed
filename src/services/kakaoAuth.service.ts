@@ -6,16 +6,12 @@ import { JWTExpired } from 'jose/errors';
 import { TOKEN_ERROR } from '@/constants/token';
 import { AxiosError, isAxiosError } from 'axios';
 import { ERROR_MSG } from '@/constants/errorMsg';
-import { ProviderRepository } from '@/repositories/provider.repository';
-import { logoutKakao } from '@/apis/kakao.api';
+import { getKakaoToken, getKakaoUserInfo, leaveKakao, logoutKakao } from '@/apis/kakao.api';
 
 export class KakaoAuthService {
     private authService: AuthService;
-    private providerRepository: ProviderRepository;
-
     constructor() {
         this.authService = new AuthService();
-        this.providerRepository = new ProviderRepository();
     }
 
     async login({
@@ -27,8 +23,8 @@ export class KakaoAuthService {
     > {
         try {
             const { accessToken, refreshToken, accessTokenExpiresInSec, refreshTokenExpiresInSec } =
-                await this.authService.getTokenWithKakao(code);
-            const kakaoUserInfo = await this.authService.getKakaoUserInfo(accessToken);
+                await this.getToken(code);
+            const kakaoUserInfo = await this.getUserInfo(accessToken);
 
             const existingUser = await this.authService.checkExistingUser({
                 userInfo: {
@@ -156,5 +152,54 @@ export class KakaoAuthService {
                 status: 500,
             };
         }
+    }
+
+    async leave({ userId, reason }: { userId: string; reason: string }) {
+        try {
+            const result = await this.authService.leave({ userId, reason, provider: 'kakao' });
+            if (!result.success) {
+                return result;
+            }
+
+            await leaveKakao({
+                accessToken: result.data.accessToken,
+                providerUserId: result.data.providerUserId,
+            });
+
+            return {
+                success: result.success,
+                message: '탈퇴 성공',
+                status: result.status,
+            };
+        } catch (error) {
+            console.error('Kakao leave error:', error, userId);
+            return {
+                success: false,
+                error: ERROR_MSG.KAKAO_INTERNAL_ERROR,
+                status: 500,
+            };
+        }
+    }
+
+    async getToken(code: string) {
+        const kakaoToken = await getKakaoToken(code);
+        const {
+            access_token: accessToken,
+            refresh_token: refreshToken,
+            expires_in: accessTokenExpiresInSec,
+            refresh_token_expires_in: refreshTokenExpiresInSec,
+        } = kakaoToken;
+
+        return {
+            accessToken,
+            refreshToken,
+            accessTokenExpiresInSec,
+            refreshTokenExpiresInSec,
+        };
+    }
+
+    async getUserInfo(kakaoAccessToken: string) {
+        const kakaoUserInfo = await getKakaoUserInfo(kakaoAccessToken);
+        return kakaoUserInfo;
     }
 }

@@ -1,7 +1,6 @@
 import { UserRepository } from '@/repositories/user.repository';
 import { OAuthAccount, User } from '@/generated/prisma';
 import { deleteSession } from '@/lib/session';
-import { getKakaoToken, getKakaoUserInfo, leaveKakao } from '@/apis/kakao.api';
 import { ProviderRepository } from '@/repositories/provider.repository';
 import { RequiredUserInfo, UserInfo } from '@/types/user';
 import { NicknameService } from '@/services/nickname.service';
@@ -117,7 +116,7 @@ export class AuthService {
             return {
                 success: false,
                 error: ERROR_MSG.KAKAO_ACCESS_TOKEN_NOT_FOUND,
-                status: 400,
+                status: 401,
             };
         }
 
@@ -132,73 +131,50 @@ export class AuthService {
         };
     }
 
-    async leaveWithKakao({ userId, reason }: { userId: string; reason: string }) {
+    async leave({
+        userId,
+        reason,
+        provider,
+    }: {
+        userId: string;
+        reason: string;
+        provider: Providers;
+    }): Promise<
+        | { success: true; data: { accessToken: string; providerUserId: string }; status: number }
+        | { success: false; error: string; status: number }
+    > {
         const leaveReasonRepository = new LeaveReasonRepository();
-        const providerInfo = await this.providerRepository.findProviderInfo(userId, 'kakao');
+        const providerInfo = await this.providerRepository.findProviderInfo(userId, provider);
+
         if (!providerInfo) {
             await deleteSession();
             return {
-                ok: false,
-                reason: 'Provider information not found',
+                success: false,
+                error: ERROR_MSG.KAKAO_PROVIDER_INFO_NOT_FOUND,
+                status: 400,
             };
         }
 
-        const { accessToken, providerUserId } = providerInfo;
-        if (!accessToken) {
+        if (!providerInfo.accessToken) {
             await deleteSession();
             return {
-                ok: false,
-                reason: 'Access token not found',
+                success: false,
+                error: ERROR_MSG.KAKAO_ACCESS_TOKEN_NOT_FOUND,
+                status: 401,
             };
         }
 
         // 카카오 연결 해제 시도
-        const kakaoResponse = await leaveKakao({ accessToken, providerUserId });
-        if (kakaoResponse.id) {
-            const user = await this.userRepository.findByProvider({
-                provider: 'kakao',
-                providerUserId: kakaoResponse.id.toString(),
-            });
-
-            if (user) {
-                await this.leave(user.id);
-                await leaveReasonRepository.createLeaveReason(reason);
-                return {
-                    ok: true,
-                };
-            }
-        }
-
-        return {
-            ok: false,
-            reason: 'Failed to process leave request',
-        };
-    }
-
-    async getTokenWithKakao(code: string) {
-        const kakaoToken = await getKakaoToken(code);
-        const {
-            access_token: accessToken,
-            refresh_token: refreshToken,
-            expires_in: accessTokenExpiresInSec,
-            refresh_token_expires_in: refreshTokenExpiresInSec,
-        } = kakaoToken;
-
-        return {
-            accessToken,
-            refreshToken,
-            accessTokenExpiresInSec,
-            refreshTokenExpiresInSec,
-        };
-    }
-
-    async getKakaoUserInfo(kakaoAccessToken: string) {
-        const kakaoUserInfo = await getKakaoUserInfo(kakaoAccessToken);
-        return kakaoUserInfo;
-    }
-
-    async leave(userId: string) {
         await this.userRepository.delete(userId);
         await deleteSession();
+        await leaveReasonRepository.createLeaveReason(reason);
+        return {
+            success: true,
+            data: {
+                accessToken: providerInfo.accessToken,
+                providerUserId: providerInfo.providerUserId,
+            },
+            status: 200,
+        };
     }
 }
