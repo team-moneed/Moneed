@@ -22,7 +22,7 @@ export default function Leave() {
     });
 
     return (
-        <div className='flex flex-col items-center justify-between h-full w-full sm:pt-[10rem] pt-[1rem] sm:pb-[4.8rem] pb-[2.4rem]'>
+        <div className='flex flex-col gap-[30rem] items-center justify-between h-full w-full sm:pt-[10rem] pt-[1rem] sm:pb-[4.8rem] pb-[2.4rem]'>
             <div className='flex flex-col items-start w-full'>
                 <div className='sm:flex hidden w-full items-center justify-start'>
                     <div className='bg-moneed-black rounded-full size-[6rem] flex items-center justify-center'>

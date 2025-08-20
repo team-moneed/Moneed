@@ -52,14 +52,14 @@ function LeaveButton() {
                         <>
                             <Button
                                 variant='primary'
-                                className='text-[1.6rem] font-bold leading-[140%] px-58 py-[1.8rem] w-full'
+                                className='text-[1.6rem] font-bold leading-[140%] px-24 py-[1.2rem] lg:px-58 lg:py-[1.8rem] w-full'
                                 onClick={handleCancel}
                             >
                                 계정을 계속 쓸래요
                             </Button>
                             <Button
                                 variant='secondary'
-                                className='text-[1.6rem] font-bold leading-[140%] px-58 py-[1.8rem] w-full'
+                                className='text-[1.6rem] font-bold leading-[140%] px-24 py-[1.2rem] lg:px-58 lg:py-[1.8rem] w-full'
                                 onClick={handleLeave}
                             >
                                 탈퇴하고 싶어요

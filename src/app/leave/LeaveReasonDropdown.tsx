@@ -57,7 +57,7 @@ export default function LeaveReasonDropdown({ setSelectedReason, selectedReason 
 
             {/* 드롭다운 옵션들 */}
             {isDropdownOpen && (
-                <div className='absolute top-full left-0 right-0 bg-white border-[1.5px] border-moneed-gray-5 rounded-b-[1.2rem] z-10'>
+                <div className='absolute top-full left-0 right-0 h-[30rem] lg:h-auto overflow-y-auto bg-white border-[1.5px] border-moneed-gray-5 rounded-b-[1.2rem] z-10'>
                     {LEAVE_REASON.map((reason, index) => (
                         <button
                             key={reason.id}

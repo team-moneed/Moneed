@@ -1,32 +1,17 @@
 'use client';
-
-import { useRouter } from 'next/navigation';
-import { usePathname } from 'next/navigation';
 import NavLink from '@/components/NavLink';
+import MobileWritePostButton from '@/components/MobileWirtePostButton';
+import { usePathname } from 'next/navigation';
 
 const MobileNav = () => {
-    const router = useRouter();
     const pathname = usePathname();
 
     const hideMobileNavPaths = ['/selectstocktype', '/myprofile', '/welcome', '/writepost', '/editpost'];
+    const hideMobileWritePostButtonPaths = ['/leave'];
 
     if (hideMobileNavPaths.some(path => pathname.startsWith(path))) {
         return null;
     }
-
-    const moveToWritePost = () => {
-        const lastPathSegment = pathname.split('/').pop();
-
-        if (location.pathname.startsWith('/community/')) {
-            if (lastPathSegment && decodeURIComponent(lastPathSegment) !== '전체') {
-                router.push(`/writepost/${lastPathSegment}`);
-            } else {
-                router.push(`/writepost`);
-            }
-        } else {
-            router.push(`/writepost`);
-        }
-    };
 
     return (
         <div className='flex justify-between fixed bottom-0 left-0 right-0 z-10 pt-[.6rem] pb-4 px-8 bg-moneed-gray-3 sm:hidden'>
@@ -43,13 +28,7 @@ const MobileNav = () => {
                 내프로필
             </NavLink>
 
-            <button
-                type='button'
-                onClick={moveToWritePost}
-                className='aspect-square w-[5.2rem] bg-moneed-brand absolute bottom-[calc(100%+2rem)] flex items-center justify-center rounded-full right-8'
-            >
-                <img src='/icon/icon-edit.svg' alt='' />
-            </button>
+            {!hideMobileWritePostButtonPaths.some(path => pathname.startsWith(path)) && <MobileWritePostButton />}
         </div>
     );
 };

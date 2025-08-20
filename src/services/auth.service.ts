@@ -8,7 +8,6 @@ import { ProviderInfo, Providers } from '@/types/auth';
 import LeaveReasonRepository from '@/repositories/leaveReason.repository';
 import { ERROR_MSG } from '@/constants/errorMsg';
 
-// TODO: 추상화 (카카오 로그인 외 다른 로그인 추가 시 수정 필요)
 export class AuthService {
     private userRepository: UserRepository;
     private providerRepository: ProviderRepository;
