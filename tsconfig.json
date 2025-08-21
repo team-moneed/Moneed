@@ -1,38 +1,30 @@
 {
-    "references": [
-        {
-            "path": "./tsconfig.app.json"
-        }
-    ],
     "compilerOptions": {
-        "target": "ES2020",
-        "useDefineForClassFields": true,
-        "lib": ["ES2020", "DOM", "DOM.Iterable"],
-        "module": "ESNext",
-        "esModuleInterop": true,
+        "target": "ES2022",
+        "lib": ["dom", "dom.iterable", "ES6"],
+        "allowJs": true,
         "skipLibCheck": true,
+        "strict": true,
+        "noEmit": true,
+        "esModuleInterop": true,
+        "module": "esnext",
         "moduleResolution": "bundler",
-        "allowImportingTsExtensions": true,
         "resolveJsonModule": true,
         "isolatedModules": true,
-        "noEmit": true,
         "jsx": "preserve",
-        "strict": true,
-        "noUnusedLocals": true,
-        "noUnusedParameters": true,
-        "noFallthroughCasesInSwitch": true,
-        "allowJs": true,
-        "forceConsistentCasingInFileNames": true,
         "incremental": true,
         "plugins": [
             {
                 "name": "next"
             }
         ],
+        "baseUrl": ".",
         "paths": {
-            "@/*": ["./src/*"]
+            "@/*": ["./apps/web/src/*"],
+            "@moneed/shared-types": ["./packages/shared-types/src"],
+            "@moneed/shared-utils": ["./packages/shared-utils/src"]
         }
     },
-    "include": ["./dist/types/**/*.ts", "./next-env.d.ts", "./src", "svg.d.ts", "dist/types/**/*.ts"],
-    "exclude": ["./node_modules"]
+    "include": ["apps/*/src/**/*", "packages/*/src/**/*"],
+    "exclude": ["node_modules", "dist", "build"]
 }

@@ -34,3 +34,6 @@ dist-ssr
 # Prisma
 generated
 backup/*
+
+# AWS
+*.pem

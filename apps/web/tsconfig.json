@@ -1,0 +1,36 @@
+{
+    "compilerOptions": {
+        "target": "ES2017",
+        "lib": ["dom", "dom.iterable", "esnext"],
+        "allowJs": true,
+        "skipLibCheck": true,
+        "strict": false,
+        "noEmit": true,
+        "incremental": true,
+        "module": "esnext",
+        "esModuleInterop": true,
+        "resolveJsonModule": true,
+        "isolatedModules": true,
+        "jsx": "preserve",
+        "composite": true,
+        "plugins": [
+            {
+                "name": "next"
+            }
+        ]
+    },
+    "include": [
+        "next-env.d.ts",
+        "dist/types/**/*.ts",
+        "**/*.ts",
+        "**/*.tsx",
+        "../../packages/shared-types/src/auth.ts"
+    ],
+    "exclude": ["node_modules"],
+    "extends": "../../tsconfig.json",
+    "references": [
+        {
+            "path": "../../packages/shared-types"
+        }
+    ]
+}
