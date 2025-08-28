@@ -5,6 +5,8 @@ import { isFile } from '@/utils/typeChecker';
 import S3Service from './s3.service';
 import { urlToS3FileName } from '@/utils/parser';
 import type { UpdateUserProfileRequest } from '@/types/user';
+import { ResponseError } from '@moneed/utils';
+import { ERROR_MSG } from '@/constants/message';
 
 class UserService {
     private userRepository = new UserRepository();
@@ -32,7 +34,7 @@ class UserService {
         const s3Service = new S3Service();
         const isDuplicate = await this.isDuplicateNickname({ userId, nickname });
         if (isDuplicate) {
-            throw new Error('이미 존재하는 닉네임입니다.');
+            throw new ResponseError(409, ERROR_MSG.DUPLICATE_NICKNAME);
         }
 
         let profileImageUrl: string | undefined;

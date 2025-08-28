@@ -1,17 +1,21 @@
-import { getSession } from '@/utils/session';
 import PostService from '@/services/post.service';
 import { NextResponse } from 'next/server';
+import { verifyRequestCookies } from '@/utils/cookie';
+import { ResponseError } from '@moneed/utils';
+import { ERROR_MSG } from '@/constants/message';
 
 export async function GET() {
-    const session = await getSession();
-    if (!session) {
-        return NextResponse.json({ message: '유저 정보를 조회할 수 없습니다. 로그인을 해주세요.' }, { status: 401 });
+    try {
+        const { accessTokenPayload } = await verifyRequestCookies();
+
+        const postService = new PostService();
+        const posts = await postService.getPostsWithUserExtended({ userId: accessTokenPayload.userId });
+
+        return NextResponse.json(posts);
+    } catch (error) {
+        if (error instanceof ResponseError) {
+            return NextResponse.json({ error: error.message }, { status: error.code });
+        }
+        return NextResponse.json({ error: ERROR_MSG.INTERNAL_SERVER_ERROR }, { status: 500 });
     }
-
-    const { userId } = session;
-    const postService = new PostService();
-
-    const posts = await postService.getPostsWithUserExtended({ userId });
-
-    return NextResponse.json(posts);
 }

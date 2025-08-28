@@ -1,21 +1,26 @@
 import { NextResponse } from 'next/server';
 import UserService from '@/services/user.service';
-import { getSession } from '@/utils/session';
+import { verifyRequestCookies } from '@/utils/cookie';
+import { ResponseError } from '@moneed/utils';
+import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
 
 export async function POST(request: Request) {
-    const session = await getSession();
-    if (!session) {
-        return NextResponse.json({ message: '유저 정보를 조회할 수 없습니다. 로그인을 해주세요.' }, { status: 401 });
-    }
+    try {
+        const { accessTokenPayload } = await verifyRequestCookies();
 
-    const { userId } = session;
-    const { nickname } = await request.json();
-    const userService = new UserService();
+        const { nickname } = await request.json();
+        const userService = new UserService();
 
-    const isDuplicate = await userService.isDuplicateNickname({ userId, nickname });
-    if (isDuplicate) {
-        return NextResponse.json({ message: '이미 존재하는 닉네임입니다.', nickname }, { status: 409 });
-    } else {
-        return NextResponse.json({ message: '사용 가능한 닉네임입니다.', nickname }, { status: 200 });
+        const isDuplicate = await userService.isDuplicateNickname({ userId: accessTokenPayload.userId, nickname });
+        if (isDuplicate) {
+            return NextResponse.json({ error: ERROR_MSG.DUPLICATE_NICKNAME, nickname }, { status: 409 });
+        } else {
+            return NextResponse.json({ message: SUCCESS_MSG.NICKNAME_CHECK_SUCCESS, nickname }, { status: 200 });
+        }
+    } catch (error) {
+        if (error instanceof ResponseError) {
+            return NextResponse.json({ error: error.message }, { status: error.code });
+        }
+        return NextResponse.json({ error: ERROR_MSG.INTERNAL_SERVER_ERROR }, { status: 500 });
     }
 }

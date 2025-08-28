@@ -1,5 +1,5 @@
 // import { REASON_CODES } from '@/constants/snackbar';
-import { ERROR_MSG } from '@/constants/error';
+import { ERROR_MSG } from '@/constants/message';
 import axios from 'axios';
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { logout, refresh } from './auth.api';

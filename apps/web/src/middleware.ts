@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession } from '@/utils/session';
 import { REASON_CODES } from './constants/snackbar';
+import { TOKEN_KEY, verifySession } from '@moneed/auth';
+import { getServerSideCookie } from './utils/cookie';
 
 const protectedRoutes = [
     '/mypage',
@@ -19,13 +20,14 @@ export async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
     const isProtectedRoute = protectedRoutes.includes(path);
     const isGuestOnlyRoute = guestOnlyRoutes.includes(path);
-    const session = await getSession();
+    const accessToken = await getServerSideCookie(TOKEN_KEY.ACCESS_TOKEN);
+    const session = await verifySession(accessToken);
 
-    if (isGuestOnlyRoute && session?.userId) {
+    if (isGuestOnlyRoute && session.payload) {
         return NextResponse.redirect(new URL(`/?reason=${REASON_CODES.LOGGED_IN}`, req.nextUrl));
     }
 
-    if (isProtectedRoute && (!session?.userId || (session.exp && session.exp < Date.now() / 1000))) {
+    if (isProtectedRoute && (session.isExpired || session.isInvalid)) {
         return NextResponse.redirect(new URL(`/onboarding?reason=${REASON_CODES.NO_SESSION}`, req.nextUrl));
     }
 

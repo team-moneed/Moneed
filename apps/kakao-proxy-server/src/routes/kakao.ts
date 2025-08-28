@@ -2,7 +2,7 @@ import express from 'express';
 import { KakaoAuthService } from '@/service/kakaoAuth.service';
 import { verifyRequestCookies } from '@/utils/session';
 import { accessTokenCookie, refreshTokenCookie, createSession } from '@moneed/auth';
-import { ResponseError } from '@/utils/error';
+import { ResponseError } from '@moneed/utils';
 
 const router = express.Router();
 

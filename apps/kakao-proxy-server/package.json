@@ -15,6 +15,7 @@
         "@moneed/auth": "*",
         "@moneed/db": "*",
         "@moneed/utility-types": "*",
+        "@moneed/utils": "*",
         "axios": "^1.7.9",
         "cookie-parser": "^1.4.7",
         "cors": "^2.8.5",

@@ -1,0 +1,16 @@
+{
+    "name": "@moneed/utils",
+    "version": "0.1.0",
+    "private": true,
+    "type": "module",
+    "exports": {
+        ".": "./dist/src/index.js"
+    },
+    "scripts": {
+        "build": "tsc && tsc-alias",
+        "dev": "tsc --watch",
+        "clean": "rimraf dist",
+        "type-check": "tsc --noEmit"
+    },
+    "dependencies": {}
+}

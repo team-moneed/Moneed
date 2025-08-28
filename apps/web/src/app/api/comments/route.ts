@@ -1,16 +1,22 @@
-import { getSession } from '@/utils/session';
 import CommentService from '@/services/comment.service';
 import { NextRequest, NextResponse } from 'next/server';
+import { verifyRequestCookies } from '@/utils/cookie';
+import { ResponseError } from '@moneed/utils';
+import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
 
 export async function POST(req: NextRequest) {
-    const { postId, content } = await req.json();
-    const session = await getSession();
-    if (!session) {
-        return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+    try {
+        const { postId, content } = await req.json();
+        const { accessTokenPayload } = await verifyRequestCookies();
+
+        const commentService = new CommentService();
+        await commentService.createComment({ postId, content, userId: accessTokenPayload.userId });
+
+        return NextResponse.json({ message: SUCCESS_MSG.COMMENT_CREATED }, { status: 201 });
+    } catch (error) {
+        if (error instanceof ResponseError) {
+            return NextResponse.json({ error: error.message }, { status: error.code });
+        }
+        return NextResponse.json({ error: ERROR_MSG.INTERNAL_SERVER_ERROR }, { status: 500 });
     }
-
-    const commentService = new CommentService();
-    await commentService.createComment({ postId, content, userId: session.userId });
-
-    return NextResponse.json({ message: '댓글이 작성되었습니다.' }, { status: 201 });
 }

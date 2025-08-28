@@ -1,25 +1,22 @@
-import { TOKEN_ERROR } from '@moneed/auth';
-import { JWTExpired } from 'jose/errors';
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession } from '@/utils/session';
+import { verifyRequestCookies } from '@/utils/cookie';
 import { StockService } from '@/services/stock.service';
+import { ResponseError } from '@moneed/utils';
+import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
 
 export async function POST(req: NextRequest) {
     try {
-        const session = await getSession();
-        if (!session) {
-            return NextResponse.json({ error: TOKEN_ERROR.INVALID_TOKEN }, { status: 401 });
-        }
+        const { accessTokenPayload } = await verifyRequestCookies();
 
         const { stockSymbols } = await req.json();
         const stockService = new StockService();
-        await stockService.selectStock(session.userId, stockSymbols);
+        await stockService.selectStock(accessTokenPayload.userId, stockSymbols);
 
-        return NextResponse.json({ message: 'Selected stocks updated' }, { status: 200 });
+        return NextResponse.json({ message: SUCCESS_MSG.STOCKS_SELECTED }, { status: 200 });
     } catch (error) {
-        if (error instanceof JWTExpired) {
-            return NextResponse.json({ error: TOKEN_ERROR.EXPIRED_TOKEN }, { status: 401 });
+        if (error instanceof ResponseError) {
+            return NextResponse.json({ error: error.message }, { status: error.code });
         }
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        return NextResponse.json({ error: ERROR_MSG.INTERNAL_SERVER_ERROR }, { status: 500 });
     }
 }

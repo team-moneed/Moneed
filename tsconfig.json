@@ -20,6 +20,6 @@
         ],
         "baseUrl": "."
     },
-    "include": ["apps/*/src/**/*", "packages/*/src/**/*"],
+    "include": ["apps/*/src/**/*", "packages/*/src/**/*", "packages/shared/utils/error.ts"],
     "exclude": ["node_modules", "dist"]
 }

@@ -1,5 +1,5 @@
 import { searchShorts } from '@/apis/youtube.api';
-import { ERROR_MSG } from '@/constants/error';
+import { ERROR_MSG } from '@/constants/message';
 import type { Shorts } from '@moneed/db/generated';
 import ShortRepository from '@/repositories/short.repository';
 import { parseShorts } from '@/utils/parser';

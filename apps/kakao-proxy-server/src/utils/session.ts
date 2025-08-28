@@ -1,8 +1,8 @@
-import { ERROR_MSG } from '@/constants/error';
+import { ERROR_MSG } from '@moneed/auth';
 import type { TokenPayload } from '@moneed/auth';
 import { refreshTokenCookie, accessTokenCookie, verifySession } from '@moneed/auth';
 import { Request, Response } from 'express';
-import { ResponseError } from './error';
+import { ResponseError } from '@moneed/utils';
 
 export async function deleteSession(response: Response) {
     response.clearCookie(accessTokenCookie.name);

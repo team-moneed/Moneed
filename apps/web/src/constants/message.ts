@@ -1,0 +1,32 @@
+export const ERROR_MSG = {
+    YOUTUBE_TOO_MANY_REQUESTS: 'Youtube API 금일 할당량 초과',
+    YOUTUBE_SHORTS_UPDATE_UNHANDLED_ERROR: 'Shorts 업데이트 중 예상치 못한 오류 발생',
+    SHORT_VIDEO_ID_REQUIRED: '비디오 ID가 필요합니다',
+    SHORT_NOT_FOUND: '해당 Short를 찾을 수 없습니다',
+    SHORT_FETCH_ERROR: 'Short 조회 중 오류가 발생했습니다',
+    TOKEN_EXPIRED: '세션이 만료되었습니다.',
+    AUTHORIZATION_HEADER_REQUIRED: 'Authorization 헤더가 필요합니다.',
+    SESSION_SECRET_NOT_SET: 'SESSION_SECRET 환경변수가 설정되지 않았습니다',
+    INTERNAL_SERVER_ERROR: '서버 오류가 발생했습니다',
+    ACCESS_TOKEN_EXPIRED: '액세스 토큰이 만료되었습니다',
+    ACCESS_TOKEN_INVALID: '유효하지 않은 액세스 토큰입니다',
+    REFRESH_TOKEN_EXPIRED: '리프레시 토큰이 만료되었습니다',
+    REFRESH_TOKEN_INVALID: '유효하지 않은 리프레시 토큰입니다',
+    SYMBOL_REQUIRED: 'symbol이 필요합니다',
+    STOCK_NOT_FOUND: '주식을 찾을 수 없습니다',
+    USER_NOT_FOUND: '유저가 존재하지 않습니다.',
+    DUPLICATE_NICKNAME: '이미 존재하는 닉네임입니다.',
+} as const;
+
+export const SUCCESS_MSG = {
+    POST_CREATED: '게시글이 작성되었습니다.',
+    POST_DELETED: '게시글이 삭제되었습니다.',
+    POST_UPDATED: '게시글이 수정되었습니다.',
+    POST_LIKED: '좋아요',
+    POST_UNLIKED: '좋아요 취소',
+    STOCKS_SELECTED: '주식이 선택되었습니다.',
+    COMMENT_CREATED: '댓글이 작성되었습니다.',
+    COMMENT_DELETED: '댓글이 삭제되었습니다.',
+    COMMENT_UPDATED: '댓글이 수정되었습니다.',
+    NICKNAME_CHECK_SUCCESS: '사용 가능한 닉네임입니다.',
+} as const;
