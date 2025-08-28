@@ -1,4 +1,4 @@
-import type { Shorts } from '@moneed/db';
+import type { Shorts } from '@moneed/db/generated';
 
 interface ShortformDetailProps {
     video: Shorts;

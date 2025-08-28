@@ -1,9 +1,7 @@
-import type { RequiredUserInfo } from '@moneed/db/types';
+import type { RequiredUserInfo } from '@moneed/db';
 import type { TokenPayload } from '@moneed/auth';
 import { AuthService } from '@/service/auth.service';
-import { createSession, deleteSession } from '@/utils/session';
-import { JWTExpired } from 'jose/errors';
-import { TOKEN_ERROR } from '@moneed/auth';
+import { deleteSession } from '@/utils/session';
 import { AxiosError, isAxiosError } from 'axios';
 import { ERROR_MSG } from '@/constants/error';
 import { getKakaoToken, getKakaoUserInfo, leaveKakao, logoutKakao, refreshKakaoToken } from '@/api/kakao.api';

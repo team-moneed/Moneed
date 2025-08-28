@@ -1,4 +1,4 @@
-import type { Shorts } from '@moneed/db';
+import type { Shorts } from '@moneed/db/generated';
 import { http } from './client';
 
 export const fetchShorts = async ({ cursor, limit }: { cursor: string; limit: number }) => {

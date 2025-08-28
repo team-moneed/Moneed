@@ -1,5 +1,5 @@
 import { httpWithCredentials, http } from '@/apis/client';
-import type { Stock } from '@moneed/db';
+import type { Stock } from '@moneed/db/generated';
 import type { MarketCode, OverseasStockPriceResponse } from '@/types/kis';
 import type { HotStock } from '@/types/stock';
 

@@ -40,25 +40,20 @@ router.get('/callback', async (req, res, next) => {
         const { code, state, error, error_description } = req.query;
         const baseUrl = process.env.MONEED_BASE_URL || '';
 
-        // 에러 처리
         if (error || error_description) {
             return res.redirect(`${baseUrl}/auth/error?error=${error}&description=${error_description}`);
         }
 
-        // code 파라미터 검증
         if (!code) {
             return res.redirect(`${baseUrl}/auth/error?error=missing_code`);
         }
 
-        // state 토큰 검증
         if (!state || state !== process.env.KAKAO_STATE_TOKEN) {
             return res.redirect(`${baseUrl}/auth/error?error=invalid_state`);
         }
 
-        // KakaoAuthService를 사용한 로그인 처리
         const kakaoAuthService = new KakaoAuthService();
         const result = await kakaoAuthService.login({ code: code as string });
-        // login 메서드 내부에서 createSession()을 통해 쿠키가 설정됨
 
         if (result.success) {
             const redirectPath = result.data.isNewUser ? `/selectstocktype?url=${encodeURIComponent('/welcome')}` : `/`;

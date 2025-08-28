@@ -1,4 +1,5 @@
-import { OAuthAccount, prisma } from '@moneed/db';
+import { prisma } from '@moneed/db';
+import { OAuthAccount } from '@moneed/db/generated';
 import { ProviderInfo } from '@moneed/auth';
 import { Optional } from '@moneed/utility-types';
 

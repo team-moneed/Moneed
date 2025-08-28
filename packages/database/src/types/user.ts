@@ -1,4 +1,4 @@
-import { User } from '../../generated/prisma';
+import { User } from '@moneed/db/prisma/generated/prisma-client-js';
 import { Optional } from '@moneed/utility-types';
 
 export interface UserInfo {

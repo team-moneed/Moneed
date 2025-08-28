@@ -1,4 +1,4 @@
-import type { Comment, User, Post, Stock } from '@moneed/db';
+import type { Comment, User, Post, Stock } from '@moneed/db/generated';
 
 export type CommentDeleteResponse = {
     message: string;

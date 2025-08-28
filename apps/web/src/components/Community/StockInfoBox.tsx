@@ -1,6 +1,6 @@
 'use client';
 
-import type { Stock } from '@moneed/db';
+import type { Stock } from '@moneed/db/generated';
 import { cn } from '@/utils/style';
 import { ReactNode } from 'react';
 import StockInfoBoxSkeleton from '../Skeletons/StockInfoBoxSkeleton';

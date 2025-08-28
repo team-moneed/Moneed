@@ -1,4 +1,5 @@
-import { OAuthAccount, User, prisma, RequiredUserInfo } from '@moneed/db';
+import { prisma, RequiredUserInfo } from '@moneed/db';
+import { OAuthAccount, User } from '@moneed/db/generated';
 
 export class UserRepository {
     private prisma = prisma;

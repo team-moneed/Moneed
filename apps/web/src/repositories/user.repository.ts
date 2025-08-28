@@ -1,4 +1,5 @@
-import { prisma, type User } from '@moneed/db';
+import { type User } from '@moneed/db/generated';
+import { prisma } from '@moneed/db';
 
 export class UserRepository {
     private prisma = prisma;

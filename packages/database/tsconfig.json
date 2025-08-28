@@ -5,7 +5,18 @@
         "module": "ESNext",
         "moduleResolution": "bundler",
         "target": "ESNext",
-        "composite": true
+        "composite": true,
+        "declaration": true,
+        "declarationMap": true,
+        "allowSyntheticDefaultImports": true,
+        "baseUrl": ".",
+        "paths": {
+            "@moneed/db/*": ["*"]
+        }
     },
-    "include": ["src"]
+    "include": ["src/**/*"],
+    "exclude": ["node_modules", "dist"],
+    "tsc-alias": {
+        "resolveFullPaths": true
+    }
 }

@@ -1,14 +1,22 @@
 {
-    "extends": "../../../tsconfig.json",
     "compilerOptions": {
-        "rootDir": "./src",
-        "outDir": "./dist"
+        "rootDir": ".",
+        "outDir": "./dist",
+        "baseUrl": ".",
+        "declaration": true,
+        "declarationMap": true,
+        "moduleResolution": "bundler",
+        "module": "ESNext",
+        "target": "ES2022"
     },
     "include": ["src/**/*"],
-    "exclude": ["node_modules"],
+    "exclude": ["node_modules", "src/__test__/**/*"],
     "references": [
         {
             "path": "../../database"
         }
-    ]
+    ],
+    "tsc-alias": {
+        "resolveFullPaths": true
+    }
 }

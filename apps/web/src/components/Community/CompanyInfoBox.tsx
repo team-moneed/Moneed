@@ -1,6 +1,6 @@
 'use client';
 
-import type { Stock } from '@moneed/db';
+import type { Stock } from '@moneed/db/generated';
 
 const CompanyInfoBox = ({ stock }: { stock: Stock }) => {
     return (

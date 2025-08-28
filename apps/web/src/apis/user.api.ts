@@ -1,4 +1,4 @@
-import type { User } from '@moneed/db';
+import type { User } from '@moneed/db/generated';
 import { httpWithCredentials } from './client';
 import { isFile } from '@/utils/typeChecker';
 import type { UpdateUserProfileRequest } from '@/types/user';

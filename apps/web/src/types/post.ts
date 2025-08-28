@@ -1,4 +1,4 @@
-import type { Comment as PrismaComment } from '@moneed/db';
+import type { Comment as PrismaComment } from '@moneed/db/generated';
 
 export interface CreatePostResult {
     id: number;
