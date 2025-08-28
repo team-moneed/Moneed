@@ -1,6 +1,6 @@
 'use client';
 
-import { Stock } from '@/generated/prisma';
+import type { Stock } from '@moneed/db';
 import { cn } from '@/utils/style';
 import { ReactNode } from 'react';
 import StockInfoBoxSkeleton from '../Skeletons/StockInfoBoxSkeleton';

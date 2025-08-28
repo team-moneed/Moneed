@@ -1,4 +1,4 @@
-import { Shorts } from '@/generated/prisma';
+import type { Shorts } from '@moneed/db';
 
 interface ShortformDetailProps {
     video: Shorts;

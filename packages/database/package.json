@@ -1,0 +1,30 @@
+{
+    "name": "@moneed/db",
+    "version": "0.1.0",
+    "description": "prisma and prisma client",
+    "license": "ISC",
+    "author": "",
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts",
+        "./types": "./src/types/index.ts"
+    },
+    "scripts": {
+        "dev": "tsc --watch",
+        "clean": "rm -rf dist",
+        "db:generate": "prisma generate",
+        "db:migrate": "prisma migrate dev --skip-generate",
+        "db:deploy": "prisma migrate deploy",
+        "type-check": "tsc --noEmit"
+    },
+    "prisma": {
+        "seed": "tsx prisma/post.seed.ts"
+    },
+    "dependencies": {
+        "@prisma/client": "^6.14.0",
+        "@moneed/utility-types": "*"
+    },
+    "devDependencies": {
+        "prisma": "^6.14.0"
+    }
+}

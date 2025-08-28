@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { getSession } from '@/lib/session';
+import { getSession } from '@/utils/session';
 import { REASON_CODES } from './constants/snackbar';
 
 const protectedRoutes = [

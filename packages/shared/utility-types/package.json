@@ -1,0 +1,13 @@
+{
+    "name": "@moneed/utility-types",
+    "version": "0.1.0",
+    "type": "module",
+    "exports": {
+        ".": "./src/index.ts"
+    },
+    "scripts": {
+        "dev": "tsc --watch",
+        "clean": "rm -rf dist",
+        "type-check": "tsc --noEmit"
+    }
+}

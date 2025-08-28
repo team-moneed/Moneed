@@ -1,5 +1,4 @@
-import { Shorts } from '@/generated/prisma';
-import { prisma } from '@moneed/shared-utils';
+import { prisma, type Shorts } from '@moneed/db';
 
 export default class ShortRepository {
     private readonly prisma = prisma;

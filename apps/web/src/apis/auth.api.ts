@@ -1,34 +1,20 @@
-import { Providers } from '@moneed/shared-types';
-import { auth, authWithCredentials } from './client';
+import { KakaoRefreshTokenResponse } from '@/types/auth';
+import { proxy, proxyWithCredentials } from './client';
+import { Providers } from '@moneed/auth';
 
-type KakaoTokenParams = {
-    code: string;
-    state?: string;
-    provider: 'kakao';
-};
-
-type KakaoTokenResponse = {
-    isExistingUser: boolean;
-};
-
-export const getAuthCode = async ({ provider }: { provider: Providers }) => {
-    const res = await auth.get<{ url: string }>(`/api/auth/${provider}/login`);
-    return res.data;
-};
-
-export const login = async ({ code, state, provider }: KakaoTokenParams) => {
-    const res = await auth.post<KakaoTokenResponse>(`/api/auth/${provider}/login`, { code, state });
-    return res.data;
-};
-
-export const logout = async ({ provider }: { provider: 'kakao' }) => {
-    const res = await authWithCredentials.post(`/api/auth/${provider}/logout`);
+export const logout = async ({ provider }: { provider: Providers }) => {
+    const res = await proxy.post(`/api/auth/${provider}/logout`);
     return res;
 };
 
-export const leave = async ({ provider, reason }: { provider: 'kakao'; reason: string }) => {
-    const res = await authWithCredentials.post<{ ok: boolean; reason?: string }>(`/api/auth/${provider}/leave`, {
+export const leave = async ({ provider, reason }: { provider: Providers; reason: string }) => {
+    const res = await proxyWithCredentials.post<{ ok: boolean; reason?: string }>(`/api/auth/${provider}/leave`, {
         reason,
     });
+    return res;
+};
+
+export const refresh = async ({ provider }: { provider: Providers }) => {
+    const res = await proxyWithCredentials.post<KakaoRefreshTokenResponse>(`/api/auth/${provider}/refresh`);
     return res;
 };

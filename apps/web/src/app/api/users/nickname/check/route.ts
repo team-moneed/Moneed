@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import UserService from '@/services/user.service';
-import { getSession } from '@/lib/session';
+import { getSession } from '@/utils/session';
 
 export async function POST(request: Request) {
     const session = await getSession();

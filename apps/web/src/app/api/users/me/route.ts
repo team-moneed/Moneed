@@ -1,5 +1,5 @@
-import { getSession } from '@/lib/session';
-import { UpdateUserProfileRequest } from '@/types/user';
+import { getSession } from '@/utils/session';
+import type { UpdateUserProfileRequest } from '@/types/user';
 import UserService from '@/services/user.service';
 import { NextResponse } from 'next/server';
 

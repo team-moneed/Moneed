@@ -1,6 +1,6 @@
 'use client';
 
-import { TokenPayload } from '@/types/auth';
+import type { TokenPayload } from '@moneed/auth';
 import { decodeJwt } from 'jose';
 import { getCookie } from '@/utils/cookie';
 import { useEffect, useState } from 'react';

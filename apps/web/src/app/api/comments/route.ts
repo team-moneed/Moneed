@@ -1,4 +1,4 @@
-import { getSession } from '@/lib/session';
+import { getSession } from '@/utils/session';
 import CommentService from '@/services/comment.service';
 import { NextRequest, NextResponse } from 'next/server';
 

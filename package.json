@@ -1,29 +1,25 @@
 {
-    "name": "moneed-workspace",
+    "name": "moneed",
     "private": true,
     "version": "0.0.0",
     "type": "module",
     "workspaces": [
         "apps/*",
-        "packages/*"
+        "packages/database",
+        "packages/shared/*"
     ],
     "scripts": {
-        "dev": "concurrently \"npm run dev:web\" \"npm run dev:proxy\"",
+        "dev": "concurrently \"npm run dev:web\" \"npm run dev:kakao\"",
         "dev:web": "npm run dev --workspace=apps/web",
-        "dev:proxy": "npm run dev --workspace=apps/proxy-server",
+        "dev:kakao": "npm run dev --workspace=apps/kakao-proxy-server",
         "build": "npm run build --workspaces",
         "build:web": "npm run build --workspace=apps/web",
-        "build:proxy": "npm run build --workspace=apps/proxy-server",
+        "build:kakao": "npm run build --workspace=apps/kakao-proxy-server",
         "start": "npm run start --workspaces",
         "lint": "npm run lint --workspaces",
         "lint:fix": "npm run lint:fix --workspaces",
         "type-check": "npm run type-check --workspaces",
-        "prepare": "husky install",
-        "postinstall": "husky install && npm run prismaGenerate",
-        "prismaGenerate": "prisma generate"
-    },
-    "prisma": {
-        "seed": "tsx prisma/post.seed.ts"
+        "postinstall": "husky install"
     },
     "lint-staged": {
         "*.{js,jsx,ts,tsx}": []

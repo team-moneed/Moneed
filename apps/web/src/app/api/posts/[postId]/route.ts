@@ -1,5 +1,5 @@
 import PostService from '@/services/post.service';
-import { getSession } from '@/lib/session';
+import { getSession } from '@/utils/session';
 import { NextRequest, NextResponse } from 'next/server';
 import { UpdatePostRequest } from '@/types/post';
 

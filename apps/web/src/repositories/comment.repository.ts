@@ -1,4 +1,4 @@
-import prisma from '@packages/shared-utils';
+import { prisma } from '@moneed/db';
 
 export default class CommentRepository {
     private prisma = prisma;

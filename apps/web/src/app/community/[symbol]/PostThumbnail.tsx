@@ -6,8 +6,8 @@ import { PostThumbnail as TPostThumbnail } from '@/types/post';
 import PostThumbnailCard from '@/components/PostThumbnailCard';
 import { useEffect, useState } from 'react';
 import { getCookie } from '@/utils/cookie';
-import { TokenPayload } from '@/types/auth';
-import { TOKEN_KEY } from '@/constants/token';
+import type { TokenPayload } from '@moneed/auth';
+import { TOKEN_KEY } from '@moneed/auth';
 import { decodeJwt } from 'jose';
 
 const PostThumbnail = ({ post }: { post: TPostThumbnail }) => {

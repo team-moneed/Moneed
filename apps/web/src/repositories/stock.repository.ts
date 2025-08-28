@@ -1,4 +1,4 @@
-import { prisma } from '@moneed/shared-utils';
+import { prisma } from '@moneed/db';
 
 export class StockRepository {
     private prisma = prisma;

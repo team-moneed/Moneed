@@ -1,9 +1,9 @@
-import { User } from '@/generated/prisma';
+import type { User } from '@moneed/db';
 import { httpWithCredentials } from './client';
 import { isFile } from '@/utils/typeChecker';
-import { UpdateUserProfileRequest } from '@/types/user';
-import { CommentWithUser } from '@/types/comment';
-import { PostThumbnail } from '@/types/post';
+import type { UpdateUserProfileRequest } from '@/types/user';
+import type { CommentWithUser } from '@/types/comment';
+import type { PostThumbnail } from '@/types/post';
 
 export async function fetchMyInfo() {
     const res = await httpWithCredentials.get<User>(`/api/users/me`);

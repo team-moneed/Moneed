@@ -18,13 +18,8 @@
                 "name": "next"
             }
         ],
-        "baseUrl": ".",
-        "paths": {
-            "@/*": ["./apps/web/src/*"],
-            "@moneed/shared-types": ["./packages/shared-types/src"],
-            "@moneed/shared-utils": ["./packages/shared-utils/src"]
-        }
+        "baseUrl": "."
     },
     "include": ["apps/*/src/**/*", "packages/*/src/**/*"],
-    "exclude": ["node_modules", "dist", "build"]
+    "exclude": ["node_modules", "dist"]
 }

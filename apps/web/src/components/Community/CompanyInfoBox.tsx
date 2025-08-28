@@ -1,6 +1,6 @@
 'use client';
 
-import { Stock } from '@/generated/prisma';
+import type { Stock } from '@moneed/db';
 
 const CompanyInfoBox = ({ stock }: { stock: Stock }) => {
     return (

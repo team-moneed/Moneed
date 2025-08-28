@@ -1,16 +1,11 @@
 'use client';
-import { getAuthCode } from '@/apis/auth.api';
 import Button from '@/components/Button';
 
 export default function KakaoLoginButton() {
-    const handleLogin = async (e: React.FormEvent<HTMLFormElement>) => {
-        e.preventDefault();
-        const { url } = await getAuthCode({ provider: 'kakao' });
-        window.location.href = url;
-    };
+    const url = process.env.NEXT_PUBLIC_KAKAO_PROXY_SERVER + '/api/auth/kakao/login';
 
     return (
-        <form onSubmit={handleLogin}>
+        <a href={url}>
             <Button
                 type='submit'
                 variant='primary'
@@ -19,6 +14,6 @@ export default function KakaoLoginButton() {
                 <img src='/logo-kakao.svg' alt='kakao login button' />
                 카카오로 시작하기
             </Button>
-        </form>
+        </a>
     );
 }

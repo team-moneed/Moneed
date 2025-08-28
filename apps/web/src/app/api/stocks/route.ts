@@ -1,4 +1,4 @@
-import { Stock } from '@/generated/prisma';
+import type { Stock } from '@moneed/db';
 import { StockService } from '@/services/stock.service';
 import { NextRequest, NextResponse } from 'next/server';
 

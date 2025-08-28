@@ -4,7 +4,7 @@ import { UserRepository } from '@/repositories/user.repository';
 import { isFile } from '@/utils/typeChecker';
 import S3Service from './s3.service';
 import { urlToS3FileName } from '@/utils/parser';
-import { UpdateUserProfileRequest } from '@/types/user';
+import type { UpdateUserProfileRequest } from '@/types/user';
 
 class UserService {
     private userRepository = new UserRepository();
@@ -12,7 +12,7 @@ class UserService {
     private commentRepository = new CommentRepository();
 
     async getUserInfo({ userId }: { userId: string }) {
-        return this.userRepository.findById(userId);
+        return this.userRepository.findFirst({ field: 'id', value: userId });
     }
 
     async getUserPosts({ userId }: { userId: string }) {
@@ -56,7 +56,7 @@ class UserService {
     }
 
     async isDuplicateNickname({ userId, nickname }: { userId: string; nickname: string }) {
-        const user = await this.userRepository.findByNickname(nickname);
+        const user = await this.userRepository.findFirst({ field: 'nickname', value: nickname });
         if (user && user.id !== userId) {
             return true;
         }

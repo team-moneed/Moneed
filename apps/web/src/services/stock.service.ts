@@ -1,5 +1,5 @@
 import { getOverseasStockInfo, getOverseasStockPrice } from '@/apis/kis.api';
-import { Stock } from '@/generated/prisma';
+import type { Stock } from '@moneed/db';
 import { StockRepository } from '@/repositories/stock.repository';
 
 export class StockService {

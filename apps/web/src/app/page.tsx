@@ -1,6 +1,6 @@
-import MainNews from '@/app/MainNews';
-import MainShortforms from '@/app/MainShortforms';
-import Top3 from '@/app/Top3';
+import MainNews from './MainNews';
+import MainShortforms from './MainShortforms';
+import Top3 from './Top3';
 import Link from 'next/link';
 import { SnackbarTrigger } from '@/components/Snackbar';
 

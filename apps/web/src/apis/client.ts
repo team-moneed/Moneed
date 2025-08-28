@@ -1,6 +1,8 @@
 // import { REASON_CODES } from '@/constants/snackbar';
+import { ERROR_MSG } from '@/constants/error';
 import axios from 'axios';
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
+import { logout, refresh } from './auth.api';
 
 const getMoneedInstance = (): AxiosInstance => {
     const instance: AxiosInstance = axios.create({
@@ -36,7 +38,7 @@ const getMoneedInstance = (): AxiosInstance => {
 
 const withCredentials = (instance: AxiosInstance) => {
     instance.interceptors.request.use(
-        (config: InternalAxiosRequestConfig) => {
+        async (config: InternalAxiosRequestConfig) => {
             return config;
         },
         (error: AxiosError) => {
@@ -49,10 +51,17 @@ const withCredentials = (instance: AxiosInstance) => {
         (response: AxiosResponse) => {
             return response;
         },
-        (error: AxiosError) => {
+        async (error: AxiosError) => {
             if (error.response?.status === 401) {
+                // TODO: 주석 제거 -> 커뮤니티 페이지 StockTypeBar 수정 (유저, 게스트 UI 명확히 분리)
                 // window.location.href = `/onboarding?reason=${REASON_CODES.EXPIRED_SESSION}`;
-                console.error(error.response?.data);
+                const { data } = await refresh({ provider: 'kakao' });
+                return instance.request(error.config);
+            }
+
+            if (error.response?.status === 403) {
+                await logout({ provider: 'kakao' });
+                return Promise.reject(new AxiosError(ERROR_MSG.TOKEN_EXPIRED));
             }
             return Promise.reject(error);
         },
@@ -60,10 +69,10 @@ const withCredentials = (instance: AxiosInstance) => {
     return instance;
 };
 
-const getAuthInstance = (): AxiosInstance => {
+const getProxyInstance = (): AxiosInstance => {
     const instance: AxiosInstance = axios.create({
         withCredentials: true,
-        baseURL: process.env.NEXT_PUBLIC_AUTH_BASE_URL,
+        baseURL: process.env.NEXT_PUBLIC_KAKAO_PROXY_SERVER,
         headers: {
             'Content-type': 'application/json',
         },
@@ -92,7 +101,7 @@ const getAuthInstance = (): AxiosInstance => {
     return instance;
 };
 
-export const auth = getAuthInstance();
-export const authWithCredentials = withCredentials(getAuthInstance());
+export const proxy = getProxyInstance();
+export const proxyWithCredentials = withCredentials(getProxyInstance());
 export const http = getMoneedInstance();
 export const httpWithCredentials = withCredentials(getMoneedInstance());

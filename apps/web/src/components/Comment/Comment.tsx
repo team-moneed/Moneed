@@ -6,9 +6,9 @@ import Image from 'next/image';
 import { Comment as TComment } from '@/types/post';
 import DateFormatter from '../Dateformatter';
 import { getCookie } from '@/utils/cookie';
-import { TOKEN_KEY } from '@/constants/token';
+import { TOKEN_KEY } from '@moneed/auth';
 import { decodeJwt } from 'jose';
-import { TokenPayload } from '@/types/auth';
+import type { TokenPayload } from '@moneed/auth';
 
 type CommentType = {
     comment: TComment;

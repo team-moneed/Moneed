@@ -1,5 +1,6 @@
-import { prisma } from '@moneed/shared-utils';
+import { prisma } from '@moneed/db';
 import { BoardRankResponse } from '@/types/board';
+import { CreatePostResult } from '@/types/post';
 
 export default class PostRepository {
     private prisma = prisma;
@@ -359,7 +360,7 @@ export default class PostRepository {
         content: string;
         stockSymbol: string;
         thumbnailImage?: string;
-    }) {
+    }): Promise<CreatePostResult> {
         const post = await this.prisma.post.create({
             data: {
                 userId,

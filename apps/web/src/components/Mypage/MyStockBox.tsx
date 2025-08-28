@@ -1,5 +1,5 @@
 'use client';
-import { Stock } from '@/generated/prisma';
+import type { Stock } from '@moneed/db';
 import { useOverseasStockPrice } from '@/queries/stock.query';
 import { cn } from '@/utils/style';
 import Link from 'next/link';

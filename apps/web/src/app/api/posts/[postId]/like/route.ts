@@ -1,4 +1,4 @@
-import { getSession } from '@/lib/session';
+import { getSession } from '@/utils/session';
 import PostService from '@/services/post.service';
 import { NextRequest, NextResponse } from 'next/server';
 

@@ -1,5 +1,5 @@
 import ShortService from '@/services/short.service';
-import { ERROR_MSG } from '@/constants/errorMsg';
+import { ERROR_MSG } from '@/constants/error';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
