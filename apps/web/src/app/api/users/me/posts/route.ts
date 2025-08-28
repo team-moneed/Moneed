@@ -1,6 +1,6 @@
 import PostService from '@/services/post.service';
 import { NextResponse } from 'next/server';
-import { verifyRequestCookies } from '@/utils/cookie';
+import { verifyRequestCookies } from '@/utils/cookie.server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/constants/message';
 

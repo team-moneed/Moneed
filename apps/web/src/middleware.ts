@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { REASON_CODES } from './constants/snackbar';
 import { TOKEN_KEY, verifySession } from '@moneed/auth';
-import { getServerSideCookie } from './utils/cookie';
+import { getServerSideCookie } from './utils/cookie.server';
 
 const protectedRoutes = [
     '/mypage',

@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { PostThumbnail as TPostThumbnail } from '@/types/post';
 import PostThumbnailCard from '@/components/PostThumbnailCard';
 import { useEffect, useState } from 'react';
-import { getCookie } from '@/utils/cookie';
+import { getCookie } from '@/utils/cookie.browser';
 import type { TokenPayload } from '@moneed/auth';
 import { TOKEN_KEY } from '@moneed/auth';
 import { decodeJwt } from 'jose';

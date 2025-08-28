@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import UserService from '@/services/user.service';
-import { verifyRequestCookies } from '@/utils/cookie';
+import { verifyRequestCookies } from '@/utils/cookie.server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
 

@@ -1,4 +1,4 @@
-import { verifyRequestCookies } from '@/utils/cookie';
+import { verifyRequestCookies } from '@/utils/cookie.server';
 import type { UpdateUserProfileRequest } from '@/types/user';
 import UserService from '@/services/user.service';
 import { NextResponse } from 'next/server';

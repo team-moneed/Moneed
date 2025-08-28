@@ -1,5 +1,5 @@
-import { ERROR_MSG, TOKEN_KEY, verifySession, type DecodedToken } from '@moneed/auth';
-import { decodeJwt } from 'jose';
+import 'server-only';
+import { ERROR_MSG, TOKEN_KEY, verifySession } from '@moneed/auth';
 import { cookies } from 'next/headers';
 import { ResponseError } from '@moneed/utils';
 import { TokenPayload } from '@moneed/auth';
@@ -7,29 +7,6 @@ import { TokenPayload } from '@moneed/auth';
 export const getServerSideCookie = async (key: string) => {
     const cookieStore = await cookies();
     return cookieStore.get(key)?.value;
-};
-
-export const getCookie = (key: string) => {
-    const cookie = document.cookie
-        .split('; ')
-        .find(cookie => cookie.startsWith(`${key}=`))
-        ?.split('=')[1];
-    return cookie;
-};
-
-export const decodeToken = (token?: string): DecodedToken | null => {
-    const accessToken = token || getCookie('access_token');
-    if (!accessToken) return null;
-
-    return decodeJwt<DecodedToken>(accessToken);
-};
-
-export const isTokenExpired = (token?: string): boolean => {
-    const decodedToken = decodeToken(token);
-    if (!decodedToken) return true;
-
-    const currentTime = Date.now() / 1000;
-    return decodedToken.exp < currentTime;
 };
 
 export async function verifyRequestCookies() {

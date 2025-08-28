@@ -1,6 +1,6 @@
 import PostThumbnailCard from '@/components/PostThumbnailCard';
 import { HotPostThumbnail as THotPostThumbnail } from '@/types/post';
-import { getCookie } from '@/utils/cookie';
+import { getCookie } from '@/utils/cookie.browser';
 import { TOKEN_KEY } from '@moneed/auth';
 import { EmblaOptionsType } from 'embla-carousel';
 import { useRouter } from 'next/navigation';

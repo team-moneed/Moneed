@@ -1,4 +1,4 @@
-import { verifyRequestCookies } from '@/utils/cookie';
+import { verifyRequestCookies } from '@/utils/cookie.server';
 import PostService from '@/services/post.service';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
