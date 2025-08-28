@@ -16,3 +16,8 @@ export const AUTH_ERROR_PATHS = {
     MISSING_CODE: '/auth/error?error=missing_code',
     INTERNAL_ERROR: '/auth/error?error=internal_error',
 } as const;
+
+export const SUCCESS_MSG = {
+    LOGOUT: '로그아웃 성공',
+    LEAVE: '탈퇴 성공',
+} as const;

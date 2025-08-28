@@ -3,7 +3,7 @@ import type { TokenPayload } from '@moneed/auth';
 import { AuthService } from '@/service/auth.service';
 import { deleteSession } from '@/utils/session';
 import { AxiosError, isAxiosError } from 'axios';
-import { ERROR_MSG } from '@/constants/error';
+import { ERROR_MSG, SUCCESS_MSG } from '@/constants/error';
 import { getKakaoToken, getKakaoUserInfo, leaveKakao, logoutKakao, refreshKakaoToken } from '@/api/kakao.api';
 import { Response } from 'express';
 import { ProviderRepository } from '@/repository/provider.repository';
@@ -134,7 +134,7 @@ export class KakaoAuthService {
             });
             return {
                 success: result.success,
-                message: '로그아웃 성공',
+                message: SUCCESS_MSG.LOGOUT,
                 status: result.status,
             };
         } catch (e) {
@@ -142,9 +142,9 @@ export class KakaoAuthService {
             if (error.response?.data?.code === -401) {
                 await deleteSession(response);
                 return {
-                    success: false,
-                    error: error.response?.data?.msg,
-                    status: error.response?.status || 500,
+                    success: true,
+                    message: SUCCESS_MSG.LOGOUT,
+                    status: 200,
                 };
             }
             return {

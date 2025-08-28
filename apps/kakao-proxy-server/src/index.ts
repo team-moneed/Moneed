@@ -6,6 +6,7 @@ import dotenv from 'dotenv';
 import { kakaoRouter } from './routes/kakao.js';
 import { errorHandler } from './middleware/errorHandler.js';
 import { rateLimiter } from './middleware/rateLimiter.js';
+import cookieParser from 'cookie-parser';
 
 // 환경변수 로드
 dotenv.config({ path: '.env' });
@@ -17,6 +18,7 @@ const PORT = process.env.PORT || 8000;
 
 // 미들웨어 설정
 app.use(helmet()); // 보안 헤더 설정
+app.use(cookieParser());
 app.use(
     cors({
         origin: process.env.ALLOWED_ORIGINS?.split(',') || ['http://localhost:3000'],

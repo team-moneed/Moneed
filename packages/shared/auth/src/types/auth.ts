@@ -15,3 +15,8 @@ export type ProviderInfo = {
 };
 
 export type Providers = 'kakao';
+
+export type SessionResult =
+    | { isExpired: false; isInvalid: false; payload: TokenPayload }
+    | { isExpired: true; isInvalid: false; payload: null }
+    | { isExpired: false; isInvalid: true; payload: null };

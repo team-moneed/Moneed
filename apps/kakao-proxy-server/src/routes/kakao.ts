@@ -1,8 +1,7 @@
 import express from 'express';
 import { KakaoAuthService } from '@/service/kakaoAuth.service';
-import { createSession, verifyRequestCookies } from '@/utils/session';
-import { accessTokenCookie } from '@moneed/auth';
-import { refreshTokenCookie } from '@moneed/auth';
+import { verifyRequestCookies } from '@/utils/session';
+import { accessTokenCookie, refreshTokenCookie, createSession } from '@moneed/auth';
 import { ResponseError } from '@/utils/error';
 
 const router = express.Router();
@@ -80,8 +79,8 @@ router.get('/callback', async (req, res, next) => {
 
 router.post('/logout', async (req, res, next) => {
     try {
-        await verifyRequestCookies(req);
-        const { userId } = req.body;
+        const { accessTokenPayload } = await verifyRequestCookies(req);
+        const { userId } = accessTokenPayload;
 
         if (!userId) {
             return res.status(200).json({
