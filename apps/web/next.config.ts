@@ -6,6 +6,7 @@ const nextConfig: NextConfig = {
         dirs: ['src'],
     },
     devIndicators: false,
+    transpilePackages: ['@moneed/db', '@moneed/auth', '@moneed/utils', '@moneed/utility-types'],
     images: {
         remotePatterns: [
             {
