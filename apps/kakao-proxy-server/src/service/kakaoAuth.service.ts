@@ -22,7 +22,8 @@ export class KakaoAuthService {
     }: {
         code: string;
     }): Promise<
-        { success: true; data: TokenPayload; status: number } | { success: false; error: string; status: number }
+        | { success: true; data: { payload: TokenPayload; isNewUser: boolean }; status: number }
+        | { success: false; error: string; status: number }
     > {
         try {
             const { accessToken, refreshToken, accessTokenExpiresInSec, refreshTokenExpiresInSec } =
@@ -45,8 +46,8 @@ export class KakaoAuthService {
             let payload: TokenPayload = {
                 userId: '',
                 nickname: '',
-                isNewUser: false,
             };
+            let isNewUser = false;
 
             if (existingUser.isExisting) {
                 const user = await this.authService.signIn(existingUser.user.id, {
@@ -61,8 +62,8 @@ export class KakaoAuthService {
                 payload = {
                     userId: user.id,
                     nickname: user.nickname,
-                    isNewUser: false,
                 };
+                isNewUser = false;
             } else {
                 const user: Omit<RequiredUserInfo, 'nickname'> = {
                     name: kakaoUserInfo.kakao_account.name,
@@ -85,13 +86,16 @@ export class KakaoAuthService {
                 payload = {
                     userId: newUser.id,
                     nickname: newUser.nickname,
-                    isNewUser: true,
                 };
+                isNewUser = true;
             }
 
             return {
                 success: true,
-                data: payload,
+                data: {
+                    payload,
+                    isNewUser,
+                },
                 status: 200,
             };
         } catch (error) {

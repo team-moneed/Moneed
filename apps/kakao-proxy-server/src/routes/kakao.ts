@@ -1,8 +1,9 @@
 import express from 'express';
 import { KakaoAuthService } from '@/service/kakaoAuth.service';
 import { verifyRequestCookies } from '@/utils/session';
-import { accessTokenCookie, refreshTokenCookie, createSession } from '@moneed/auth';
-import { ResponseError } from '@moneed/utils';
+import { createToken, getAccessTokenCookie, getRefreshTokenCookie } from '@moneed/auth';
+import { parseDurationToMs, ResponseError } from '@moneed/utils';
+import { ERROR_MSG } from '@/constants/error';
 
 const router = express.Router();
 
@@ -56,16 +57,37 @@ router.get('/callback', async (req, res, next) => {
 
         if (result.success) {
             const redirectPath = result.data.isNewUser ? `/selectstocktype?url=${encodeURIComponent('/welcome')}` : `/`;
-            const { accessToken, refreshToken, accessTokenExpire, refreshTokenExpire } = await createSession(
-                result.data,
+            const key = process.env.SESSION_SECRET;
+            if (!key) {
+                console.error(ERROR_MSG.SESSION_SECRET_NOT_SET);
+                throw new ResponseError(500, ERROR_MSG.INTERNAL_SERVER_ERROR);
+            }
+            const accessToken = await createToken({
+                payload: result.data.payload,
+                duration: process.env.JWT_ACCESS_EXPIRES_IN || '24h',
+                key,
+            });
+            const refreshToken = await createToken({
+                payload: result.data.payload,
+                duration: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
+                key,
+            });
+
+            const accessTokenCookie = getAccessTokenCookie(
+                process.env.JWT_ACCESS_EXPIRES_IN || '24h',
+                process.env.JWT_ACCESS_NAME || 'access_token',
+            );
+            const refreshTokenCookie = getRefreshTokenCookie(
+                process.env.JWT_REFRESH_EXPIRES_IN || '30d',
+                process.env.JWT_REFRESH_NAME || 'refresh_token',
             );
             res.cookie(accessTokenCookie.name, accessToken, {
                 ...accessTokenCookie.options,
-                expires: accessTokenExpire,
+                expires: new Date(Date.now() + parseDurationToMs(process.env.JWT_ACCESS_EXPIRES_IN || '24h')),
             });
             res.cookie(refreshTokenCookie.name, refreshToken, {
                 ...refreshTokenCookie.options,
-                expires: refreshTokenExpire,
+                expires: new Date(Date.now() + parseDurationToMs(process.env.JWT_REFRESH_EXPIRES_IN || '30d')),
             });
             res.setHeader('Location', `${baseUrl}${redirectPath}`);
             return res.status(302).end();
@@ -73,6 +95,9 @@ router.get('/callback', async (req, res, next) => {
             return res.redirect(`${baseUrl}/auth/error?error=${result.error}`);
         }
     } catch (error) {
+        if (error instanceof ResponseError) {
+            return res.status(error.code).json({ message: error.message });
+        }
         next(error);
     }
 });

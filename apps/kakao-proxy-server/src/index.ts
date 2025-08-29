@@ -9,7 +9,7 @@ import { rateLimiter } from './middleware/rateLimiter.js';
 import cookieParser from 'cookie-parser';
 
 // 환경변수 로드
-dotenv.config({ path: '.env' });
+dotenv.config({ path: '.env.local' });
 const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
 dotenv.config({ path: envFile });
 

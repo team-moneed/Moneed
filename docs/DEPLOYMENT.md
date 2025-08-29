@@ -37,18 +37,18 @@
 
 ### 1. 필수 계정 및 서비스
 
-- [ ] GitHub 계정
-- [ ] Vercel 계정
-- [ ] AWS 계정 (EC2 인스턴스)
-- [ ] 카카오 개발자 계정
-- [ ] PostgreSQL 데이터베이스
+- [x] GitHub 계정
+- [x] Vercel 계정
+- [x] AWS 계정 (EC2 인스턴스)
+- [x] 카카오 개발자 계정
+- [x] PostgreSQL 데이터베이스
 
 ### 2. 로컬 개발 환경
 
-- [ ] Node.js 18 이상
-- [ ] Yarn 패키지 매니저
-- [ ] Docker (선택사항)
-- [ ] Git
+- [x] Node.js 18 이상
+- [x] Yarn 패키지 매니저
+- [x] Docker (선택사항)
+- [x] Git
 
 ### 3. 환경변수 준비
 
