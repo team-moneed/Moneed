@@ -1,12 +1,12 @@
 import PostThumbnailCard from '@/components/PostThumbnailCard';
 import { HotPostThumbnail as THotPostThumbnail } from '@/types/post';
 import { getCookie } from '@/utils/cookie.browser';
-import { TOKEN_KEY } from '@moneed/auth';
 import { EmblaOptionsType } from 'embla-carousel';
 import { useRouter } from 'next/navigation';
 import { decodeJwt } from 'jose';
 import type { TokenPayload } from '@moneed/auth';
 import { useEffect, useState } from 'react';
+import { TOKEN_KEY } from '@/constants/token';
 
 export default function HotPostThumbnail({ post }: { post: THotPostThumbnail }) {
     const { user, content, isLiked, id, thumbnailImage, likeCount, createdAt, title, commentCount, stock } = post;

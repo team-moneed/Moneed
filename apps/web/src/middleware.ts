@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { REASON_CODES } from './constants/snackbar';
-import { TOKEN_KEY, verifySession } from '@moneed/auth';
+import { verifyToken } from '@moneed/auth';
 import { getServerSideCookie } from './utils/cookie.server';
 
 const protectedRoutes = [
@@ -20,14 +20,15 @@ export async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
     const isProtectedRoute = protectedRoutes.includes(path);
     const isGuestOnlyRoute = guestOnlyRoutes.includes(path);
-    const accessToken = await getServerSideCookie(TOKEN_KEY.ACCESS_TOKEN);
-    const session = await verifySession(accessToken);
+    const accessToken = await getServerSideCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+
+    const session = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET });
 
     if (isGuestOnlyRoute && session.payload) {
         return NextResponse.redirect(new URL(`/?reason=${REASON_CODES.LOGGED_IN}`, req.nextUrl));
     }
 
-    if (isProtectedRoute && (session.isExpired || session.isInvalid)) {
+    if (isProtectedRoute && (session.isExpired || session.isInvalid || !accessToken)) {
         return NextResponse.redirect(new URL(`/onboarding?reason=${REASON_CODES.NO_SESSION}`, req.nextUrl));
     }
 
