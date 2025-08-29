@@ -1,6 +1,6 @@
 import { searchShorts } from '@/apis/youtube.api';
 import { ERROR_MSG } from '@/constants/message';
-import type { Shorts } from '@moneed/db/generated';
+import type { Shorts } from '@/generated/prisma-client-js';
 import ShortRepository from '@/repositories/short.repository';
 import { parseShorts } from '@/utils/parser';
 import { AxiosError } from 'axios';

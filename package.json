@@ -5,7 +5,6 @@
     "type": "module",
     "workspaces": [
         "apps/*",
-        "packages/database",
         "packages/shared/*"
     ],
     "scripts": {
@@ -14,14 +13,14 @@
         "dev:kakao": "npm run dev --workspace=apps/kakao-proxy-server",
         "build": "npm run build:packages && npm run build:apps",
         "build:packages": "npm run build:packages:sequential",
-        "build:packages:sequential": "npm run build --workspace=@moneed/utility-types && npm run build --workspace=@moneed/utils && npm run build --workspace=@moneed/auth && npm run build --workspace=@moneed/db",
+        "build:packages:sequential": "npm run build --workspace=@moneed/utility-types && npm run build --workspace=@moneed/utils && npm run build --workspace=@moneed/auth",
         "build:apps": "npm run build --workspace=apps/web && npm run build --workspace=apps/kakao-proxy-server",
         "build:web": "npm run build:packages && npm run build --workspace=apps/web",
         "build:kakao": "npm run build:packages && npm run build --workspace=apps/kakao-proxy-server",
         "build:ci": "npm run build:packages && npm run build:apps:parallel",
         "build:apps:parallel": "npm run build --workspace=apps/web & npm run build --workspace=apps/kakao-proxy-server",
         "clean": "npm run clean:packages && npm run clean:apps",
-        "clean:packages": "npm run clean --workspace=@moneed/utility-types && npm run clean --workspace=@moneed/utils && npm run clean --workspace=@moneed/auth && npm run clean --workspace=@moneed/db",
+        "clean:packages": "npm run clean --workspace=@moneed/utility-types && npm run clean --workspace=@moneed/utils && npm run clean --workspace=@moneed/auth",
         "clean:apps": "npm run clean --workspace=apps/web && npm run clean --workspace=apps/kakao-proxy-server",
         "start": "concurrently \"npm run start:web\" \"npm run start:kakao\"",
         "start:web": "npm run start --workspace=apps/web",

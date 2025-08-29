@@ -17,7 +17,6 @@
     },
     "dependencies": {
         "@jest/globals": "^30.1.1",
-        "@moneed/db": "*",
         "@types/jest": "^30.0.0",
         "jest": "^30.1.1",
         "jose": "^6.0.13",

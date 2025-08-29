@@ -20,13 +20,15 @@
 ```
 Moneed/
 ├── apps/
-│   ├── web/                    # Next.js 웹 애플리케이션
-│   └── proxy-server/           # Express 프록시 서버
+│   ├── web/                    # Next.js 웹 애플리케이션 (독립적 Prisma 설정)
+│   └── kakao-proxy-server/     # Express 프록시 서버 (독립적 Prisma 설정)
 ├── packages/
-│   ├── shared-types/          # 공유 타입 정의
-│   └── shared-utils/          # 공유 유틸리티
-├── prisma/                    # 데이터베이스 스키마
-└── public/                    # 정적 자산
+│   └── shared/
+│       ├── auth/               # 인증 관련 공유 로직
+│       ├── utils/              # 공통 유틸리티 함수
+│       └── utility-types/      # 공유 TypeScript 타입
+├── env-templates/              # 환경변수 템플릿
+└── scripts/                    # 배포 및 설정 스크립트
 ```
 
 <br />

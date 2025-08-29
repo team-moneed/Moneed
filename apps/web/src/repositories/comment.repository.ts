@@ -1,4 +1,4 @@
-import { prisma } from '@moneed/db';
+import { prisma } from '@/database/client';
 
 export default class CommentRepository {
     private prisma = prisma;

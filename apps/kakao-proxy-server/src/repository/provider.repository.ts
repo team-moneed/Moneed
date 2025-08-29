@@ -1,7 +1,7 @@
-import { prisma } from '@moneed/db';
-import { OAuthAccount } from '@moneed/db/generated';
-import { ProviderInfo } from '@moneed/auth';
-import { Optional } from '@moneed/utility-types';
+import { prisma } from '@/database/client';
+import type { OAuthAccount } from '@/generated/prisma-client-js';
+import type { ProviderInfo } from '@moneed/auth';
+import type { Optional } from '@moneed/utility-types';
 
 export class ProviderRepository {
     private prisma = prisma;

@@ -17,7 +17,7 @@
             "@/*": ["./src/*"]
         }
     },
-    "include": ["src/**/*", "../../packages/shared/utils/error.ts"],
+    "include": ["src/**/*", "prisma"],
     "exclude": ["node_modules", "dist"],
     "tsc-alias": {
         "resolveFullPaths": true,

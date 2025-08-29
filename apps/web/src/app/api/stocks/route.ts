@@ -1,4 +1,4 @@
-import type { Stock } from '@moneed/db/generated';
+import type { Stock } from '@/generated/prisma-client-js';
 import { StockService } from '@/services/stock.service';
 import { NextRequest, NextResponse } from 'next/server';
 

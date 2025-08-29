@@ -1,4 +1,4 @@
-import { prisma } from '@moneed/db';
+import { prisma } from '@/database/client';
 import { BoardRankResponse } from '@/types/board';
 import { CreatePostResult } from '@/types/post';
 

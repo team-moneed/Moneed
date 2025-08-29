@@ -121,6 +121,15 @@ AWS_SECRET_ACCESS_KEY=...
 AWS_BUCKET_NAME=your-bucket
 ```
 
+### 3. Prisma 클라이언트 생성
+
+웹 앱은 독립적인 Prisma 설정을 사용합니다. 빌드 시 Prisma 클라이언트가 자동으로 생성됩니다.
+
+```bash
+# 수동으로 Prisma 클라이언트 생성이 필요한 경우
+yarn db:generate
+```
+
 ### 3. 도메인 설정 (선택사항)
 
 1. Project Settings > Domains
@@ -183,7 +192,16 @@ export GITHUB_TOKEN=your_github_token
 export GITHUB_ACTOR=your_github_username
 ```
 
-### 4. 수동 배포 테스트
+### 4. Prisma 클라이언트 생성
+
+프록시 서버는 독립적인 Prisma 설정을 사용합니다. 배포 시 Prisma 클라이언트가 자동으로 생성됩니다.
+
+```bash
+# 수동으로 Prisma 클라이언트 생성이 필요한 경우
+yarn db:generate
+```
+
+### 5. 수동 배포 테스트
 
 ```bash
 # EC2에서 실행
@@ -242,7 +260,7 @@ git push origin main
 
 1. **코드 푸시** → GitHub
 2. **변경사항 감지** → 웹앱/프록시서버/공유패키지
-3. **병렬 빌드** → 각 컴포넌트별 독립 빌드
+3. **병렬 빌드** → 각 컴포넌트별 독립 빌드 (각 앱에서 Prisma 클라이언트 자동 생성)
 4. **자동 배포** → Vercel (웹앱) + EC2 (프록시서버)
 5. **헬스체크** → 배포 성공 확인
 6. **알림** → 배포 결과 리포트

@@ -64,6 +64,12 @@ jobs:
             - name: Build packages
               run: yarn build:packages
 
+            - name: Generate Prisma clients
+              run: |
+                  cd apps/web && yarn db:generate
+                  cd ../kakao-proxy-server && yarn db:generate
+                  cd ../..
+
             - name: Run linting
               run: yarn lint
 
@@ -90,6 +96,12 @@ jobs:
 
             - name: Build packages
               run: yarn build:packages
+
+            - name: Generate Prisma clients
+              run: |
+                  cd apps/web && yarn db:generate
+                  cd ../kakao-proxy-server && yarn db:generate
+                  cd ../..
 
             - name: Run tests
               run: |

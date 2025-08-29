@@ -1,8 +1,8 @@
 import { UserRepository } from '@/repository/user.repository';
-import { OAuthAccount, User } from '@moneed/db/generated';
+import { OAuthAccount, User } from '@/generated/prisma-client-js';
 import { deleteSession } from '@/utils/session';
 import { ProviderRepository } from '@/repository/provider.repository';
-import { RequiredUserInfo, UserInfo } from '@moneed/db';
+import { RequiredUserInfo, UserInfo } from '@/database/types';
 import { NicknameService } from '@/service/nickname.service';
 import { ProviderInfo, Providers } from '@moneed/auth';
 import LeaveReasonRepository from '@/repository/leaveReason.repository';

@@ -1,5 +1,5 @@
-import { type User } from '@moneed/db/generated';
-import { prisma } from '@moneed/db';
+import { prisma } from '@/database/client';
+import { User } from '@/generated/prisma-client-js';
 
 export class UserRepository {
     private prisma = prisma;
@@ -12,7 +12,7 @@ export class UserRepository {
         });
     }
 
-    async update(userId: string, userData: Partial<User>) {
+    async update(userId: string, userData: any) {
         return this.prisma.user.update({
             where: { id: userId },
             data: userData,

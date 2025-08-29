@@ -46,6 +46,11 @@ cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env.local
 # 공유 패키지 빌드
 yarn build:packages
 
+# Prisma 클라이언트 생성 (각 앱에서 독립적으로)
+cd apps/web && yarn db:generate
+cd ../kakao-proxy-server && yarn db:generate
+cd ../..
+
 # 개발 서버 실행
 yarn dev
 ```
@@ -64,7 +69,6 @@ Moneed/
 │   ├── web/                    # Next.js 웹 애플리케이션 (Vercel 배포)
 │   └── kakao-proxy-server/     # Express 프록시 서버 (AWS EC2 배포)
 ├── packages/
-│   ├── database/               # Prisma 스키마 및 클라이언트
 │   └── shared/
 │       ├── auth/               # 인증 관련 공유 로직
 │       ├── utils/              # 공통 유틸리티 함수
@@ -140,8 +144,8 @@ yarn dev:kakao        # 프록시 서버만 실행
 # 빌드
 yarn build            # 전체 빌드 (패키지 → 앱)
 yarn build:packages   # 공유 패키지만 빌드
-yarn build:web        # 웹 앱 빌드
-yarn build:kakao      # 프록시 서버 빌드
+yarn build:web        # 웹 앱 빌드 (Prisma 클라이언트 자동 생성)
+yarn build:kakao      # 프록시 서버 빌드 (Prisma 클라이언트 자동 생성)
 
 # 테스트 및 검증
 yarn lint             # ESLint 실행

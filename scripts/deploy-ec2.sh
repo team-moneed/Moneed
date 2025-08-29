@@ -128,7 +128,7 @@ start_new() {
         exit 1
     fi
     
-    # 컨테이너 실행
+    # 컨테이너 실행 (독립적인 Prisma 설정 사용)
     docker run -d \
         --name $CONTAINER_NAME \
         --restart unless-stopped \
@@ -139,7 +139,7 @@ start_new() {
         --log-opt max-file=3 \
         "$IMAGE_NAME:$IMAGE_TAG"
     
-    print_success "새 컨테이너 실행 완료"
+    print_success "새 컨테이너 실행 완료 (독립적인 Prisma 설정)"
 }
 
 # 헬스체크

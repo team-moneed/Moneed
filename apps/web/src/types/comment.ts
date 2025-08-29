@@ -1,4 +1,4 @@
-import type { Comment, User, Post, Stock } from '@moneed/db/generated';
+import type { Comment, User, Post, Stock } from '@/generated/prisma-client-js';
 
 export type CommentDeleteResponse = {
     message: string;

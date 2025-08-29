@@ -1,5 +1,11 @@
 import { JWTPayload } from 'jose';
-import type { UserInfo } from '@moneed/db';
+
+export type UserInfo = {
+    id: string;
+    nickname: string;
+    email?: string;
+    profileImage?: string;
+};
 
 export type TokenPayload = { userId: string; nickname: string } & JWTPayload;
 

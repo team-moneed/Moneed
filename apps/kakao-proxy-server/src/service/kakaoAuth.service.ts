@@ -1,4 +1,4 @@
-import type { RequiredUserInfo } from '@moneed/db';
+import type { RequiredUserInfo } from '@/database/types';
 import type { TokenPayload } from '@moneed/auth';
 import { AuthService } from '@/service/auth.service';
 import { deleteSession } from '@/utils/session';

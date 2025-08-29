@@ -7,7 +7,7 @@ import { usePrevNextButtons } from '@/hooks/usePrevNextButtons';
 import { useState } from 'react';
 import ShortformDetail from '@/app/shortform/ShortformDetail';
 import { cn } from '@/utils/style';
-import type { Shorts } from '@moneed/db/generated';
+import type { Shorts } from '@/generated/prisma-client-js';
 
 type PropType = {
     videos: Shorts[];

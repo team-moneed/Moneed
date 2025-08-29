@@ -10,11 +10,14 @@
         "clean": "rimraf dist",
         "lint": "eslint src --ext .ts",
         "lint:fix": "eslint src --ext .ts --fix",
-        "type-check": "tsc --noEmit"
+        "type-check": "tsc --noEmit",
+        "db:generate": "prisma generate",
+        "db:push": "prisma db push",
+        "db:migrate": "prisma migrate dev",
+        "db:seed": "tsx prisma/post.seed.ts"
     },
     "dependencies": {
         "@moneed/auth": "*",
-        "@moneed/db": "*",
         "@moneed/utility-types": "*",
         "@moneed/utils": "*",
         "axios": "^1.7.9",
@@ -38,6 +41,10 @@
         "eslint": "^9.15.0",
         "tsc-alias": "^1.8.16",
         "tsx": "^4.20.3",
-        "typescript": "~5.6.2"
+        "typescript": "~5.6.2",
+        "prisma": "^6.14.0"
+    },
+    "prisma": {
+        "seed": "tsx src/prisma/post.seed.ts"
     }
 }

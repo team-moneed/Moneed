@@ -1,4 +1,4 @@
-import { prisma } from '@moneed/db';
+import { prisma } from '@/database/client';
 import { KISAccessTokenResponse } from '@/types/kis';
 import { TokenUtils } from '@/utils/token-utils';
 

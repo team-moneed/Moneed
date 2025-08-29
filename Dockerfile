@@ -9,7 +9,6 @@ WORKDIR /app
 
 # Copy package files
 COPY package.json yarn.lock* ./
-COPY packages/database/package.json ./packages/database/
 COPY packages/shared/auth/package.json ./packages/shared/auth/
 COPY packages/shared/utils/package.json ./packages/shared/utils/
 COPY packages/shared/utility-types/package.json ./packages/shared/utility-types/
@@ -32,7 +31,9 @@ COPY . .
 RUN yarn workspace @moneed/utility-types build
 RUN yarn workspace @moneed/utils build  
 RUN yarn workspace @moneed/auth build
-RUN yarn workspace @moneed/db build
+
+# Generate Prisma client for kakao proxy server
+RUN cd apps/kakao-proxy-server && yarn db:generate
 
 # Build kakao proxy server
 RUN yarn workspace @moneed/kakao-proxy-server build

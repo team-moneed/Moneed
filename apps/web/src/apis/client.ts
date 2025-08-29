@@ -55,7 +55,7 @@ const withCredentials = (instance: AxiosInstance) => {
             if (error.response?.status === 401) {
                 // TODO: 주석 제거 -> 커뮤니티 페이지 StockTypeBar 수정 (유저, 게스트 UI 명확히 분리)
                 // window.location.href = `/onboarding?reason=${REASON_CODES.EXPIRED_SESSION}`;
-                const { data } = await refresh({ provider: 'kakao' });
+                await refresh({ provider: 'kakao' });
                 return instance.request(error.config);
             }
 
