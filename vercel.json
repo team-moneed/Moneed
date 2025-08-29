@@ -2,7 +2,6 @@
     "buildCommand": "yarn build:web",
     "outputDirectory": "apps/web/dist",
     "installCommand": "yarn install",
-    "rootDirectory": "apps/web",
     "ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/web/ packages/",
     "functions": {
         "apps/web/src/app/api/**/*.ts": {
