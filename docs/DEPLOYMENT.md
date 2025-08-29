@@ -45,7 +45,7 @@
 
 ### 2. 로컬 개발 환경
 
-- [x] Node.js 18 이상
+- [x] Node.js 20 이상
 - [x] Yarn 패키지 매니저
 - [x] Docker (선택사항)
 - [x] Git

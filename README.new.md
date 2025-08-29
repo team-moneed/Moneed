@@ -3,9 +3,6 @@
   <h1>MONEED</h1>
   <p>MZ세대를 위한 주식투자 커뮤니티 플랫폼</p>
   
-  [![Deploy](https://github.com/your-username/moneed/actions/workflows/deploy.yml/badge.svg)](https://github.com/your-username/moneed/actions/workflows/deploy.yml)
-  [![CI](https://github.com/your-username/moneed/actions/workflows/ci.yml/badge.svg)](https://github.com/your-username/moneed/actions/workflows/ci.yml)
-  
   <br />
 </div>
 
@@ -93,7 +90,7 @@ Moneed/
 
 ### Backend (Express.js)
 
-- **Runtime**: Node.js 18+
+- **Runtime**: Node.js 20+
 - **Framework**: Express.js
 - **Language**: TypeScript
 - **Database**: PostgreSQL + Prisma ORM
@@ -157,7 +154,7 @@ yarn clean            # 빌드 결과물 정리
 
 ### 개발 환경 요구사항
 
-- **Node.js**: 18 이상
+- **Node.js**: 20 이상
 - **Package Manager**: Yarn
 - **Database**: PostgreSQL (Docker 권장)
 - **IDE**: VS Code (권장)
