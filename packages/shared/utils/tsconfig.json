@@ -10,5 +10,8 @@
         "target": "ES2022"
     },
     "include": ["src/**/*"],
-    "exclude": ["node_modules", "src/__test__/**/*"]
+    "exclude": ["node_modules", "src/__test__/**/*"],
+    "tsc-alias": {
+        "resolveFullPaths": true
+    }
 }
