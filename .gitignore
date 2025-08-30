@@ -37,3 +37,4 @@ backup/*
 
 # AWS
 *.pem
+.vercel
