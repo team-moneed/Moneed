@@ -139,17 +139,11 @@ router.post('/logout', async (req, res, next) => {
  */
 router.post('/leave', async (req, res, next) => {
     try {
-        const { userId, reason } = req.body;
-
-        if (!userId) {
-            return res.status(400).json({
-                error: 'Bad Request',
-                message: 'userId is required',
-            });
-        }
+        const { accessTokenPayload } = await verifyRequestCookies(req);
+        const { reason } = req.body;
 
         const kakaoAuthService = new KakaoAuthService();
-        const result = await kakaoAuthService.leave({ userId, reason, response: res });
+        const result = await kakaoAuthService.leave({ userId: accessTokenPayload.userId, reason, response: res });
 
         if (result.success) {
             return res.status(result.status).json({
@@ -161,11 +155,11 @@ router.post('/leave', async (req, res, next) => {
             });
         }
     } catch (error) {
-        console.error('Leave API error:', error);
-        return res.status(500).json({
-            error: 'Internal Server Error',
-            message: '회원탈퇴 처리 중 오류가 발생했습니다.',
-        });
+        console.error('회원탈퇴 오류:', error);
+        if (error instanceof ResponseError) {
+            return res.status(error.code).json({ message: error.message });
+        }
+        next(error);
     }
 });
 
