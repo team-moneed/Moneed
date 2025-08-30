@@ -143,7 +143,8 @@ export class KakaoAuthService {
             };
         } catch (e) {
             const error = e as AxiosError<{ msg: string; code: number }>;
-            if (error.response?.data?.code === -401) {
+            console.error('로그아웃 오류:', error);
+            if (error.status === 401) {
                 await deleteSession(response);
                 return {
                     success: true,

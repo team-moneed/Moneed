@@ -76,23 +76,23 @@ function Set-EnvFiles {
     Write-Step "환경변수 파일을 설정합니다..."
     
     # 웹 앱 환경변수
-    if (-not (Test-Path "apps/web/.env.local")) {
-        Copy-Item "env-templates/web.env.template" "apps/web/.env.local"
-        Write-Success "웹 앱 환경변수 파일 생성: apps/web/.env.local"
-        Write-Warning "apps/web/.env.local 파일을 열어서 실제 값으로 수정해주세요."
+    if (-not (Test-Path "apps/web/.env")) {
+        Copy-Item "env-templates/web.env.template" "apps/web/.env"
+        Write-Success "웹 앱 환경변수 파일 생성: apps/web/.env"
+        Write-Warning "apps/web/.env 파일을 열어서 실제 값으로 수정해주세요."
     }
     else {
-        Write-Warning "apps/web/.env.local 파일이 이미 존재합니다."
+        Write-Warning "apps/web/.env 파일이 이미 존재합니다."
     }
     
     # 카카오 프록시 서버 환경변수
-    if (-not (Test-Path "apps/kakao-proxy-server/.env.local")) {
-        Copy-Item "env-templates/kakao-proxy.env.template" "apps/kakao-proxy-server/.env.local"
-        Write-Success "카카오 프록시 서버 환경변수 파일 생성: apps/kakao-proxy-server/.env.local"
-        Write-Warning "apps/kakao-proxy-server/.env.local 파일을 열어서 실제 값으로 수정해주세요."
+    if (-not (Test-Path "apps/kakao-proxy-server/.env")) {
+        Copy-Item "env-templates/kakao-proxy.env.template" "apps/kakao-proxy-server/.env"
+        Write-Success "카카오 프록시 서버 환경변수 파일 생성: apps/kakao-proxy-server/.env"
+        Write-Warning "apps/kakao-proxy-server/.env 파일을 열어서 실제 값으로 수정해주세요."
     }
     else {
-        Write-Warning "apps/kakao-proxy-server/.env.local 파일이 이미 존재합니다."
+        Write-Warning "apps/kakao-proxy-server/.env 파일이 이미 존재합니다."
     }
 }
 

@@ -56,7 +56,6 @@ router.get('/callback', async (req, res, next) => {
         const result = await kakaoAuthService.login({ code: code as string });
 
         if (result.success) {
-            const redirectPath = result.data.isNewUser ? `/selectstocktype?url=${encodeURIComponent('/welcome')}` : `/`;
             const key = process.env.SESSION_SECRET;
             if (!key) {
                 console.error(ERROR_MSG.SESSION_SECRET_NOT_SET);
@@ -89,8 +88,9 @@ router.get('/callback', async (req, res, next) => {
                 ...refreshTokenCookie.options,
                 expires: new Date(Date.now() + parseDurationToMs(process.env.JWT_REFRESH_EXPIRES_IN || '30d')),
             });
-            res.setHeader('Location', `${baseUrl}${redirectPath}`);
-            return res.status(302).end();
+
+            const redirectPath = result.data.isNewUser ? `/selectstocktype?url=${encodeURIComponent('/welcome')}` : `/`;
+            return res.redirect(`${baseUrl}${redirectPath}`);
         } else {
             return res.redirect(`${baseUrl}/auth/error?error=${result.error}`);
         }
@@ -126,6 +126,7 @@ router.post('/logout', async (req, res, next) => {
             });
         }
     } catch (error) {
+        console.error('로그아웃 오류:', error);
         if (error instanceof ResponseError) {
             return res.status(error.code).json({ message: error.message });
         }

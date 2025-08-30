@@ -20,15 +20,15 @@ env-templates/
 
 ```bash
 # 웹 앱 환경변수 복사
-cp env-templates/web.env.template apps/web/.env.local
+cp env-templates/web.env.template apps/web/.env
 
 # 카카오 프록시 서버 환경변수 복사
-cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env.local
+cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env
 ```
 
 ### 2. 환경변수 값 설정
 
-각 `.env.local` 파일을 열어서 실제 값으로 변경하세요:
+각 `.env` 파일을 열어서 실제 값으로 변경하세요:
 
 - 데이터베이스 연결 정보
 - 카카오 OAuth 설정
@@ -39,8 +39,8 @@ cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env.local
 
 ### 개발 환경 (Local)
 
-- **웹 앱**: `apps/web/.env.local`
-- **프록시 서버**: `apps/kakao-proxy-server/.env.local`
+- **웹 앱**: `apps/web/.env`
+- **프록시 서버**: `apps/kakao-proxy-server/.env`
 - **데이터베이스**: 로컬 PostgreSQL
 
 ### 프로덕션 환경
@@ -71,7 +71,7 @@ sudo nano /home/ubuntu/.env.production
 
 ### 필수 보안 사항
 
-- ✅ `.env.local` 파일은 절대 Git에 커밋하지 않기
+- ✅ `.env` 파일은 절대 Git에 커밋하지 않기
 - ✅ 프로덕션과 개발 환경의 키를 분리하기
 - ✅ JWT 시크릿은 최소 32자 이상의 강력한 키 사용
 - ✅ 정기적으로 API 키와 시크릿 로테이션
@@ -85,7 +85,7 @@ sudo nano /home/ubuntu/.env.production
 
 ## 📋 환경변수 체크리스트
 
-### 웹 앱 (.env.local)
+### 웹 앱 (.env)
 
 - [ ] `NEXT_PUBLIC_MONEED_BASE_URL` - 웹 앱 기본 URL
 - [ ] `KAKAO_PROXY_SERVER_URL` - 프록시 서버 URL
@@ -94,7 +94,7 @@ sudo nano /home/ubuntu/.env.production
 - [ ] `AWS_SECRET_ACCESS_KEY` - AWS 시크릿 키
 - [ ] `AWS_BUCKET_NAME` - S3 버킷 이름
 
-### 카카오 프록시 서버 (.env.local)
+### 카카오 프록시 서버 (.env)
 
 - [ ] `PORT` - 서버 포트 (기본: 8000)
 - [ ] `DATABASE_URL` - 데이터베이스 연결 문자열

@@ -40,8 +40,8 @@ yarn dev
 yarn install
 
 # 환경변수 설정
-cp env-templates/web.env.template apps/web/.env.local
-cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env.local
+cp env-templates/web.env.template apps/web/.env
+cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env
 
 # 공유 패키지 빌드
 yarn build:packages
@@ -178,8 +178,8 @@ yarn clean            # 빌드 결과물 정리
 
 ```bash
 # 로컬 개발
-apps/web/.env.local
-apps/kakao-proxy-server/.env.local
+apps/web/.env
+apps/kakao-proxy-server/.env
 
 # Vercel (웹앱)
 Vercel Dashboard → Environment Variables

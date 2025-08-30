@@ -74,21 +74,21 @@ setup_env_files() {
     print_step "환경변수 파일을 설정합니다..."
     
     # 웹 앱 환경변수
-    if [ ! -f "apps/web/.env.local" ]; then
-        cp env-templates/web.env.template apps/web/.env.local
-        print_success "웹 앱 환경변수 파일 생성: apps/web/.env.local"
-        print_warning "apps/web/.env.local 파일을 열어서 실제 값으로 수정해주세요."
+    if [ ! -f "apps/web/.env" ]; then
+        cp env-templates/web.env.template apps/web/.env
+        print_success "웹 앱 환경변수 파일 생성: apps/web/.env"
+        print_warning "apps/web/.env 파일을 열어서 실제 값으로 수정해주세요."
     else
-        print_warning "apps/web/.env.local 파일이 이미 존재합니다."
+        print_warning "apps/web/.env 파일이 이미 존재합니다."
     fi
     
     # 카카오 프록시 서버 환경변수
-    if [ ! -f "apps/kakao-proxy-server/.env.local" ]; then
-        cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env.local
-        print_success "카카오 프록시 서버 환경변수 파일 생성: apps/kakao-proxy-server/.env.local"
-        print_warning "apps/kakao-proxy-server/.env.local 파일을 열어서 실제 값으로 수정해주세요."
+    if [ ! -f "apps/kakao-proxy-server/.env" ]; then
+        cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env
+        print_success "카카오 프록시 서버 환경변수 파일 생성: apps/kakao-proxy-server/.env"
+        print_warning "apps/kakao-proxy-server/.env 파일을 열어서 실제 값으로 수정해주세요."
     else
-        print_warning "apps/kakao-proxy-server/.env.local 파일이 이미 존재합니다."
+        print_warning "apps/kakao-proxy-server/.env 파일이 이미 존재합니다."
     fi
 }
 

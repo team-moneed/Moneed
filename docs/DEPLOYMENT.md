@@ -74,12 +74,12 @@ chmod +x scripts/setup-dev.sh
 yarn install
 
 # 2. 환경변수 파일 복사
-cp env-templates/web.env.template apps/web/.env.local
-cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env.local
+cp env-templates/web.env.template apps/web/.env
+cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env
 
 # 3. 환경변수 값 수정 (실제 값으로 변경)
-# apps/web/.env.local
-# apps/kakao-proxy-server/.env.local
+# apps/web/.env
+# apps/kakao-proxy-server/.env
 
 # 4. 공유 패키지 빌드
 yarn build:packages
