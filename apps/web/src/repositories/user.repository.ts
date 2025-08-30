@@ -1,5 +1,5 @@
 import { prisma } from '@/database/client';
-import { User } from '@/generated/prisma-client-js';
+import { User } from '@prisma/client';
 
 export class UserRepository {
     private prisma = prisma;

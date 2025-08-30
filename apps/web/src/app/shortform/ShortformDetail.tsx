@@ -1,4 +1,4 @@
-import type { Shorts } from '@/generated/prisma-client-js';
+import type { Shorts } from '@prisma/client';
 
 interface ShortformDetailProps {
     video: Shorts;

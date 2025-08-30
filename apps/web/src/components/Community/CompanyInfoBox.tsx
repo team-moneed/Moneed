@@ -1,6 +1,6 @@
 'use client';
 
-import type { Stock } from '@/generated/prisma-client-js';
+import type { Stock } from '@prisma/client';
 
 const CompanyInfoBox = ({ stock }: { stock: Stock }) => {
     return (

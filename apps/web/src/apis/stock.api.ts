@@ -1,5 +1,5 @@
 import { httpWithCredentials, http } from '@/apis/client';
-import type { Stock } from '@/generated/prisma-client-js';
+import type { Stock } from '@prisma/client';
 import type { MarketCode, OverseasStockPriceResponse } from '@/types/kis';
 import type { HotStock } from '@/types/stock';
 

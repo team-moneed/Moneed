@@ -1,4 +1,4 @@
-import type { User } from '@/generated/prisma-client-js';
+import type { User } from '@prisma/client';
 import { httpWithCredentials } from './client';
 import { isFile } from '@/utils/typeChecker';
 import type { UpdateUserProfileRequest } from '@/types/user';

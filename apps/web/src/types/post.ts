@@ -1,4 +1,4 @@
-import type { Comment as PrismaComment } from '@/generated/prisma-client-js';
+import type { Comment as PrismaComment } from '@prisma/client';
 
 export interface CreatePostResult {
     id: number;

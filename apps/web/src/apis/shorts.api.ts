@@ -1,4 +1,4 @@
-import type { Shorts } from '@/generated/prisma-client-js';
+import type { Shorts } from '@prisma/client';
 import { http } from './client';
 
 export const fetchShorts = async ({ cursor, limit }: { cursor: string; limit: number }) => {
