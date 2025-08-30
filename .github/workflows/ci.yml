@@ -139,6 +139,15 @@ jobs:
                   cache-from: type=gha
                   cache-to: type=gha,mode=max
 
+            - name: Verify Docker image exists
+              run: |
+                  echo "Checking if Docker image was built successfully..."
+                  docker images kakao-proxy:test
+                  if ! docker images kakao-proxy:test | grep -q kakao-proxy; then
+                      echo "Error: Docker image was not built successfully"
+                      exit 1
+                  fi
+
             - name: Test Docker image
               run: |
                   # 컨테이너 실행 테스트
@@ -192,16 +201,6 @@ jobs:
               run: |
                   # 기본 lint 실행
                   yarn lint
-                  # SARIF 형식으로 출력
-                  yarn lint --format=@microsoft/eslint-formatter-sarif --output-file=eslint-results.sarif
-              continue-on-error: true
-
-            - name: Upload ESLint results
-              if: always()
-              uses: github/codeql-action/upload-sarif@v3
-              with:
-                  sarif_file: eslint-results.sarif
-                  checkout_path: ${{ github.workspace }}
 
     # 보안 스캔
     security-scan:
