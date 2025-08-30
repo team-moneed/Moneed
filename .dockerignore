@@ -6,7 +6,6 @@ yarn-error.log*
 .pnpm-debug.log*
 
 # Build outputs (except the ones we need)
-apps/web/dist
 apps/web/.next
 .next
 dist

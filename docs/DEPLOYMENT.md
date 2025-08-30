@@ -105,7 +105,7 @@ yarn dev
     - **Framework Preset**: Next.js
     - **Root Directory**: `./` (루트)
     - **Build Command**: `yarn build:web`
-    - **Output Directory**: `apps/web/dist`
+    - **Output Directory**: `apps/web/.next`
 
 ### 2. 환경변수 설정
 
