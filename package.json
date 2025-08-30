@@ -25,8 +25,8 @@
         "start": "concurrently \"npm run start:web\" \"npm run start:kakao\"",
         "start:web": "npm run start --workspace=apps/web",
         "start:kakao": "npm run start --workspace=apps/kakao-proxy-server",
-        "lint": "npm run lint --workspaces",
-        "lint:fix": "npm run lint:fix --workspaces",
+        "lint": "npm run lint --workspace=apps/*",
+        "lint:fix": "npm run lint:fix --workspace=apps/*",
         "type-check": "npm run type-check --workspaces",
         "postinstall": "husky install"
     },
