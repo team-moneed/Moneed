@@ -6,6 +6,14 @@
 - **카카오 프록시 서버** (`@moneed/kakao-proxy-server`): AWS EC2 배포
 - **공유 패키지들**: `@moneed/db`, `@moneed/auth`, `@moneed/utils`, `@moneed/utility-types`
 
+### 주요 API 통합
+
+- **한국투자증권 API**: 실시간 주식 데이터 및 거래 정보
+- **YouTube API**: 주식 관련 영상 콘텐츠 연동
+- **카카오 OAuth**: 사용자 인증 및 소셜 로그인
+- **AWS S3**: 이미지 및 파일 저장소
+- **Supabase**: PostgreSQL 데이터베이스 호스팅
+
 ## 1. 배포 전략
 
 ### 1.1 Vercel 배포 (@moneed/web)
@@ -28,8 +36,13 @@
 - Vercel Dashboard에서 환경변수 설정
 - 필요한 변수들:
     - `NEXT_PUBLIC_*`: 클라이언트 사이드 변수
-    - `DATABASE_URL`: 데이터베이스 연결
-    - `KAKAO_PROXY_SERVER_URL`: EC2 서버 엔드포인트
+    - `DATABASE_URL`, `DIRECT_URL`: Supabase 데이터베이스 연결
+    - `NEXT_PUBLIC_KAKAO_PROXY_SERVER`: EC2 서버 엔드포인트
+    - `KIS_APP_KEY`, `KIS_APP_SECRET`: 한국투자증권 API
+    - `YOUTUBE_API_KEY`: YouTube API
+    - `MONEED_AWS_ACCESS_KEY`, `MONEED_AWS_SECRET_KEY`: AWS S3
+    - `SESSION_SECRET`: JWT 세션 관리
+    - `CRON_SECRET`: Vercel Cron Jobs
 
 #### 빌드 최적화
 
@@ -153,15 +166,31 @@ jobs:
 ```bash
 # 웹 애플리케이션 (.env)
 NEXT_PUBLIC_MONEED_BASE_URL=https://moneed.vercel.app
-KAKAO_PROXY_SERVER_URL=https://api.moneed.com
-DATABASE_URL=postgresql://...
+NEXT_PUBLIC_KAKAO_PROXY_SERVER=https://api.moneed.com
+
+# 한국투자증권 API
+KIS_APP_KEY=...
+KIS_APP_SECRET=...
+
+# YouTube API
+YOUTUBE_API_KEY=...
+
+# AWS S3 설정
+MONEED_AWS_ACCESS_KEY=...
+MONEED_AWS_SECRET_KEY=...
+
+# Supabase 데이터베이스
+DATABASE_URL=postgresql://postgres.user:password@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true
+DIRECT_URL=postgresql://postgres.user:password@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres
 
 # 카카오 프록시 서버 (.env.production)
 PORT=8000
 KAKAO_CLIENT_ID=...
 KAKAO_CLIENT_SECRET=...
+SESSION_SECRET=...
 ALLOWED_ORIGINS=https://moneed.vercel.app
 DATABASE_URL=postgresql://...
+DIRECT_URL=postgresql://...
 ```
 
 ### 3.2 보안 관리

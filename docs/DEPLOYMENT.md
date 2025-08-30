@@ -114,11 +114,38 @@ Vercel Dashboard > Project Settings > Environment Variables
 ```bash
 # 필수 환경변수
 NEXT_PUBLIC_MONEED_BASE_URL=https://your-domain.vercel.app
-KAKAO_PROXY_SERVER_URL=https://your-ec2-domain.com
-DATABASE_URL=postgresql://...
-AWS_ACCESS_KEY_ID=AKIA...
-AWS_SECRET_ACCESS_KEY=...
-AWS_BUCKET_NAME=your-bucket
+NEXT_PUBLIC_KAKAO_PROXY_SERVER=https://your-ec2-domain.com
+
+# 데이터베이스 (Supabase)
+DATABASE_URL=postgresql://postgres.your_db_user:your_db_password@aws-0-ap-northeast-2.pooler.supabase.com:6543/postgres?pgbouncer=true
+DIRECT_URL=postgresql://postgres.your_db_user:your_db_password@aws-0-ap-northeast-2.pooler.supabase.com:5432/postgres
+
+# 한국투자증권 API
+KIS_BASE_URL=https://openapi.koreainvestment.com:9443
+KIS_WEBSOCKET_URL=ws://ops.koreainvestment.com:21000
+KIS_APP_KEY=your_kis_app_key
+KIS_APP_SECRET=your_kis_app_secret
+
+# YouTube API
+YOUTUBE_BASE_URL=https://www.googleapis.com/youtube
+YOUTUBE_API_KEY=your_youtube_api_key
+
+# JWT 설정
+SESSION_SECRET=your_session_secret
+JWT_ACCESS_EXPIRES_IN=24h
+JWT_REFRESH_EXPIRES_IN=30d
+JWT_ACCESS_NAME=access_token
+JWT_REFRESH_NAME=refresh_token
+
+# AWS S3 설정
+AWS_REGION=your_aws_region
+AWS_BUCKET_NAME=your_bucket_name
+AWS_BUCKET_URL=your_bucket_url
+MONEED_AWS_ACCESS_KEY=your_aws_access_key
+MONEED_AWS_SECRET_KEY=your_aws_secret_key
+
+# Vercel Cron Jobs
+CRON_SECRET=your_cron_secret
 ```
 
 ### 3. Prisma 클라이언트 생성
@@ -178,6 +205,13 @@ sudo nano /home/ubuntu/.env.production
 
 # env-templates/production.env.template 내용을 복사하고
 # 실제 프로덕션 값으로 수정
+
+# 주요 환경변수:
+# - KAKAO_CLIENT_ID, KAKAO_CLIENT_SECRET: 카카오 OAuth 설정
+# - SESSION_SECRET: JWT 세션 시크릿
+# - DATABASE_URL, DIRECT_URL: Supabase 데이터베이스 연결
+# - ALLOWED_ORIGINS: CORS 허용 도메인 (프로덕션 웹앱 URL)
+# - RATE_LIMIT_*: API 요청 제한 설정
 ```
 
 ### 3. 배포 스크립트 설정

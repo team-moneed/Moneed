@@ -191,6 +191,23 @@ Vercel Dashboard → Environment Variables
 Repository Settings → Secrets
 ```
 
+#### 주요 환경변수
+
+**웹 앱 (Vercel)**:
+
+- 한국투자증권 API (KIS_APP_KEY, KIS_APP_SECRET)
+- YouTube API (YOUTUBE_API_KEY)
+- AWS S3 설정 (이미지 업로드)
+- JWT 토큰 설정
+- 데이터베이스 연결 (Supabase)
+
+**프록시 서버 (EC2)**:
+
+- 카카오 OAuth 설정
+- JWT 세션 관리
+- CORS 설정
+- Rate Limiting 설정
+
 자세한 설정 방법은 [`env-templates/README.md`](env-templates/README.md)를 참고하세요.
 
 ### 자동 배포 설정

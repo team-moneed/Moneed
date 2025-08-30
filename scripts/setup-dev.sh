@@ -111,6 +111,7 @@ setup_database() {
         
         print_success "PostgreSQL 컨테이너 실행 (포트: 5432)"
         print_warning "데이터베이스 연결 문자열: postgresql://moneed:moneed123@localhost:5432/moneed_dev"
+        print_warning "Supabase 사용 시 DATABASE_URL과 DIRECT_URL을 환경변수 파일에서 설정하세요."
     else
         print_warning "Docker가 설치되어 있지 않습니다. 수동으로 PostgreSQL을 설치하고 설정해주세요."
     fi
@@ -162,9 +163,12 @@ show_dev_guide() {
     echo ""
     echo "📝 추가 설정 사항:"
 echo "1. 환경변수 파일들을 실제 값으로 수정"
+echo "   - 웹앱: 한국투자증권 API, YouTube API, AWS S3, Supabase DB"
+echo "   - 프록시서버: 카카오 OAuth, JWT 세션, CORS 설정"
 echo "2. 카카오 개발자 콘솔에서 OAuth 앱 설정"
 echo "3. AWS S3 버킷 설정 (이미지 업로드용)"
 echo "4. 각 앱에서 독립적인 Prisma 설정 사용"
+echo "5. Supabase 데이터베이스 설정 (DATABASE_URL, DIRECT_URL)"
 echo ""
 echo "📖 자세한 내용은 env-templates/README.md를 참고하세요."
 }

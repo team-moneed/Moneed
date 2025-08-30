@@ -209,7 +209,7 @@ jobs:
                       docker stop kakao-proxy || true
                       docker rm kakao-proxy || true
 
-                      # 새 컨테이너 실행
+                      # 새 컨테이너 실행 (독립적인 Prisma 설정 사용)
                       docker run -d \
                         --name kakao-proxy \
                         --restart unless-stopped \

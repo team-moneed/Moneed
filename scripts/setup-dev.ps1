@@ -117,6 +117,7 @@ function Set-Database {
                 
             Write-Success "PostgreSQL 컨테이너 실행 (포트: 5432)"
             Write-Warning "데이터베이스 연결 문자열: postgresql://moneed:moneed123@localhost:5432/moneed_dev"
+            Write-Warning "Supabase 사용 시 DATABASE_URL과 DIRECT_URL을 환경변수 파일에서 설정하세요."
         }
         catch {
             Write-Warning "PostgreSQL 컨테이너가 이미 실행 중이거나 오류가 발생했습니다."
@@ -166,8 +167,12 @@ function Show-DevGuide {
     Write-Host ""
     Write-Host "📝 추가 설정 사항:" -ForegroundColor White
     Write-Host "1. 환경변수 파일들을 실제 값으로 수정"
+    Write-Host "   - 웹앱: 한국투자증권 API, YouTube API, AWS S3, Supabase DB"
+    Write-Host "   - 프록시서버: 카카오 OAuth, JWT 세션, CORS 설정"
     Write-Host "2. 카카오 개발자 콘솔에서 OAuth 앱 설정"
     Write-Host "3. AWS S3 버킷 설정 (이미지 업로드용)"
+    Write-Host "4. 각 앱에서 독립적인 Prisma 설정 사용"
+    Write-Host "5. Supabase 데이터베이스 설정 (DATABASE_URL, DIRECT_URL)"
     Write-Host ""
     Write-Host "📖 자세한 내용은 env-templates/README.md를 참고하세요." -ForegroundColor White
 }
