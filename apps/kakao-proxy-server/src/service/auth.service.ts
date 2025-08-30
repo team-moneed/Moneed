@@ -22,7 +22,7 @@ export class AuthService {
 
     createDefaultProfileImage(): string {
         const randomNumber = Math.floor(Math.random() * 15) + 1;
-        return `${process.env.NEXT_PUBLIC_MONEED_BASE_URL}/profile/profile-${randomNumber}.svg`;
+        return `${process.env.MONEED_BASE_URL}/profile/profile-${randomNumber}.svg`;
     }
 
     async checkExistingUser({
