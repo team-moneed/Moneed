@@ -2,7 +2,7 @@
     "buildCommand": "yarn build:web",
     "outputDirectory": "apps/web/dist",
     "installCommand": "yarn install",
-    "ignoreCommand": "git diff --quiet HEAD^ HEAD -- apps/web/ packages/",
+    "ignoreCommand": "[ -z \"$VERCEL_GIT_PREVIOUS_SHA\" ] || git diff --quiet $VERCEL_GIT_PREVIOUS_SHA $VERCEL_GIT_COMMIT_SHA -- apps/web/ packages/",
     "functions": {
         "apps/web/src/app/api/**/*.ts": {
             "maxDuration": 10
