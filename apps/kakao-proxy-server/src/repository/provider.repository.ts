@@ -1,5 +1,5 @@
 import { prisma } from '@/database/client';
-import type { OAuthAccount } from '@/generated/prisma-client-js';
+import type { OAuthAccount } from '@prisma/client';
 import type { ProviderInfo } from '@moneed/auth';
 import type { Optional } from '@moneed/utility-types';
 

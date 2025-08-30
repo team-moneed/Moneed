@@ -1,6 +1,6 @@
 import { prisma } from '@/database/client';
 import type { RequiredUserInfo } from '@/database/types';
-import type { OAuthAccount, User } from '@/generated/prisma-client-js';
+import type { OAuthAccount, User } from '@prisma/client';
 
 export class UserRepository {
     private prisma = prisma;

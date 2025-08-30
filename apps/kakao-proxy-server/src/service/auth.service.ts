@@ -1,5 +1,5 @@
 import { UserRepository } from '@/repository/user.repository';
-import { OAuthAccount, User } from '@/generated/prisma-client-js';
+import { OAuthAccount, User } from '@prisma/client';
 import { deleteSession } from '@/utils/session';
 import { ProviderRepository } from '@/repository/provider.repository';
 import { RequiredUserInfo, UserInfo } from '@/database/types';

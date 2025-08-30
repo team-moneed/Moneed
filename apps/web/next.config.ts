@@ -8,12 +8,14 @@ const nextConfig: NextConfig = {
     devIndicators: false,
     transpilePackages: ['@moneed/db', '@moneed/auth', '@moneed/utils', '@moneed/utility-types'],
     images: {
-        remotePatterns: [
-            {
-                protocol: 'https',
-                hostname: process.env.AWS_BUCKET_URL ?? '',
-            },
-        ],
+        remotePatterns: process.env.AWS_BUCKET_URL
+            ? [
+                  {
+                      protocol: 'https',
+                      hostname: process.env.AWS_BUCKET_URL,
+                  },
+              ]
+            : [],
     },
 };
 
