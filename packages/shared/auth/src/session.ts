@@ -11,7 +11,7 @@ export const getAccessTokenCookie = (duration: string | Date | number, name: str
         name,
         options: {
             secure: true,
-            sameSite: 'lax' as const,
+            sameSite: 'none' as const,
             path: '/',
         },
         duration,
@@ -24,7 +24,7 @@ export const getRefreshTokenCookie = (duration: string | Date | number, name: st
         options: {
             httpOnly: true,
             secure: true,
-            sameSite: 'lax' as const,
+            sameSite: 'none' as const,
             path: '/',
         },
         duration,

@@ -4,6 +4,7 @@ import { verifyRequestCookies } from '@/utils/session';
 import { createToken, getAccessTokenCookie, getRefreshTokenCookie } from '@moneed/auth';
 import { parseDurationToMs, ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/constants/error';
+import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from '@/constants/token';
 
 const router = express.Router();
 
@@ -29,6 +30,7 @@ router.get('/login', async (req, res, next) => {
             'birthyear',
         ];
         const url = `${KAKAO_AUTH_BASE}/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=${scope.join(',')}&state=${state}&nonce=${nonce}`;
+        console.log('url', url);
         return res.redirect(url);
     } catch (error) {
         next(error);
@@ -39,6 +41,8 @@ router.get('/callback', async (req, res, next) => {
     try {
         const { code, state, error, error_description } = req.query;
         const baseUrl = process.env.MONEED_BASE_URL || '';
+        console.log('baseUrl', baseUrl);
+        console.log('request', req.query);
 
         if (error || error_description) {
             return res.redirect(`${baseUrl}/auth/error?error=${error}&description=${error_description}`);
@@ -72,20 +76,12 @@ router.get('/callback', async (req, res, next) => {
                 key,
             });
 
-            const accessTokenCookie = getAccessTokenCookie(
-                process.env.JWT_ACCESS_EXPIRES_IN || '24h',
-                process.env.JWT_ACCESS_NAME || 'access_token',
-            );
-            const refreshTokenCookie = getRefreshTokenCookie(
-                process.env.JWT_REFRESH_EXPIRES_IN || '30d',
-                process.env.JWT_REFRESH_NAME || 'refresh_token',
-            );
-            res.cookie(accessTokenCookie.name, accessToken, {
-                ...accessTokenCookie.options,
+            res.cookie(ACCESS_TOKEN_COOKIE.name, accessToken, {
+                ...ACCESS_TOKEN_COOKIE.options,
                 expires: new Date(Date.now() + parseDurationToMs(process.env.JWT_ACCESS_EXPIRES_IN || '24h')),
             });
-            res.cookie(refreshTokenCookie.name, refreshToken, {
-                ...refreshTokenCookie.options,
+            res.cookie(REFRESH_TOKEN_COOKIE.name, refreshToken, {
+                ...REFRESH_TOKEN_COOKIE.options,
                 expires: new Date(Date.now() + parseDurationToMs(process.env.JWT_REFRESH_EXPIRES_IN || '30d')),
             });
 
