@@ -1,18 +1,20 @@
 import { ERROR_MSG } from '@/constants/error';
 import type { TokenPayload } from '@moneed/auth';
 import { verifyToken } from '@moneed/auth';
-import { Request, Response } from 'express';
+import { Request } from 'express';
 import { ResponseError } from '@moneed/utils';
-import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from '@/constants/token';
+// 쿠키 관련 코드는 더 이상 사용하지 않음
 
-export async function deleteSession(response: Response) {
-    response.clearCookie(ACCESS_TOKEN_COOKIE.name);
-    response.clearCookie(REFRESH_TOKEN_COOKIE.name);
-}
+export async function verifyRequestTokens(req: Request) {
+    // Authorization 헤더에서 토큰 추출
+    const authHeader = req.headers.authorization;
+    const accessToken = authHeader?.replace('Bearer ', '');
 
-export async function verifyRequestCookies(req: Request) {
-    const accessToken = req.cookies[ACCESS_TOKEN_COOKIE.name];
-    const refreshToken = req.cookies[REFRESH_TOKEN_COOKIE.name];
+    // 리프레쉬 토큰은 별도 헤더나 바디에서 가져올 수 있지만,
+    // 현재는 액세스 토큰만 검증하도록 단순화
+    if (!accessToken) {
+        throw new ResponseError(401, ERROR_MSG.ACCESS_TOKEN_INVALID);
+    }
 
     const key = process.env.SESSION_SECRET;
     if (!key) {
@@ -29,19 +31,8 @@ export async function verifyRequestCookies(req: Request) {
         throw new ResponseError(401, ERROR_MSG.ACCESS_TOKEN_INVALID);
     }
 
-    const refreshTokenResult = await verifyToken({ jwt: refreshToken, key });
-    if (refreshTokenResult.isExpired) {
-        throw new ResponseError(403, ERROR_MSG.REFRESH_TOKEN_EXPIRED);
-    }
-
-    if (refreshTokenResult.isInvalid) {
-        throw new ResponseError(403, ERROR_MSG.REFRESH_TOKEN_INVALID);
-    }
-
     return {
         accessToken: accessToken as string,
-        refreshToken: refreshToken as string,
         accessTokenPayload: accessTokenResult.payload as TokenPayload,
-        refreshTokenPayload: refreshTokenResult.payload as TokenPayload,
     };
 }

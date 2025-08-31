@@ -1,7 +1,6 @@
 import type { RequiredUserInfo } from '@/database/types';
 import type { TokenPayload } from '@moneed/auth';
 import { AuthService } from '@/service/auth.service';
-import { deleteSession } from '@/utils/session';
 import { AxiosError, isAxiosError } from 'axios';
 import { ERROR_MSG, SUCCESS_MSG } from '@/constants/error';
 import { getKakaoToken, getKakaoUserInfo, leaveKakao, logoutKakao, refreshKakaoToken } from '@/api/kakao.api';
@@ -131,7 +130,6 @@ export class KakaoAuthService {
                 return result;
             }
 
-            await deleteSession(response);
             await logoutKakao({
                 accessToken: result.data.accessToken,
                 providerUserId: result.data.providerUserId,
@@ -145,7 +143,6 @@ export class KakaoAuthService {
             const error = e as AxiosError<{ msg: string; code: number }>;
             console.error('로그아웃 오류:', error);
             if (error.status === 401) {
-                await deleteSession(response);
                 return {
                     success: true,
                     message: SUCCESS_MSG.LOGOUT,

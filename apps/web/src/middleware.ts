@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { REASON_CODES } from './constants/snackbar';
 import { verifyToken } from '@moneed/auth';
-import { getServerSideCookie } from './utils/cookie.server';
+// getServerSideCookie 대신 req.cookies 직접 사용
 
 const protectedRoutes = [
     '/mypage',
@@ -14,13 +14,13 @@ const protectedRoutes = [
     '/writepost',
 ];
 
-const guestOnlyRoutes = ['/onboarding', '/auth/kakao/callback'];
+const guestOnlyRoutes = ['/onboarding'];
 
 export async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
     const isProtectedRoute = protectedRoutes.includes(path);
     const isGuestOnlyRoute = guestOnlyRoutes.includes(path);
-    const accessToken = await getServerSideCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+    const accessToken = req.cookies.get(process.env.JWT_ACCESS_NAME || 'access_token')?.value;
 
     const session = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET });
 

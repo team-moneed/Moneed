@@ -1,10 +1,10 @@
 import express from 'express';
 import { KakaoAuthService } from '@/service/kakaoAuth.service';
-import { verifyRequestCookies } from '@/utils/session';
-import { createToken, getAccessTokenCookie, getRefreshTokenCookie } from '@moneed/auth';
-import { parseDurationToMs, ResponseError } from '@moneed/utils';
+import { verifyRequestTokens } from '@/utils/session';
+import { createToken } from '@moneed/auth';
+import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/constants/error';
-import { ACCESS_TOKEN_COOKIE, REFRESH_TOKEN_COOKIE } from '@/constants/token';
+import { generateTempCode, consumeTempCode } from '@/utils/tempCode';
 
 const router = express.Router();
 
@@ -30,7 +30,6 @@ router.get('/login', async (req, res, next) => {
             'birthyear',
         ];
         const url = `${KAKAO_AUTH_BASE}/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=${scope.join(',')}&state=${state}&nonce=${nonce}`;
-        console.log('url', url);
         return res.redirect(url);
     } catch (error) {
         next(error);
@@ -41,8 +40,6 @@ router.get('/callback', async (req, res, next) => {
     try {
         const { code, state, error, error_description } = req.query;
         const baseUrl = process.env.MONEED_BASE_URL || '';
-        console.log('baseUrl', baseUrl);
-        console.log('request', req.query);
 
         if (error || error_description) {
             return res.redirect(`${baseUrl}/auth/error?error=${error}&description=${error_description}`);
@@ -76,17 +73,15 @@ router.get('/callback', async (req, res, next) => {
                 key,
             });
 
-            res.cookie(ACCESS_TOKEN_COOKIE.name, accessToken, {
-                ...ACCESS_TOKEN_COOKIE.options,
-                expires: new Date(Date.now() + parseDurationToMs(process.env.JWT_ACCESS_EXPIRES_IN || '24h')),
-            });
-            res.cookie(REFRESH_TOKEN_COOKIE.name, refreshToken, {
-                ...REFRESH_TOKEN_COOKIE.options,
-                expires: new Date(Date.now() + parseDurationToMs(process.env.JWT_REFRESH_EXPIRES_IN || '30d')),
+            // 임시 코드 생성하여 토큰들 저장
+            const tempCode = generateTempCode({
+                accessToken,
+                refreshToken,
+                payload: result.data.payload,
+                isNewUser: result.data.isNewUser,
             });
 
-            const redirectPath = result.data.isNewUser ? `/selectstocktype?url=${encodeURIComponent('/welcome')}` : `/`;
-            return res.redirect(`${baseUrl}${redirectPath}`);
+            return res.redirect(`${baseUrl}/auth/callback?tempCode=${tempCode}`);
         } else {
             return res.redirect(`${baseUrl}/auth/error?error=${result.error}`);
         }
@@ -100,7 +95,7 @@ router.get('/callback', async (req, res, next) => {
 
 router.post('/logout', async (req, res, next) => {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies(req);
+        const { accessTokenPayload } = await verifyRequestTokens(req);
         const { userId } = accessTokenPayload;
 
         if (!userId) {
@@ -135,7 +130,7 @@ router.post('/logout', async (req, res, next) => {
  */
 router.post('/leave', async (req, res, next) => {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies(req);
+        const { accessTokenPayload } = await verifyRequestTokens(req);
         const { reason } = req.body;
 
         const kakaoAuthService = new KakaoAuthService();
@@ -161,10 +156,12 @@ router.post('/leave', async (req, res, next) => {
 
 router.post('/refresh', async (req, res, next) => {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies(req);
+        const { accessTokenPayload: refreshTokenPayload } = await verifyRequestTokens(req);
 
         const kakaoAuthService = new KakaoAuthService();
-        const result = await kakaoAuthService.refresh({ userId: accessTokenPayload.userId });
+        const result = await kakaoAuthService.refresh({
+            userId: refreshTokenPayload.userId,
+        });
 
         if (result.success) {
             return res.status(result.status).json(result.data);
@@ -174,6 +171,42 @@ router.post('/refresh', async (req, res, next) => {
             });
         }
     } catch (error) {
+        if (error instanceof ResponseError) {
+            return res.status(error.code).json({ message: error.message });
+        }
+        next(error);
+    }
+});
+
+/**
+ * 임시 코드로 실제 토큰들 교환
+ */
+router.post('/exchange', async (req, res, next) => {
+    try {
+        const { tempCode } = req.body;
+
+        if (!tempCode) {
+            return res.status(400).json({
+                error: '임시 코드가 필요합니다.',
+            });
+        }
+
+        const data = consumeTempCode(tempCode);
+
+        if (!data) {
+            return res.status(400).json({
+                error: '유효하지 않거나 만료된 임시 코드입니다.',
+            });
+        }
+
+        return res.status(200).json({
+            access_token: data.accessToken,
+            refresh_token: data.refreshToken,
+            payload: data.payload,
+            isNewUser: data.isNewUser,
+        });
+    } catch (error) {
+        console.error('토큰 교환 오류:', error);
         if (error instanceof ResponseError) {
             return res.status(error.code).json({ message: error.message });
         }

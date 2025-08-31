@@ -9,6 +9,7 @@ import { AxiosError } from 'axios';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import ChipSkeleton from '@/components/Skeletons/ChipSkeleton';
 
+// TODO: 유저, 게스트 UI 명확히 분리
 function StockTypeBar() {
     const params = useParams();
     const symbol = params ? params.symbol : undefined;

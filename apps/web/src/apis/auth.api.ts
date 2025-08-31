@@ -3,7 +3,7 @@ import { proxy, proxyWithCredentials } from './client';
 import { Providers } from '@moneed/auth';
 
 export const logout = async ({ provider }: { provider: Providers }) => {
-    const res = await proxy.post(`/api/auth/${provider}/logout`);
+    const res = await proxyWithCredentials.post(`/api/auth/${provider}/logout`);
     return res;
 };
 
@@ -14,7 +14,26 @@ export const leave = async ({ provider, reason }: { provider: Providers; reason:
     return res;
 };
 
-export const refresh = async ({ provider }: { provider: Providers }) => {
-    const res = await proxyWithCredentials.post<KakaoRefreshTokenResponse>(`/api/auth/${provider}/refresh`);
+export const refresh = async ({ provider, refreshToken }: { provider: Providers; refreshToken: string }) => {
+    const res = await proxy.post<KakaoRefreshTokenResponse>(
+        `/api/auth/${provider}/refresh`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        },
+    );
+    return res;
+};
+
+export const exchangeTempCode = async ({ tempCode }: { tempCode: string }) => {
+    const res = await proxy.post<{
+        access_token: string;
+        refresh_token: string;
+        payload: any;
+        isNewUser: boolean;
+    }>('/api/auth/kakao/exchange', { tempCode });
+    console.log('exchangeTempCode', res.data);
     return res;
 };

@@ -3,17 +3,17 @@
 import { logout } from '@/apis/auth.api';
 import { REASON_CODES } from '@/constants/snackbar';
 import useSnackbarStore from '@/store/useSnackbarStore';
+import { clearTokens } from '@/utils/localStorage.browser';
 import { cn } from '@/utils/style';
 import { useMutation } from '@tanstack/react-query';
-import { useRouter } from 'next/navigation';
 
 export default function LogoutButton() {
-    const router = useRouter();
     const showSnackbar = useSnackbarStore(state => state.showSnackbar);
     const { mutate: mutateLogout, isPending } = useMutation({
         mutationFn: ({ provider }: { provider: 'kakao' }) => logout({ provider }),
-        onSuccess: () => {
-            router.push(`/onboarding?reason=${REASON_CODES.LOGOUT}`);
+        onSuccess: async () => {
+            await clearTokens();
+            window.location.href = `/onboarding?reason=${REASON_CODES.LOGOUT}`;
         },
         onError: () => {
             showSnackbar({
