@@ -4,7 +4,7 @@ on:
     push:
         branches: [develop, release, feature/*, fix/*]
     pull_request:
-        branches: [main, develop, release]
+        branches: [develop]
 
 permissions:
     security-events: write

@@ -2,12 +2,15 @@ name: Deploy Applications
 
 on:
     push:
-        branches: [main, develop]
+        branches: [main, release]
     pull_request:
-        branches: [main]
+        branches: [main, release]
+
+permissions:
+    security-events: write
 
 env:
-    NODE_VERSION: '18'
+    NODE_VERSION: '20'
     REGISTRY: ghcr.io
     IMAGE_NAME: ${{ github.repository }}/kakao-proxy
 
@@ -43,8 +46,8 @@ jobs:
                         - 'package.json'
                         - 'yarn.lock'
 
-    # 린팅 및 타입 체크
-    lint-and-typecheck:
+    # 빌드 테스트
+    build-test:
         runs-on: ubuntu-latest
         needs: detect-changes
         if: needs.detect-changes.outputs.any-changed == 'true'
@@ -69,6 +72,9 @@ jobs:
                   cd apps/web && yarn db:generate
                   cd ../kakao-proxy-server && yarn db:generate
                   cd ../..
+
+            - name: Build applications
+              run: yarn build:apps
 
             - name: Run linting
               run: yarn lint
@@ -103,18 +109,135 @@ jobs:
                   cd ../kakao-proxy-server && yarn db:generate
                   cd ../..
 
-            - name: Run tests
+            - name: Run tests with coverage
               run: |
-                  if [ -f "packages/shared/auth/package.json" ] && grep -q '"test"' packages/shared/auth/package.json; then
-                    yarn workspace @moneed/auth test
+                  if [ -f "packages/shared/auth/package.json" ] && grep -q '"test:coverage"' packages/shared/auth/package.json; then
+                    yarn workspace @moneed/auth test:coverage
                   else
-                    echo "No tests found for @moneed/auth"
+                    echo "No coverage tests found"
                   fi
+
+            - name: Upload coverage reports
+              if: success()
+              uses: codecov/codecov-action@v4
+              with:
+                  token: ${{ secrets.CODECOV_TOKEN }}
+                  files: ./packages/shared/auth/coverage/lcov.info
+                  fail_ci_if_error: false
+
+    # Docker 빌드 테스트
+    docker-build-test:
+        runs-on: ubuntu-latest
+        needs: detect-changes
+        if: needs.detect-changes.outputs.any-changed == 'true'
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Set up Docker Buildx
+              uses: docker/setup-buildx-action@v3
+
+            - name: Build Docker image (test only)
+              uses: docker/build-push-action@v5
+              with:
+                  context: .
+                  file: ./Dockerfile
+                  push: false
+                  tags: kakao-proxy:test
+                  load: true
+                  cache-from: type=gha
+                  cache-to: type=gha,mode=max
+
+            - name: Verify Docker image exists
+              run: |
+                  echo "Checking if Docker image was built successfully..."
+                  docker images kakao-proxy:test
+                  if ! docker images kakao-proxy:test | grep -q kakao-proxy; then
+                      echo "Error: Docker image was not built successfully"
+                      exit 1
+                  fi
+
+            - name: Test Docker image
+              run: |
+                  # 컨테이너 실행 테스트
+                  docker run --rm -d --name test-container -p 8001:8000 kakao-proxy:test
+                  sleep 10
+
+                  # 헬스체크 테스트
+                  curl -f http://localhost:8001/health || exit 1
+
+                  # 컨테이너 중지
+                  docker stop test-container
+
+    # PR 미리보기 배포 (Vercel)
+    deploy-preview:
+        runs-on: ubuntu-latest
+        needs: [build-test, test]
+        if: github.event_name == 'pull_request'
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Deploy Preview to Vercel
+              uses: amondnet/vercel-action@v25
+              with:
+                  vercel-token: ${{ secrets.VERCEL_TOKEN }}
+                  vercel-org-id: ${{ secrets.VERCEL_ORG_ID }}
+                  vercel-project-id: ${{ secrets.VERCEL_PROJECT_ID }}
+                  github-comment: true
+
+    # 코드 품질 체크
+    code-quality:
+        runs-on: ubuntu-latest
+        needs: detect-changes
+        if: needs.detect-changes.outputs.any-changed == 'true'
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+              with:
+                  fetch-depth: 0
+
+            - name: Setup Node.js
+              uses: actions/setup-node@v4
+              with:
+                  node-version: ${{ env.NODE_VERSION }}
+                  cache: 'yarn'
+
+            - name: Install dependencies
+              run: yarn install --frozen-lockfile
+
+            - name: Run ESLint with annotations
+              run: |
+                  # 기본 lint 실행
+                  yarn lint
+
+    # 보안 스캔
+    security-scan:
+        runs-on: ubuntu-latest
+        needs: detect-changes
+        if: needs.detect-changes.outputs.any-changed == 'true'
+        steps:
+            - name: Checkout code
+              uses: actions/checkout@v4
+
+            - name: Run Trivy vulnerability scanner
+              uses: aquasecurity/trivy-action@master
+              with:
+                  scan-type: 'fs'
+                  scan-ref: '.'
+                  format: 'sarif'
+                  output: 'trivy-results.sarif'
+
+            - name: Upload Trivy scan results
+              if: always()
+              uses: github/codeql-action/upload-sarif@v3
+              with:
+                  sarif_file: 'trivy-results.sarif'
 
     # Vercel 배포 (웹 앱)
     deploy-web:
         runs-on: ubuntu-latest
-        needs: [detect-changes, lint-and-typecheck, test]
+        needs: [detect-changes, build-test, test]
         if: |
             github.ref == 'refs/heads/main' && 
             (needs.detect-changes.outputs.web-changed == 'true' || needs.detect-changes.outputs.packages-changed == 'true')
@@ -134,7 +257,7 @@ jobs:
     # Docker 이미지 빌드 및 푸시
     build-and-push-docker:
         runs-on: ubuntu-latest
-        needs: [detect-changes, lint-and-typecheck, test]
+        needs: [detect-changes, build-test, test, docker-build-test, code-quality, security-scan]
         if: |
             github.ref == 'refs/heads/main' && 
             (needs.detect-changes.outputs.kakao-changed == 'true' || needs.detect-changes.outputs.packages-changed == 'true')
