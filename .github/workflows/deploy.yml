@@ -355,7 +355,7 @@ jobs:
 
                       # 헬스체크
                       sleep 10
-                      curl -f http://localhost:8000/health || exit 1
+                      curl -f http://${{ secrets.EC2_HOST }}/health || exit 1
 
     # 배포 알림
     notify-deployment:
