@@ -289,7 +289,7 @@ jobs:
               with:
                   registry: ${{ env.REGISTRY }}
                   username: ${{ env.GITHUB_ACTOR }}
-                  password: ${{ secrets.GITHUB_TOKEN }}
+                  password: ${{ secrets.PAT }}
 
             - name: Extract metadata
               id: meta
@@ -333,7 +333,7 @@ jobs:
                       export IMAGE_TAG="${{ needs.build-and-push-docker.outputs.image-tag }}"
 
                       # Docker 로그인
-                      echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ env.GITHUB_ACTOR }} --password-stdin
+                      echo "${{ secrets.PAT }}" | docker login ${{ env.REGISTRY }} -u ${{ env.GITHUB_ACTOR }} --password-stdin
 
                       # 새 이미지 풀
                       docker pull $IMAGE_TAG
