@@ -14,7 +14,8 @@ permissions:
 env:
     NODE_VERSION: '20'
     REGISTRY: ghcr.io
-    IMAGE_NAME: ${{ github.repository }}/kakao-proxy
+    IMAGE_NAME: moneed/kakao-proxy
+    GITHUB_ACTOR: team-moneed
 
 jobs:
     # 변경사항 감지
@@ -280,21 +281,21 @@ jobs:
             - name: 디버깅을 위한 변수 값 확인
               run: |
                   echo "REGISTRY: ${{ env.REGISTRY }}"
-                  echo "ACTOR: ${{ github.actor }}"
+                  echo "ACTOR: ${{ env.GITHUB_ACTOR }}"
                   echo "IMAGE_NAME: ${{ env.IMAGE_NAME }}"
 
             - name: Log in to Container Registry
               uses: docker/login-action@v3
               with:
                   registry: ${{ env.REGISTRY }}
-                  username: ${{ github.actor }}
+                  username: ${{ env.GITHUB_ACTOR }}
                   password: ${{ secrets.GITHUB_TOKEN }}
 
             - name: Extract metadata
               id: meta
               uses: docker/metadata-action@v5
               with:
-                  images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+                  images: ${{ env.REGISTRY }}/${{ env.GITHUB_ACTOR }}/${{ env.IMAGE_NAME }}
                   tags: |
                       type=ref,event=branch
                       type=ref,event=pr
@@ -332,7 +333,7 @@ jobs:
                       export IMAGE_TAG="${{ needs.build-and-push-docker.outputs.image-tag }}"
 
                       # Docker 로그인
-                      echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ github.actor }} --password-stdin
+                      echo "${{ secrets.GITHUB_TOKEN }}" | docker login ${{ env.REGISTRY }} -u ${{ env.GITHUB_ACTOR }} --password-stdin
 
                       # 새 이미지 풀
                       docker pull $IMAGE_TAG
