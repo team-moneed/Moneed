@@ -315,13 +315,21 @@ jobs:
                   cache-to: type=gha,mode=max
                   platforms: linux/amd64
 
-    # AWS EC2 배포
+        # AWS EC2 배포
     deploy-to-ec2:
         runs-on: ubuntu-latest
         needs: [build-and-push-docker]
         if: github.ref == 'refs/heads/main'
         steps:
-            - name: Deploy to EC2
+            - name: Checkout repository
+              uses: actions/checkout@v4
+
+            - name: Setup environment variables
+              run: |
+                  echo "IMAGE_TAG=${{ needs.build-and-push-docker.outputs.image-tag }}" >> $GITHUB_ENV
+                  echo "GITHUB_ACTOR=${{ env.GITHUB_ACTOR }}" >> $GITHUB_ENV
+
+            - name: Check environment variables
               uses: appleboy/ssh-action@v1.0.3
               with:
                   host: ${{ secrets.EC2_HOST }}
@@ -329,33 +337,278 @@ jobs:
                   key: ${{ secrets.EC2_SSH_KEY }}
                   port: ${{ secrets.EC2_SSH_PORT || 22 }}
                   script: |
-                      # 환경변수 설정
-                      export IMAGE_TAG="${{ needs.build-and-push-docker.outputs.image-tag }}"
+                      echo "🔍 환경변수를 확인합니다..."
 
-                      # Docker 로그인
+                      if [ -z "${{ env.IMAGE_TAG }}" ]; then
+                          echo "⚠️ IMAGE_TAG가 설정되지 않아 'latest'를 사용합니다."
+                          export IMAGE_TAG="latest"
+                      else
+                          export IMAGE_TAG="${{ env.IMAGE_TAG }}"
+                      fi
+
+                      echo "✅ 환경변수 설정 완료: $IMAGE_TAG"
+
+                      # Docker Compose 파일 존재 확인
+                      if [ ! -f "docker-compose.yml" ]; then
+                          echo "❌ Docker Compose 파일이 존재하지 않습니다: docker-compose.yml"
+                          exit 1
+                      fi
+
+            - name: Check SSL certificates
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  port: ${{ secrets.EC2_SSH_PORT || 22 }}
+                  script: |
+                      echo "🔒 SSL 인증서를 확인합니다..."
+
+                      SSL_DIR="./nginx/ssl"
+
+                      if [ ! -f "$SSL_DIR/server.crt" ] || [ ! -f "$SSL_DIR/server.key" ]; then
+                          echo "⚠️ SSL 인증서가 존재하지 않습니다. 자체 서명 인증서를 생성합니다..."
+                          
+                          if [ -f "scripts/generate-ssl-cert.sh" ]; then
+                              chmod +x scripts/generate-ssl-cert.sh
+                              ./scripts/generate-ssl-cert.sh
+                          else
+                              echo "⚠️ SSL 인증서 생성 스크립트가 없습니다. 기본 인증서를 사용합니다."
+                          fi
+                      else
+                          echo "✅ SSL 인증서가 이미 존재합니다"
+                      fi
+
+            - name: Docker login and pull image
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  port: ${{ secrets.EC2_SSH_PORT || 22 }}
+                  script: |
+                      echo "🔐 Docker 레지스트리에 로그인합니다..."
                       echo "${{ secrets.PAT }}" | docker login ${{ env.REGISTRY }} -u ${{ env.GITHUB_ACTOR }} --password-stdin
+                      echo "✅ Docker 로그인 완료"
 
-                      # 새 이미지 풀
-                      docker pull $IMAGE_TAG
+                      echo "📦 새 Docker 이미지를 다운로드합니다..."
+                      IMAGE_TAG="${{ env.IMAGE_TAG }}"
+                      if [ -z "$IMAGE_TAG" ]; then
+                          IMAGE_TAG="latest"
+                      fi
 
-                      # 기존 컨테이너 중지 및 제거 (존재할 경우)
-                      docker stop kakao-proxy || true
-                      docker rm kakao-proxy || true
+                      # 현재 이미지를 백업 태그로 저장
+                      IMAGE_NAME="${{ env.REGISTRY }}/${{ env.GITHUB_ACTOR }}/moneed/kakao-proxy"
+                      if docker images -q "$IMAGE_NAME:latest" | grep -q .; then
+                          docker tag "$IMAGE_NAME:latest" "$IMAGE_NAME:latest-backup"
+                      fi
 
-                      # 새 컨테이너 실행 (독립적인 Prisma 설정 사용)
-                      docker run -d \
-                        --name kakao-proxy \
-                        --restart unless-stopped \
-                        -p 8000:8000 \
-                        --env-file /home/${{ secrets.EC2_USER }}/.env.production \
-                        $IMAGE_TAG
+                      docker pull "$IMAGE_TAG"
+                      echo "✅ 이미지 다운로드 완료: $IMAGE_TAG"
 
-                      # 이전 이미지 정리 (최신 2개 버전만 유지)
+            - name: Backup current services
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  port: ${{ secrets.EC2_SSH_PORT || 22 }}
+                  script: |
+                      echo "💾 현재 실행 중인 서비스를 백업합니다..."
+
+                      BACKUP_DIR="/home/${{ secrets.EC2_USER }}/backups"
+                      mkdir -p $BACKUP_DIR
+
+                      if docker-compose ps 2>/dev/null | grep -q "Up"; then
+                          docker-compose ps > "$BACKUP_DIR/compose-status-$(date +%Y%m%d-%H%M%S).txt"
+                          docker-compose logs > "$BACKUP_DIR/compose-logs-$(date +%Y%m%d-%H%M%S).log" 2>&1
+                          echo "✅ 서비스 백업 완료"
+                      else
+                          echo "⚠️ 실행 중인 서비스가 없습니다."
+                      fi
+
+            - name: Stop current services
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  port: ${{ secrets.EC2_SSH_PORT || 22 }}
+                  script: |
+                      echo "⏹️ 기존 서비스를 중지합니다..."
+
+                      if docker-compose ps 2>/dev/null | grep -q "Up"; then
+                          docker-compose down
+                          echo "✅ 서비스 중지 완료"
+                      else
+                          echo "⚠️ 실행 중인 서비스가 없습니다."
+                      fi
+
+            - name: Start new services
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  port: ${{ secrets.EC2_SSH_PORT || 22 }}
+                  script: |
+                      echo "🚀 새 서비스를 시작합니다..."
+
+                      ENV_FILE="/home/${{ secrets.EC2_USER }}/.env.production"
+
+                      # 환경변수 파일 확인
+                      if [ ! -f "$ENV_FILE" ]; then
+                          echo "❌ 환경변수 파일이 존재하지 않습니다: $ENV_FILE"
+                          echo "⚠️ env-templates/production.env.template을 참고하여 파일을 생성해주세요."
+                          exit 1
+                      fi
+
+                      # 환경변수 설정
+                      export GITHUB_ACTOR="${{ env.GITHUB_ACTOR }}"
+                      export IMAGE_TAG="${{ env.IMAGE_TAG }}"
+                      if [ -z "$IMAGE_TAG" ]; then
+                          export IMAGE_TAG="latest"
+                      fi
+
+                      # Docker Compose로 서비스 시작
+                      docker-compose rm -f -s -v || true
+                      docker-compose up -d --force-recreate --remove-orphans
+
+                      echo "✅ 새 서비스 시작 완료 (Nginx + Kakao Proxy with HTTPS)"
+
+            - name: Health check
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  port: ${{ secrets.EC2_SSH_PORT || 22 }}
+                  script: |
+                      echo "🏥 헬스체크를 실행합니다..."
+
+                      CONTAINER_NAME="kakao-proxy"
+                      NGINX_CONTAINER_NAME="nginx-proxy"
+
+                      # 서비스 시작 대기
+                      sleep 15
+
+                      # HTTP 헬스체크 (내부 통신)
+                      echo "🔍 HTTP 헬스체크를 실행합니다..."
+                      for i in {1..6}; do
+                          if docker exec "$CONTAINER_NAME" curl -sf http://localhost:8000/health &>/dev/null; then
+                              echo "✅ HTTP 헬스체크 성공"
+                              break
+                          fi
+                          echo "⚠️ HTTP 헬스체크 시도 $i/6 실패, 5초 후 재시도..."
+                          sleep 5
+                          if [ $i -eq 6 ]; then
+                              echo "❌ HTTP 헬스체크 실패"
+                              docker-compose logs app
+                              exit 1
+                          fi
+                      done
+
+                      # HTTPS 헬스체크
+                      echo "🔒 HTTPS 헬스체크를 실행합니다..."
+                      for i in {1..6}; do
+                          if docker exec "$NGINX_CONTAINER_NAME" curl -skf https://localhost/health &>/dev/null; then
+                              echo "✅ HTTPS 헬스체크 성공"
+                              break
+                          fi
+                          echo "⚠️ HTTPS 헬스체크 시도 $i/6 실패, 5초 후 재시도..."
+                          sleep 5
+                          if [ $i -eq 6 ]; then
+                              echo "❌ HTTPS 헬스체크 실패"
+                              docker-compose logs
+                              exit 1
+                          fi
+                      done
+
+            - name: Cleanup old images
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  port: ${{ secrets.EC2_SSH_PORT || 22 }}
+                  script: |
+                      echo "🧹 이전 Docker 이미지를 정리합니다..."
+
+                      # 72시간 이전 이미지 제거
                       docker image prune -af --filter "until=72h"
 
-                      # 헬스체크
-                      sleep 10
-                      curl -f http://${{ secrets.EC2_HOST }}/health || exit 1
+                      # 사용하지 않는 이미지 제거
+                      docker image prune -f
+
+                      echo "✅ 이미지 정리 완료"
+
+            - name: Check deployment status
+              uses: appleboy/ssh-action@v1.0.3
+              with:
+                  host: ${{ secrets.EC2_HOST }}
+                  username: ${{ secrets.EC2_USER }}
+                  key: ${{ secrets.EC2_SSH_KEY }}
+                  port: ${{ secrets.EC2_SSH_PORT || 22 }}
+                  script: |
+                      echo "📊 배포 상태를 확인합니다..."
+
+                      CONTAINER_NAME="kakao-proxy"
+                      NGINX_CONTAINER_NAME="nginx-proxy"
+
+                      echo ""
+                      echo "✅ Docker Compose 서비스 상태:"
+                      docker-compose ps
+                      echo ""
+
+                      # 개별 컨테이너 상태 확인
+                      if docker ps -f name=$CONTAINER_NAME | grep -q "Up"; then
+                          echo "✅ Kakao Proxy 컨테이너가 정상 실행 중입니다."
+                      else
+                          echo "❌ Kakao Proxy 컨테이너가 실행되지 않았습니다."
+                          exit 1
+                      fi
+
+                      if docker ps -f name=$NGINX_CONTAINER_NAME | grep -q "Up"; then
+                          echo "✅ Nginx 프록시 컨테이너가 정상 실행 중입니다."
+                      else
+                          echo "❌ Nginx 프록시 컨테이너가 실행되지 않았습니다."
+                          exit 1
+                      fi
+
+                      # 포트 사용 확인
+                      echo ""
+                      echo "📡 포트 사용 현황:"
+                      echo "HTTP (80): $(netstat -tlnp | grep ':80 ' || echo '사용 안함')"
+                      echo "HTTPS (443): $(netstat -tlnp | grep ':443 ' || echo '사용 안함')"
+                      echo "App (8000): $(netstat -tlnp | grep ':8000 ' || echo '사용 안함')"
+                      echo ""
+
+                      # 디스크 사용량 확인
+                      DISK_USAGE=$(df / | awk 'NR==2 {print $5}' | sed 's/%//')
+                      if [ "$DISK_USAGE" -gt 80 ]; then
+                          echo "⚠️ 디스크 사용량이 높습니다: ${DISK_USAGE}%"
+                      else
+                          echo "💾 디스크 사용량: ${DISK_USAGE}%"
+                      fi
+
+                      # 메모리 사용량 확인
+                      MEMORY_USAGE=$(free | awk 'NR==2{printf "%.0f", $3*100/$2}')
+                      if [ "$MEMORY_USAGE" -gt 80 ]; then
+                          echo "⚠️ 메모리 사용량이 높습니다: ${MEMORY_USAGE}%"
+                      else
+                          echo "🧠 메모리 사용량: ${MEMORY_USAGE}%"
+                      fi
+
+                      # 최종 성공 메시지
+                      echo ""
+                      echo "🎉 HTTPS 배포가 성공적으로 완료되었습니다!"
+                      echo ""
+                      echo "✅ 접속 URL:"
+                      echo "  - HTTPS: https://${{ secrets.EC2_HOST }}"
+                      echo "  - HTTP: http://${{ secrets.EC2_HOST }} (자동으로 HTTPS로 리다이렉션)"
+                      echo "  - 헬스체크: https://${{ secrets.EC2_HOST }}/health"
+                      echo ""
+                      echo "⚠️ 자체 서명 인증서를 사용하므로 브라우저에서 보안 경고가 표시됩니다."
 
     # 배포 알림
     notify-deployment:
