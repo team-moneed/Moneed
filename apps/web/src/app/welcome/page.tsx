@@ -26,7 +26,7 @@ export default function Welcome() {
                     2초 뒤 자동으로 페이지가 전환됩니다.
                 </div>
                 <div className='flex justify-center items-center mt-8'>
-                    <img src='/welcome.svg' alt='' className='w-116' />
+                    <img src='/images/welcome.svg' alt='welcome' className='w-116' />
                 </div>
             </div>
         </>

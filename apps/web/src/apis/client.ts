@@ -3,13 +3,7 @@ import { ERROR_MSG } from '@/constants/message';
 import axios from 'axios';
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { logout, refresh } from './auth.api';
-import {
-    getAccessToken,
-    getRefreshToken,
-    clearTokens,
-    setTokens,
-    updateAccessToken,
-} from '@/utils/localStorage.browser';
+import { getAccessToken, getRefreshToken, clearTokens, setTokens } from '@/utils/localStorage.browser';
 
 const getMoneedInstance = (): AxiosInstance => {
     const instance: AxiosInstance = axios.create({

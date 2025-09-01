@@ -210,7 +210,7 @@ const WritePost = () => {
             </form>
             {isBottomModalOpen && (
                 <BottomModal
-                    imageSrc='/post-warning.svg'
+                    imageSrc='/images/post-warning.svg'
                     title={
                         <h2 className='text-[2.4rem] text-center text-moneed-black font-bold leading-[140%]'>
                             이런 의견은 피해주세요

@@ -29,7 +29,7 @@ export default function PostClipBoardButton() {
 
     return (
         <button onClick={handleCopyUrl} type='button'>
-            <Icon iconUrl='/sharingIcon.svg' width={20} height={20} />
+            <Icon iconUrl='/images/sharingIcon.svg' width={20} height={20} />
         </button>
     );
 }

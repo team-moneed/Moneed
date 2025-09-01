@@ -7,10 +7,7 @@ interface SelectProfileImageProps {
 }
 
 const SelectProfileImage = ({ onSelect, setPreviewUrl, setImage }: SelectProfileImageProps) => {
-    const profileImages = Array.from(
-        { length: 15 },
-        (_, i) => `${process.env.NEXT_PUBLIC_MONEED_BASE_URL}/profile/profile-${i + 1}.svg`,
-    );
+    const profileImages = Array.from({ length: 15 }, (_, i) => `/profile/profile-${i + 1}.svg`);
 
     return (
         <div className='grid grid-cols-4 p-8 mt-16 gap-x-[3.4rem] gap-y-[2rem] justify-items-center items-center'>

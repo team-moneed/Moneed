@@ -30,8 +30,16 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ r
 
                 <section className='aspect-350/106 rounded-[.8rem] overflow-hidden lg:aspect-941/151'>
                     <Link href='/smarttalk'>
-                        <img src='/smarttalk_m.svg' alt='' className='w-full h-full object-cover lg:hidden' />
-                        <img src='/smarttalk_pc.svg' alt='' className='hidden w-full h-full object-cover lg:block' />
+                        <img
+                            src='/images/smarttalk_m.svg'
+                            alt='smarttalk-mobile-banner'
+                            className='w-full h-full object-cover lg:hidden'
+                        />
+                        <img
+                            src='/images/smarttalk_pc.svg'
+                            alt='smarttalk-pc-banner'
+                            className='hidden w-full h-full object-cover lg:block'
+                        />
                     </Link>
                 </section>
 

@@ -91,7 +91,7 @@ export default function CommentSection({ postId, comments }: CommentSectionProps
                 {comments.length == 0 ? (
                     <div>
                         <div className='flex justify-center items-center mt-8'>
-                            <img src='/cta-2.svg' alt='' className='w-116' />
+                            <img src='/images/cta-2.svg' alt='no comments' className='w-116' />
                         </div>
                     </div>
                 ) : (
