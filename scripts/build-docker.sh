@@ -4,7 +4,7 @@ set -e
 
 # 변수 설정
 REGISTRY="ghcr.io"
-USERNAME="${GITHUB_ACTOR:-your-username}"
+USERNAME="${GITHUB_ACTOR:team-moneed}"
 IMAGE_NAME="moneed/kakao-proxy"
 VERSION="${1:-latest}"
 
