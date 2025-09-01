@@ -2,9 +2,12 @@ name: Continuous Integration
 
 on:
     push:
-        branches: [develop, feature/*, fix/*]
+        branches: [develop, release, feature/*, fix/*]
     pull_request:
-        branches: [main, develop]
+        branches: [main, develop, release]
+
+permissions:
+    security-events: write
 
 env:
     NODE_VERSION: '20'
