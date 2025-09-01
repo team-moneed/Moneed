@@ -5,25 +5,22 @@ import { ChipLink } from '@/components/Chip';
 import Icon from '@/components/Icon';
 import Link from 'next/link';
 import { useInfiniteSelectedStocks } from '@/queries/stock.query';
-import { AxiosError } from 'axios';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import ChipSkeleton from '@/components/Skeletons/ChipSkeleton';
+import { getCookie } from '@/utils/cookie.browser';
 
 // TODO: 유저, 게스트 UI 명확히 분리
 function StockTypeBar() {
     const params = useParams();
     const symbol = params ? params.symbol : undefined;
+    const accessToken = getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
     const {
         data: stocks,
-        isError,
-        error,
         isLoading,
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useInfiniteSelectedStocks({ count: 10 });
-
-    const is401Error = isError && error instanceof AxiosError && error.response?.status === 401;
+    } = useInfiniteSelectedStocks({ count: 10, accessToken: accessToken });
 
     const ref = useIntersectionObserver({
         onIntersect: () => {
@@ -44,15 +41,14 @@ function StockTypeBar() {
                     <Icon iconUrl='/icon/icon-addcircle.svg' width={30} height={30} />
                 </Link>
                 <ChipLink label='전체' active={symbol ? false : true} href='/community' />
-                {!is401Error &&
-                    stocks?.map(stock => (
-                        <ChipLink
-                            key={stock.symbol}
-                            label={stock.name}
-                            active={symbol ? symbol === stock.symbol : false}
-                            href={`/community/${stock.symbol}`}
-                        />
-                    ))}
+                {stocks?.map(stock => (
+                    <ChipLink
+                        key={stock.symbol}
+                        label={stock.name}
+                        active={symbol ? symbol === stock.symbol : false}
+                        href={`/community/${stock.symbol}`}
+                    />
+                ))}
                 {(isLoading || isFetchingNextPage) &&
                     Array.from({ length: 10 }).map((_, i) => <ChipSkeleton key={i} />)}
                 <div className='w-[10px] h-[10px] shrink-0' ref={ref}></div>

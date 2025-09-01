@@ -35,7 +35,10 @@ export const useSelectedStocks = () => {
     });
 };
 
-export const useInfiniteSelectedStocks = ({ count = 20 }: { count?: number } = {}) => {
+export const useInfiniteSelectedStocks = ({
+    count = 20,
+    accessToken,
+}: { count?: number; accessToken?: string } = {}) => {
     return useInfiniteQuery({
         queryKey: ['selectedStocks', 'infinite'],
         queryFn: ({ pageParam = 0 }) => getSelectedStocks({ count, cursor: pageParam }),
@@ -50,6 +53,7 @@ export const useInfiniteSelectedStocks = ({ count = 20 }: { count?: number } = {
             // 다른 에러의 경우 최대 3번 재시도
             return failureCount < 3;
         },
+        enabled: !!accessToken,
     });
 };
 

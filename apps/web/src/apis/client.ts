@@ -84,7 +84,6 @@ const withCredentials = (instance: AxiosInstance) => {
                 } catch {
                     // 리프레쉬 실패 시 로그아웃 처리
                     await clearTokens();
-                    await logout({ provider: 'kakao' });
                     return Promise.reject(new AxiosError(ERROR_MSG.TOKEN_EXPIRED));
                     // TODO: onboarding 페이지로 리다이렉트
                 }
@@ -93,7 +92,6 @@ const withCredentials = (instance: AxiosInstance) => {
             if (error.response?.status === 403) {
                 // 리프레쉬 토큰도 만료된 경우
                 await clearTokens();
-                await logout({ provider: 'kakao' });
                 return Promise.reject(new AxiosError(ERROR_MSG.TOKEN_EXPIRED));
                 // TODO: onboarding 페이지로 리다이렉트
             }
