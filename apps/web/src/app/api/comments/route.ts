@@ -9,6 +9,10 @@ export async function POST(req: NextRequest) {
         const { postId, content } = await req.json();
         const { accessTokenPayload } = await verifyRequestCookies();
 
+        if (!accessTokenPayload) {
+            return NextResponse.json({ error: ERROR_MSG.UNAUTHORIZED }, { status: 401 });
+        }
+
         const commentService = new CommentService();
         await commentService.createComment({ postId, content, userId: accessTokenPayload.userId });
 

@@ -34,6 +34,5 @@ export const exchangeTempCode = async ({ tempCode }: { tempCode: string }) => {
         payload: any;
         isNewUser: boolean;
     }>('/api/auth/kakao/exchange', { tempCode });
-    console.log('exchangeTempCode', res.data);
     return res;
 };
