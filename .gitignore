@@ -38,6 +38,3 @@ backup/*
 # AWS
 *.pem
 .vercel
-
-# Secrets
-.secrets
