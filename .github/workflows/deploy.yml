@@ -45,6 +45,7 @@ jobs:
                         - 'packages/**'
                         - 'package.json'
                         - 'yarn.lock'
+                        - '.github/workflows/deploy.yml'
 
     # 빌드 테스트
     build-test:
