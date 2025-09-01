@@ -14,7 +14,14 @@ export async function verifyRequestCookies() {
     const cookieStore = await cookies();
     const accessToken = cookieStore.get(process.env.JWT_ACCESS_NAME || 'access_token')?.value;
 
-    const accessTokenResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET });
+    if (!accessToken) {
+        return {
+            accessToken: undefined,
+            accessTokenPayload: undefined,
+        };
+    }
+
+    const accessTokenResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET || '' });
     if (accessTokenResult.isExpired) {
         throw new ResponseError(401, ERROR_MSG.ACCESS_TOKEN_EXPIRED);
     }
