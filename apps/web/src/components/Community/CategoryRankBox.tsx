@@ -15,7 +15,7 @@ const CategoryRankBox = ({ stock }: StockInfoProps) => {
         <>
             <div className='relative bg-moneed-black-3 border-moneed-gray-5 border-[.1rem] rounded-[1.6rem]'>
                 <i className='absolute block aspect-square w-24 top-[-.1rem] left-[-.1rem]'>
-                    <img src='/box-bg.png' alt='' className='w-full' />
+                    <img src='/images/box-bg.png' alt='box-background' className='w-full' />
                 </i>
                 <div className='relative flex items-end gap-[.4rem] h-16 mb-[.4rem]'>
                     <div className='flex rounded-[1.6rem] w-16 h-16 shrink-0 justify-center items-center bg-moneed-black'>

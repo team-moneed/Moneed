@@ -89,7 +89,7 @@ function AuthError() {
     return (
         <div className='px-8 max-w-512 mx-auto'>
             <div className='flex justify-center items-center mt-[6.3rem]'>
-                <img src='/errorcta.svg' alt='' className='w-116' />
+                <img src='/images/errorcta.svg' alt='error' className='w-116' />
             </div>
             <div className='text-[2.4rem] text-moneed-black font-bold text-center mt-8 leading-[140%]'>
                 {errorInfo.title}
