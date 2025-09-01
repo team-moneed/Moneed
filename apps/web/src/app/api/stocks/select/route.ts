@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { verifyRequestCookies } from '@/utils/cookie.server';
+import { verifyRequestCookies, assertAccessTokenPayload } from '@/utils/cookie.server';
 import { StockService } from '@/services/stock.service';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
@@ -7,6 +7,7 @@ import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
 export async function POST(req: NextRequest) {
     try {
         const { accessTokenPayload } = await verifyRequestCookies();
+        assertAccessTokenPayload(accessTokenPayload);
 
         const { stockSymbols } = await req.json();
         const stockService = new StockService();

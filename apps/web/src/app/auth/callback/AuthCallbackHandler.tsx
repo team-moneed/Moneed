@@ -10,7 +10,7 @@ export default function AuthCallbackHandler() {
     const searchParams = useSearchParams();
     const tempCode = searchParams.get('tempCode');
 
-    const { data, error, isLoading } = useTempCodeAuth(tempCode);
+    const { data, error, isLoading } = useTempCodeAuth(tempCode || '');
 
     useEffect(() => {
         if (data) {

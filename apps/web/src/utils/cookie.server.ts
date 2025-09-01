@@ -4,6 +4,12 @@ import { cookies } from 'next/headers';
 import { ResponseError } from '@moneed/utils';
 import { TokenPayload } from '@moneed/auth';
 
+export function assertAccessTokenPayload(payload: TokenPayload | undefined): asserts payload is TokenPayload {
+    if (!payload) {
+        throw new ResponseError(401, ERROR_MSG.UNAUTHORIZED);
+    }
+}
+
 export const getServerSideCookie = async (key: string) => {
     const cookieStore = await cookies();
     return cookieStore.get(key)?.value;
