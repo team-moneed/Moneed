@@ -1,8 +1,31 @@
 {
-    "crons": [
+    "buildCommand": "yarn build:web",
+    "outputDirectory": "apps/web/.next",
+    "installCommand": "yarn install",
+    "ignoreCommand": "[ -z \"$VERCEL_GIT_PREVIOUS_SHA\" ] || git diff --quiet $VERCEL_GIT_PREVIOUS_SHA $VERCEL_GIT_COMMIT_SHA -- apps/web/ packages/",
+    "rewrites": [
         {
-            "path": "/api/cron/shorts",
-            "schedule": "0 0 * * *"
+            "source": "/api/auth/kakao/(.*)",
+            "destination": "/api/auth/kakao/$1"
+        }
+    ],
+    "headers": [
+        {
+            "source": "/api/(.*)",
+            "headers": [
+                {
+                    "key": "Access-Control-Allow-Origin",
+                    "value": "*"
+                },
+                {
+                    "key": "Access-Control-Allow-Methods",
+                    "value": "GET, POST, PUT, DELETE, OPTIONS"
+                },
+                {
+                    "key": "Access-Control-Allow-Headers",
+                    "value": "Content-Type, Authorization"
+                }
+            ]
         }
     ]
 }
