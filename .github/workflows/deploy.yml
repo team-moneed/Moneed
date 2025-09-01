@@ -2,7 +2,7 @@ name: Deploy Applications
 
 on:
     push:
-        branches: [main, release]
+        branches: [main, release, hotfix]
     pull_request:
         branches: [main, release]
 
