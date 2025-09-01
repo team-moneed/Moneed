@@ -1,0 +1,6 @@
+export const ERROR_MSG = {
+    ACCESS_TOKEN_EXPIRED: '액세스 토큰이 만료되었습니다',
+    REFRESH_TOKEN_EXPIRED: '리프레시 토큰이 만료되었습니다',
+    ACCESS_TOKEN_INVALID: '액세스 토큰이 유효하지 않습니다',
+    REFRESH_TOKEN_INVALID: '리프레시 토큰이 유효하지 않습니다',
+} as const;
