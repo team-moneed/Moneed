@@ -44,8 +44,8 @@ WORKDIR /app
 
 RUN apk add --no-cache curl
 
-ENV NODE_ENV production
-ENV PORT 8000
+ENV NODE_ENV=production
+ENV PORT=8000
 
 # Create a non-root user
 RUN addgroup --system --gid 1001 nodejs
