@@ -1,12 +1,13 @@
 import PostService from '@/services/post.service';
 import { NextResponse } from 'next/server';
-import { verifyRequestCookies } from '@/utils/cookie.server';
+import { verifyRequestCookies, assertAccessTokenPayload } from '@/utils/cookie.server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/constants/message';
 
 export async function GET() {
     try {
         const { accessTokenPayload } = await verifyRequestCookies();
+        assertAccessTokenPayload(accessTokenPayload);
 
         const postService = new PostService();
         const posts = await postService.getPostsWithUserExtended({ userId: accessTokenPayload.userId });

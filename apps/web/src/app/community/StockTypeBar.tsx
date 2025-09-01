@@ -7,20 +7,17 @@ import Link from 'next/link';
 import { useInfiniteSelectedStocks } from '@/queries/stock.query';
 import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
 import ChipSkeleton from '@/components/Skeletons/ChipSkeleton';
-import { getCookie } from '@/utils/cookie.browser';
 
-// TODO: 유저, 게스트 UI 명확히 분리
 function StockTypeBar() {
     const params = useParams();
     const symbol = params ? params.symbol : undefined;
-    const accessToken = getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
     const {
         data: stocks,
         isLoading,
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useInfiniteSelectedStocks({ count: 10, accessToken: accessToken });
+    } = useInfiniteSelectedStocks({ count: 10 });
 
     const ref = useIntersectionObserver({
         onIntersect: () => {

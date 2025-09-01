@@ -7,15 +7,13 @@ import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
 
 export const dynamic = 'force-dynamic';
 
-export async function GET(_: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
+export async function GET(req: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
     try {
         const { postId } = await params;
-
         const { accessTokenPayload } = await verifyRequestCookies();
-        const userId = accessTokenPayload.userId;
 
         const postService = new PostService();
-        const post = await postService.getPost({ userId, postId: Number(postId) });
+        const post = await postService.getPost({ userId: accessTokenPayload?.userId, postId: Number(postId) });
         return NextResponse.json(post);
     } catch (error) {
         if (error instanceof ResponseError) {
@@ -29,6 +27,10 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ pos
     try {
         const { postId } = await params;
         const { accessTokenPayload } = await verifyRequestCookies();
+
+        if (!accessTokenPayload) {
+            return NextResponse.json({ error: ERROR_MSG.UNAUTHORIZED }, { status: 401 });
+        }
 
         const postService = new PostService();
         const post = await postService.deletePost({ postId: Number(postId), userId: accessTokenPayload.userId });
@@ -56,6 +58,10 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ post
         ) as UpdatePostRequest['prevThumbnailImageUrl'];
 
         const { accessTokenPayload } = await verifyRequestCookies();
+
+        if (!accessTokenPayload) {
+            return NextResponse.json({ error: ERROR_MSG.UNAUTHORIZED }, { status: 401 });
+        }
 
         const postService = new PostService();
         const post = await postService.updatePost({

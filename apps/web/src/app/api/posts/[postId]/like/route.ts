@@ -1,4 +1,4 @@
-import { verifyRequestCookies } from '@/utils/cookie.server';
+import { verifyRequestCookies, assertAccessTokenPayload } from '@/utils/cookie.server';
 import PostService from '@/services/post.service';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
@@ -10,6 +10,7 @@ export async function POST(_: NextRequest, { params }: { params: Promise<{ postI
     try {
         const { postId } = await params;
         const { accessTokenPayload } = await verifyRequestCookies();
+        assertAccessTokenPayload(accessTokenPayload);
 
         const postService = new PostService();
         await postService.likePost({ postId: Number(postId), userId: accessTokenPayload.userId });
@@ -27,6 +28,7 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ pos
     try {
         const { postId } = await params;
         const { accessTokenPayload } = await verifyRequestCookies();
+        assertAccessTokenPayload(accessTokenPayload);
 
         const postService = new PostService();
         await postService.unlikePost({ postId: Number(postId), userId: accessTokenPayload.userId });

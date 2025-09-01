@@ -1,4 +1,4 @@
-import { verifyRequestCookies } from '@/utils/cookie.server';
+import { verifyRequestCookies, assertAccessTokenPayload } from '@/utils/cookie.server';
 import PostService from '@/services/post.service';
 import { StockService } from '@/services/stock.service';
 import { NextRequest, NextResponse } from 'next/server';
@@ -13,7 +13,6 @@ export async function GET(req: NextRequest) {
 
         // Optional authentication for GETlet userId: string | undefined;
         const { accessTokenPayload } = await verifyRequestCookies();
-        const userId = accessTokenPayload.userId;
 
         const postService = new PostService();
         const stockService = new StockService();
@@ -32,7 +31,7 @@ export async function GET(req: NextRequest) {
             stockSymbol: stock.symbol,
             limit: limit ? Number(limit) : 15,
             cursor: cursor ? new Date(cursor) : new Date(),
-            userId,
+            userId: accessTokenPayload?.userId,
         });
 
         return NextResponse.json(postThumbnailList);
@@ -55,6 +54,7 @@ export async function POST(req: NextRequest) {
         const thumbnailImage = formData.get('thumbnailImage') as File;
 
         const { accessTokenPayload } = await verifyRequestCookies();
+        assertAccessTokenPayload(accessTokenPayload);
 
         const stockService = new StockService();
         const postService = new PostService();

@@ -2,17 +2,28 @@
 import { ERROR_MSG } from '@/constants/message';
 import axios from 'axios';
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
-import { logout, refresh } from './auth.api';
+import { refresh } from './auth.api';
 import { getAccessToken, getRefreshToken, clearTokens, setTokens } from '@/utils/localStorage.browser';
+import { REASON_CODES } from '@/constants/snackbar';
+
+const moneedBaseConfig = {
+    withCredentials: true,
+    baseURL: process.env.NEXT_PUBLIC_MONEED_BASE_URL,
+    headers: {
+        'Content-type': 'application/json',
+    },
+};
+
+const proxyBaseConfig = {
+    withCredentials: true,
+    baseURL: process.env.NEXT_PUBLIC_KAKAO_PROXY_SERVER,
+    headers: {
+        'Content-type': 'application/json',
+    },
+};
 
 const getMoneedInstance = (): AxiosInstance => {
-    const instance: AxiosInstance = axios.create({
-        withCredentials: true,
-        baseURL: process.env.NEXT_PUBLIC_MONEED_BASE_URL,
-        headers: {
-            'Content-type': 'application/json',
-        },
-    });
+    const instance: AxiosInstance = axios.create(moneedBaseConfig);
 
     instance.interceptors.request.use(
         (config: InternalAxiosRequestConfig) => {
@@ -60,10 +71,14 @@ const withCredentials = (instance: AxiosInstance) => {
         async (error: AxiosError) => {
             if (error.response?.status === 401) {
                 try {
+                    console.log('error', error);
                     // 리프레쉬 토큰으로 새 토큰 발급 시도
                     const refreshTokenValue = getRefreshToken();
                     if (!refreshTokenValue) {
-                        throw new Error('No refresh token available');
+                        if (typeof window !== 'undefined') {
+                            window.location.href = `/onboarding?reason=${REASON_CODES.NO_SESSION}`;
+                        }
+                        return Promise.reject(ERROR_MSG.NO_REFRESH_TOKEN);
                     }
 
                     const refreshResponse = await refresh({
@@ -84,16 +99,20 @@ const withCredentials = (instance: AxiosInstance) => {
                 } catch {
                     // 리프레쉬 실패 시 로그아웃 처리
                     await clearTokens();
-                    return Promise.reject(new AxiosError(ERROR_MSG.TOKEN_EXPIRED));
-                    // TODO: onboarding 페이지로 리다이렉트
+                    if (typeof window !== 'undefined') {
+                        window.location.href = `/onboarding?reason=${REASON_CODES.EXPIRED_SESSION}`;
+                    }
+                    return Promise.reject(ERROR_MSG.TOKEN_EXPIRED);
                 }
             }
 
             if (error.response?.status === 403) {
                 // 리프레쉬 토큰도 만료된 경우
                 await clearTokens();
-                return Promise.reject(new AxiosError(ERROR_MSG.TOKEN_EXPIRED));
-                // TODO: onboarding 페이지로 리다이렉트
+                if (typeof window !== 'undefined') {
+                    window.location.href = `/onboarding?reason=${REASON_CODES.EXPIRED_SESSION}`;
+                }
+                return Promise.reject(ERROR_MSG.TOKEN_EXPIRED);
             }
             return Promise.reject(error);
         },
@@ -102,13 +121,7 @@ const withCredentials = (instance: AxiosInstance) => {
 };
 
 const getProxyInstance = (): AxiosInstance => {
-    const instance: AxiosInstance = axios.create({
-        withCredentials: true,
-        baseURL: process.env.NEXT_PUBLIC_KAKAO_PROXY_SERVER,
-        headers: {
-            'Content-type': 'application/json',
-        },
-    });
+    const instance: AxiosInstance = axios.create(proxyBaseConfig);
 
     instance.interceptors.request.use(
         (config: InternalAxiosRequestConfig) => {
@@ -134,6 +147,6 @@ const getProxyInstance = (): AxiosInstance => {
 };
 
 export const proxy = getProxyInstance();
-export const proxyWithCredentials = withCredentials(getProxyInstance());
+export const proxyWithCredentials = withCredentials(axios.create(proxyBaseConfig));
 export const http = getMoneedInstance();
-export const httpWithCredentials = withCredentials(getMoneedInstance());
+export const httpWithCredentials = withCredentials(axios.create(moneedBaseConfig));

@@ -1,4 +1,5 @@
 import { getHotStock, getOverseasStockPrice, getSelectedStocks, getStocks, getStockBySymbol } from '@/apis/stock.api';
+import { useAuth } from '@/hooks/useAuth';
 import { MarketCode } from '@/types/kis';
 import { useInfiniteQuery, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
@@ -35,10 +36,8 @@ export const useSelectedStocks = () => {
     });
 };
 
-export const useInfiniteSelectedStocks = ({
-    count = 20,
-    accessToken,
-}: { count?: number; accessToken?: string } = {}) => {
+export const useInfiniteSelectedStocks = ({ count = 20 }: { count?: number } = {}) => {
+    const { accessToken } = useAuth();
     return useInfiniteQuery({
         queryKey: ['selectedStocks', 'infinite'],
         queryFn: ({ pageParam = 0 }) => getSelectedStocks({ count, cursor: pageParam }),

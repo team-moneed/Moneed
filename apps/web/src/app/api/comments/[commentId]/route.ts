@@ -1,4 +1,4 @@
-import { verifyRequestCookies } from '@/utils/cookie.server';
+import { verifyRequestCookies, assertAccessTokenPayload } from '@/utils/cookie.server';
 import CommentService from '@/services/comment.service';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
@@ -10,6 +10,7 @@ export async function DELETE(_: NextRequest, { params }: { params: Promise<{ com
     try {
         const { commentId } = await params;
         const { accessTokenPayload } = await verifyRequestCookies();
+        assertAccessTokenPayload(accessTokenPayload);
 
         const commentService = new CommentService();
         await commentService.deleteComment({ commentId: Number(commentId), userId: accessTokenPayload.userId });

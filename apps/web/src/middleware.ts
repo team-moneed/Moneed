@@ -20,9 +20,9 @@ export async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
     const isProtectedRoute = protectedRoutes.includes(path);
     const isGuestOnlyRoute = guestOnlyRoutes.includes(path);
-    const accessToken = req.cookies.get(process.env.JWT_ACCESS_NAME || 'access_token')?.value;
+    const accessToken = req.cookies.get(process.env.JWT_ACCESS_NAME || 'access_token')?.value || '';
 
-    const session = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET });
+    const session = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET || '' });
 
     if (isGuestOnlyRoute && session.payload) {
         return NextResponse.redirect(new URL(`/?reason=${REASON_CODES.LOGGED_IN}`, req.nextUrl));

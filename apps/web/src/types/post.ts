@@ -8,7 +8,7 @@ export interface CreatePostResult {
     stockSymbol: string;
     thumbnailImage: string | null;
     createdAt: Date;
-    updatedAt: Date;
+    updatedAt: Date | null;
     score: number;
     stock: {
         id: number;

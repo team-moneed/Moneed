@@ -9,6 +9,10 @@ export async function GET() {
     try {
         const { accessTokenPayload } = await verifyRequestCookies();
 
+        if (!accessTokenPayload) {
+            return NextResponse.json({ error: ERROR_MSG.UNAUTHORIZED }, { status: 401 });
+        }
+
         const userService = new UserService();
         const user = await userService.getUserInfo({ userId: accessTokenPayload.userId });
 
@@ -28,6 +32,10 @@ export async function GET() {
 export async function PUT(request: Request) {
     try {
         const { accessTokenPayload } = await verifyRequestCookies();
+
+        if (!accessTokenPayload) {
+            return NextResponse.json({ error: ERROR_MSG.UNAUTHORIZED }, { status: 401 });
+        }
 
         const formData = await request.formData();
         const nickname = formData.get('nickname') as UpdateUserProfileRequest['nickname'];
