@@ -1,5 +1,5 @@
 import { verifyRequestCookies } from '@/utils/cookie.server';
-import { StockService } from '@/services/stock.service';
+import { StockService } from '@/features/stock/service/stock.server';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/constants/message';

@@ -3,7 +3,7 @@ import { cn } from '@/utils/style';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import BottomModal from '@/components/BottomModal';
-import Button from '@/components/Button';
+import Button from '@/shared/ui/Button';
 import { useSuspenseUser } from '@/queries/user.query';
 import withSuspense from '@/components/HOC/withSuspense';
 

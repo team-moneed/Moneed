@@ -1,5 +1,5 @@
 import type { User } from '@prisma/client';
-import { httpWithCredentials } from './client';
+import { httpWithCredentials } from '../shared/api/client';
 import { isFile } from '@/utils/typeChecker';
 import type { UpdateUserProfileRequest } from '@/types/user';
 import type { CommentWithUser } from '@/types/comment';

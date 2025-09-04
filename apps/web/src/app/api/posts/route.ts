@@ -1,6 +1,6 @@
 import { verifyRequestCookies, assertAccessTokenPayload } from '@/utils/cookie.server';
 import PostService from '@/services/post.service';
-import { StockService } from '@/services/stock.service';
+import { StockService } from '@/features/stock/service/stock.server';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';

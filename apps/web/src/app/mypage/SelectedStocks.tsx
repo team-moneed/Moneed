@@ -1,16 +1,18 @@
 import MyStockBox from '@/components/Mypage/MyStockBox';
 import { StockBoxSkeletons } from '@/components/Skeletons/mypage/StockBoxSkeleton';
-import { useInfiniteSelectedStocks } from '@/queries/stock.query';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useInfiniteSelectedStocks } from '@/entities/stock';
+import { useAuth } from '@/shared/hooks/useAuth';
+import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
 
 export default function SelectedStocks() {
+    const { accessToken } = useAuth();
     const {
         data: selectedStocks = [],
         fetchNextPage,
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-    } = useInfiniteSelectedStocks({ count: 10 });
+    } = useInfiniteSelectedStocks({ count: 10, enabled: !!accessToken });
 
     const ref = useIntersectionObserver({
         onIntersect: () => {

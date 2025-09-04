@@ -1,6 +1,5 @@
-import { getOverseasStockByCondition } from '@/apis/kis.api';
-import { StockService } from '@/services/stock.service';
-import { MarketCode } from '@/types/kis';
+import { getOverseasStockByCondition, type MarketCode } from '@/entities/stock';
+import { StockService } from '@/features/stock/service/stock.server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {

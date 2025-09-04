@@ -1,6 +1,4 @@
-import { getOverseasStockInfo, getOverseasStockPrice } from '@/apis/kis.api';
-import type { Stock } from '@prisma/client';
-import { StockRepository } from '@/repositories/stock.repository';
+import { getOverseasStockInfo, getOverseasStockPrice, StockRepository, type Stock } from '@/entities/stock';
 
 export class StockService {
     private stockRepository: StockRepository;

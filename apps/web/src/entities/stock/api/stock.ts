@@ -1,7 +1,5 @@
-import { httpWithCredentials, http } from '@/apis/client';
-import type { Stock } from '@prisma/client';
-import type { MarketCode, OverseasStockPriceResponse } from '@/types/kis';
-import type { HotStock } from '@/types/stock';
+import { httpWithCredentials, http } from '@/shared/api/client';
+import type { MarketCode, OverseasStockPriceResponse, HotStock, Stock } from '../model';
 
 export async function getStocks({ count = 30, cursor = 0 }: { count?: number; cursor?: number } = {}) {
     const res = await http.get<Stock[]>('/api/stocks', { params: { count, cursor } });

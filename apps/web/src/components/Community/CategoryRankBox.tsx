@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode } from 'react';
-import { HotStock } from '@/types/stock';
+import type { HotStock } from '@/entities/stock';
 import { cn } from '@/utils/style';
 
 type StockInfoProps = {

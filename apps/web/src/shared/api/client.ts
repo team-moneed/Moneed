@@ -2,7 +2,7 @@
 import { ERROR_MSG } from '@/constants/message';
 import axios from 'axios';
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
-import { refresh } from './auth.api';
+import { refresh } from '../../apis/auth.api';
 import { getAccessToken, getRefreshToken, clearTokens, setTokens } from '@/utils/localStorage.browser';
 import { REASON_CODES } from '@/constants/snackbar';
 

@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createPost } from '@/apis/post.api';
 import { REASON_CODES } from '@/constants/snackbar';
 import { CreatePostField } from '@/types/fieldData';
-import Button from '@/components/Button';
+import Button from '@/shared/ui/Button';
 
 // TODO: 리팩토링 필요 (searchStockType 페이지로 꼭 이동해야 할까?)
 const WritePost = () => {

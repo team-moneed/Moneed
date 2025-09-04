@@ -1,6 +1,6 @@
 'use client';
 import type { Stock } from '@prisma/client';
-import { useOverseasStockPrice } from '@/queries/stock.query';
+import { useOverseasStockPrice } from '@/entities/stock';
 import { cn } from '@/utils/style';
 import Link from 'next/link';
 import { ReactNode } from 'react';

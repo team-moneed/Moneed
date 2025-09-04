@@ -1,4 +1,4 @@
-import { MarketCode } from '@/types/kis';
+import { MarketCode } from './types.server';
 
 export type HotStock = {
     symbol: string;

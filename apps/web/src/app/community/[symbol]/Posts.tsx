@@ -1,5 +1,5 @@
 'use client';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
 import PostThumbnail from '@/app/community/[symbol]/PostThumbnail';
 import { useInfinitePosts } from '@/queries/posts.query';
 

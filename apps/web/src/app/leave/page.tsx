@@ -1,7 +1,7 @@
 'use client';
 import { leave } from '@/apis/auth.api';
 import { REASON_CODES } from '@/constants/snackbar';
-import Button from '@/components/Button';
+import Button from '@/shared/ui/Button';
 import { useMutation } from '@tanstack/react-query';
 import LeaveReasonDropdown from './LeaveReasonDropdown';
 import { useState } from 'react';

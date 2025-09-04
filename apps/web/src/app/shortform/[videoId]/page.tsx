@@ -4,7 +4,7 @@ import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
 import { useInfiniteShorts, useShort } from '@/queries/shorts.query';
 import { ShortformPageSkeleton } from '@/components/Skeletons/shortform/ShortformSkeleton';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
 
 // TODO: 추후 현재 쇼츠 자동 재생 로직 추가
 function ShortformVideoPage() {

@@ -1,3 +1,5 @@
+export type { Stock } from '@prisma/client';
+
 export type MarketCode = 'NYS' | 'NAS' | 'AMS' | 'TSE' | 'HKS' | 'SHS' | 'SZS' | 'HSX' | 'HNX';
 
 export type KISAccessTokenResponse = {

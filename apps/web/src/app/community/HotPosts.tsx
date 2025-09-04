@@ -2,7 +2,7 @@
 
 import { PostThumbnailSkeletons } from '@/components/Skeletons/PostThumbnailSkeleton';
 import HotPostThumbnail from './HotPostThumbnail';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
 import { useSuspenseHotPosts } from '@/queries/posts.query';
 import withSuspense from '@/components/HOC/withSuspense';
 

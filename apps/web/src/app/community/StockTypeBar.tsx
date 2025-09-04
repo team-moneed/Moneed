@@ -4,20 +4,22 @@ import { useParams } from 'next/navigation';
 import { ChipLink } from '@/components/Chip';
 import Icon from '@/components/Icon';
 import Link from 'next/link';
-import { useInfiniteSelectedStocks } from '@/queries/stock.query';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useInfiniteSelectedStocks } from '@/entities/stock';
+import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
 import ChipSkeleton from '@/components/Skeletons/ChipSkeleton';
+import { useAuth } from '@/shared/hooks/useAuth';
 
 function StockTypeBar() {
     const params = useParams();
     const symbol = params ? params.symbol : undefined;
+    const { accessToken } = useAuth();
     const {
         data: stocks,
         isLoading,
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useInfiniteSelectedStocks({ count: 10 });
+    } = useInfiniteSelectedStocks({ count: 10, enabled: !!accessToken });
 
     const ref = useIntersectionObserver({
         onIntersect: () => {
