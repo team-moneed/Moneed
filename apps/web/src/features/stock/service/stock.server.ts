@@ -1,4 +1,5 @@
-import { getOverseasStockInfo, getOverseasStockPrice, StockRepository, type Stock } from '@/entities/stock';
+import type { DbStock } from '@/entities/stock';
+import { getOverseasStockInfo, getOverseasStockPrice, StockRepository } from '@/entities/stock/server';
 
 export class StockService {
     private stockRepository: StockRepository;
@@ -23,7 +24,7 @@ export class StockService {
     /**
      * 여러 주식에 대한 정보를 병렬로 가져와서 name 필드를 추가합니다.
      */
-    async updateStockNamesToKorean(stocks: Stock[]) {
+    async updateStockNamesToKorean(stocks: DbStock[]) {
         return await Promise.all(
             stocks.map(async stock => ({
                 ...stock,
@@ -46,6 +47,14 @@ export class StockService {
             ...stock,
             id: selectedStocks.find(s => s.stock.symbol === stock.symbol)?.id,
         }));
+    }
+
+    /**
+     * 사용자가 선택한 주식의 심볼 목록만 반환
+     */
+    async getSelectedStockSymbols(userId: string): Promise<string[]> {
+        const selectedStocks = await this.stockRepository.getSelectedStock(userId);
+        return selectedStocks.map(stock => stock.stock.symbol);
     }
 
     async selectStock(userId: string, stockSymbols: string[]) {

@@ -1,8 +1,9 @@
 import { MarketCode } from './types.server';
 
-export type HotStock = {
+export type Stock = {
     symbol: string;
-    name: string;
+    nameKo: string;
+    nameEn: string;
     price: number;
     change: number;
     changeRate: string;
@@ -11,4 +12,6 @@ export type HotStock = {
     rank: number;
     logoUrl: string;
     sector: string;
+    subSector: string;
+    summary: string;
 };

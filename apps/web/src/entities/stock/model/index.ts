@@ -4,7 +4,7 @@ export type {
     MarketCode,
     OverseasStockPriceResponse,
     OverseasStockInfoResponse,
-    Stock,
+    DbStock,
 } from './types.server';
 
-export type { HotStock } from './types';
+export type { Stock } from './types';

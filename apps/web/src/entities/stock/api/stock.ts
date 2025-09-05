@@ -1,5 +1,5 @@
 import { httpWithCredentials, http } from '@/shared/api/client';
-import type { MarketCode, OverseasStockPriceResponse, HotStock, Stock } from '../model';
+import type { MarketCode, OverseasStockPriceResponse, Stock, DbStock } from '../model';
 
 export async function getStocks({ count = 30, cursor = 0 }: { count?: number; cursor?: number } = {}) {
     const res = await http.get<Stock[]>('/api/stocks', { params: { count, cursor } });
@@ -26,13 +26,13 @@ export async function getOverseasStockPrice({ symbol }: { symbol: string }) {
 }
 
 export async function getHotStock({ market }: { market: MarketCode }) {
-    const res = await http.get<HotStock[]>('/api/stocks/hot', {
+    const res = await http.get<Stock[]>('/api/stocks/hot', {
         params: { market },
     });
     return res.data;
 }
 
 export async function getStockBySymbol({ symbol }: { symbol: string }) {
-    const res = await http.get<Stock>(`/api/stocks/${symbol}`);
+    const res = await http.get<DbStock>(`/api/stocks/${symbol}`);
     return res.data;
 }

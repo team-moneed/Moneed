@@ -9,8 +9,7 @@ export const useStocks = () => {
     });
 };
 
-// TODO: infinite query로 수정
-export const useSelectedStocks = () => {
+export const useSelectedStocks = ({ accessToken }: { accessToken: boolean }) => {
     return useQuery({
         queryKey: ['selectedStocks'],
         queryFn: () => getSelectedStocks(),
@@ -22,6 +21,7 @@ export const useSelectedStocks = () => {
             // 다른 에러의 경우 최대 3번 재시도
             return failureCount < 3;
         },
+        enabled: !!accessToken,
     });
 };
 
