@@ -1,11 +1,11 @@
 'use client';
 
 import { ReactNode } from 'react';
-import type { HotStock } from '@/entities/stock';
+import type { Stock } from '@/entities/stock';
 import { cn } from '@/utils/style';
 
 type StockInfoProps = {
-    stock: HotStock;
+    stock: Stock;
     children?: ReactNode;
     className?: string;
 };
@@ -37,11 +37,11 @@ const CategoryRankBox = ({ stock }: StockInfoProps) => {
                     <div className='rounded-full overflow-hidden aspect-square w-[1.6rem]'>
                         <img
                             src={stock.logoUrl ?? '/icon/icon-us.svg'}
-                            alt={stock.name}
+                            alt={stock.nameKo}
                             className='w-full h-full object-cover'
                         />
                     </div>
-                    <span className='font-normal leading-[140%] text-[1.4rem] text-moneed-black'>{stock.name}</span>
+                    <span className='font-normal leading-[140%] text-[1.4rem] text-moneed-black'>{stock.nameKo}</span>
                     <span className='py-[.3rem] px-[.8rem] font-normal leading-[140%] text-[1rem] text-moneed-gray-8 tracking-[0.02rem] rounded-[.6rem] border border-solid border-moneed-gray-8'>
                         {stock.symbol}
                     </span>

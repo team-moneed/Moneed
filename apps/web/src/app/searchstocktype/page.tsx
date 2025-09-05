@@ -3,12 +3,14 @@ import MyStockBox from '@/components/Mypage/MyStockBox';
 import { useState } from 'react';
 import Hangul from 'hangul-js';
 import { useSelectedStocks } from '@/entities/stock';
+import { useAuth } from '@/shared/hooks/useAuth';
 
 export const dynamic = 'force-dynamic';
 
 function SearchStockTypeContent() {
     const [searchStockType, setsearchStockType] = useState('');
-    const { data: stocks = [], isLoading, error } = useSelectedStocks();
+    const { accessToken } = useAuth();
+    const { data: stocks = [], isLoading, error } = useSelectedStocks({ accessToken: !!accessToken });
 
     const getInitialConsonant = (str: string) => {
         return Hangul.d(str)
@@ -24,8 +26,8 @@ function SearchStockTypeContent() {
         // console.log(Hangul.disassemble(item.name).includes(Hangul.disassemble(searchStockType)))
 
         return (
-            stock.name.toLowerCase().includes(searchStockType) ||
-            getInitialConsonant(stock.name).includes(getInitialConsonant(searchStockType))
+            stock.nameKo.toLowerCase().includes(searchStockType) ||
+            getInitialConsonant(stock.nameKo).includes(getInitialConsonant(searchStockType))
         );
     });
 
@@ -60,9 +62,9 @@ function SearchStockTypeContent() {
                 <div className='px-[2.4rem] py-[.8rem]'>
                     {filteredStocks.map(stock => (
                         <MyStockBox
-                            key={stock.id}
+                            key={stock.symbol}
                             stock={stock}
-                            href={`/writepost?symbol=${stock.symbol}&stockName=${stock.name}`}
+                            href={`/writepost?symbol=${stock.symbol}&stockName=${stock.nameKo}`}
                         />
                     ))}
                 </div>

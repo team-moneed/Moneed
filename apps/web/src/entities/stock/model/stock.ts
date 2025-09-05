@@ -4,6 +4,7 @@ import { Stock } from './types';
 export class StockModel {
     static toStock(stock: OverseasStockConditionSearchResponse['output2'][number], dbStock?: DbStock): Stock {
         return {
+            id: dbStock?.id ?? 0,
             symbol: stock.symb,
             nameKo: stock.name,
             nameEn: stock.ename,

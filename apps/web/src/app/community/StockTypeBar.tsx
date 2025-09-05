@@ -43,7 +43,7 @@ function StockTypeBar() {
                 {stocks?.map(stock => (
                     <ChipLink
                         key={stock.symbol}
-                        label={stock.name}
+                        label={stock.nameKo}
                         active={symbol ? symbol === stock.symbol : false}
                         href={`/community/${stock.symbol}`}
                     />
