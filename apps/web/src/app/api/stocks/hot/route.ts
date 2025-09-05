@@ -7,7 +7,17 @@ export async function GET(request: NextRequest) {
     if (!market) {
         return NextResponse.json({ error: 'market is required' }, { status: 400 });
     }
-    const data = await getOverseasStockByCondition({ market: market as MarketCode });
+    const data = await getOverseasStockByCondition({
+        market: market as MarketCode,
+        params: {
+            CO_YN_RATE: '1',
+            CO_ST_RATE: '0.1',
+            CO_EN_RATE: String(10_000), // 등락율 끝율
+            CO_YN_VALX: '1', // 시가총액 조건 사용 여부 (1: 사용, 0: 사용안함)
+            CO_ST_VALX: String(50_000_000), // 시가총액 시작값 (단위: 천$) -> 500억$
+            CO_EN_VALX: String(5_000_000_000), // 시가총액 끝값 (단위: 천$) -> 5조$
+        },
+    });
     const top3Stocks = data.output2.slice(0, 3);
     const stockService = new StockService();
     const stocks = await stockService.getStocksBySymbols(top3Stocks.map(stock => stock.symb));

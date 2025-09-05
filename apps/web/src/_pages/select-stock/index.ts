@@ -1,1 +1,1 @@
-export { SelectStockPage } from './ui/SelectStockPage';
+export { default } from './ui/SelectStockPage';
