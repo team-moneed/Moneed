@@ -5,7 +5,7 @@ import { useModal } from '@/context/ModalContext';
 import DateFormatter from '@/components/Dateformatter';
 import { PrimaryDropdown, PrimaryDropdownProps } from '@/components/Dropdown';
 import { deletePost } from '@/apis/post.api';
-import { REASON_CODES } from '@/constants/snackbar';
+import { REASON_CODES } from '@/shared/config/snackbar';
 import Image from 'next/image';
 import PostLikeButton from '@/components/Post/PostLikeButton';
 import PostCommentButton from '@/components/Post/PostCommentButton';

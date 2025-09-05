@@ -1,4 +1,4 @@
-import { getOverseasStockByCondition, type MarketCode } from '@/entities/stock';
+import { getOverseasStockByCondition, type MarketCode } from '@/entities/stock/server';
 import { StockService } from '@/features/stock/service/stock.server';
 import { NextRequest, NextResponse } from 'next/server';
 

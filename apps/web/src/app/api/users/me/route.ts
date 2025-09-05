@@ -1,9 +1,9 @@
-import { verifyRequestCookies } from '@/utils/cookie.server';
+import { verifyRequestCookies } from '@/shared/utils/cookie.server';
 import type { UpdateUserProfileRequest } from '@/types/user';
 import UserService from '@/services/user.service';
 import { NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG } from '@/constants/message';
+import { ERROR_MSG } from '@/shared/config/message';
 
 export async function GET() {
     try {

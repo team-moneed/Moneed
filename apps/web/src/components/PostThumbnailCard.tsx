@@ -8,7 +8,7 @@ import { useModal } from '@/context/ModalContext';
 import { useRouter } from 'next/navigation';
 import { PostThumbnail } from '@/types/post';
 import { deletePost } from '@/apis/post.api';
-import { REASON_CODES } from '@/constants/snackbar';
+import { REASON_CODES } from '@/shared/config/snackbar';
 import { queryClient } from './QueryClientProvider';
 import PostLikeButton from './Post/PostLikeButton';
 import PostCommentButton from './Post/PostCommentButton';

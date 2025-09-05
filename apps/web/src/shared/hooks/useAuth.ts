@@ -1,4 +1,4 @@
-import { getCookie } from '@/utils/cookie.browser';
+import { getCookie } from '@/shared/utils/cookie.browser';
 import { useEffect, useState } from 'react';
 
 export const useAuth = () => {

@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { REASON_CODES } from './constants/snackbar';
+import { REASON_CODES } from './shared/config/snackbar';
 import { verifyToken } from '@moneed/auth';
 // getServerSideCookie 대신 req.cookies 직접 사용
 

@@ -7,7 +7,7 @@ import useSnackbarStore from '@/store/useSnackbarStore';
 import { useForm } from 'react-hook-form';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createPost } from '@/apis/post.api';
-import { REASON_CODES } from '@/constants/snackbar';
+import { REASON_CODES } from '@/shared/config/snackbar';
 import { CreatePostField } from '@/types/fieldData';
 import Button from '@/shared/ui/Button';
 
