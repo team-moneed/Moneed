@@ -1,5 +1,5 @@
 'use client';
-import Button from '@/components/Button';
+import Button from '@/shared/ui/Button';
 import { BoardRankResponse } from '@/types/board';
 import { useRouter } from 'next/navigation';
 

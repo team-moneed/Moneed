@@ -1,6 +1,5 @@
-import { getHotStock, getOverseasStockPrice, getSelectedStocks, getStocks, getStockBySymbol } from '@/apis/stock.api';
-import { useAuth } from '@/hooks/useAuth';
-import { MarketCode } from '@/types/kis';
+import { getHotStock, getOverseasStockPrice, getSelectedStocks, getStocks, getStockBySymbol } from '../api';
+import { MarketCode } from '../model';
 import { useInfiniteQuery, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useStocks = () => {
@@ -10,18 +9,7 @@ export const useStocks = () => {
     });
 };
 
-export const useInfiniteStocks = ({ count = 20 }: { count?: number }) => {
-    return useInfiniteQuery({
-        queryKey: ['stocks'],
-        queryFn: ({ pageParam = 0 }) => getStocks({ count, cursor: pageParam }),
-        getNextPageParam: lastPage => (lastPage.length > 0 ? (lastPage.at(-1)?.id ?? 0) : undefined),
-        initialPageParam: 0,
-        select: data => data.pages.flatMap(page => page),
-    });
-};
-
-// TODO: infinite query로 수정
-export const useSelectedStocks = () => {
+export const useSelectedStocks = ({ accessToken }: { accessToken: boolean }) => {
     return useQuery({
         queryKey: ['selectedStocks'],
         queryFn: () => getSelectedStocks(),
@@ -33,11 +21,11 @@ export const useSelectedStocks = () => {
             // 다른 에러의 경우 최대 3번 재시도
             return failureCount < 3;
         },
+        enabled: !!accessToken,
     });
 };
 
-export const useInfiniteSelectedStocks = ({ count = 20 }: { count?: number } = {}) => {
-    const { accessToken } = useAuth();
+export const useInfiniteSelectedStocks = ({ count = 20, enabled }: { count?: number; enabled: boolean }) => {
     return useInfiniteQuery({
         queryKey: ['selectedStocks', 'infinite'],
         queryFn: ({ pageParam = 0 }) => getSelectedStocks({ count, cursor: pageParam }),
@@ -52,22 +40,7 @@ export const useInfiniteSelectedStocks = ({ count = 20 }: { count?: number } = {
             // 다른 에러의 경우 최대 3번 재시도
             return failureCount < 3;
         },
-        enabled: !!accessToken,
-    });
-};
-
-export const useSuspenseSelectedStocks = () => {
-    return useSuspenseQuery({
-        queryKey: ['selectedStocks'],
-        queryFn: () => getSelectedStocks(),
-        retry: (failureCount, error: any) => {
-            // 401 에러인 경우 재시도하지 않음
-            if (error?.response?.status === 401) {
-                return false;
-            }
-            // 다른 에러의 경우 최대 3번 재시도
-            return failureCount < 3;
-        },
+        enabled: enabled,
     });
 };
 

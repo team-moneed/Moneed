@@ -1,5 +1,5 @@
 import { cn } from '@/utils/style';
-import { LEAVE_REASON } from '@/constants/leaveReason';
+import { LEAVE_REASON } from '@/shared/config/leaveReason';
 import { useEffect, useRef, useState } from 'react';
 
 type LeaveReasonDropdownProps = {

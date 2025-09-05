@@ -1,4 +1,4 @@
-import { KISAccessTokenResponse } from '@/types/kis';
+import type { KISAccessTokenResponse } from '@/entities/stock';
 
 export class TokenUtils {
     /**

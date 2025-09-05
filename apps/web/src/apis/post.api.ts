@@ -12,7 +12,7 @@ import {
     LikePostResponse,
     UnlikePostResponse,
 } from '@/types/post';
-import { httpWithCredentials, http } from './client';
+import { httpWithCredentials, http } from '../shared/api/client';
 import { isFile } from '@/utils/typeChecker';
 
 export const getTopBoardPosts = async ({ symbol, limit }: { symbol: string; limit?: number }) => {

@@ -1,4 +1,4 @@
-import { youtube } from '@/apis/server';
+import { youtube } from '@/shared/api/server';
 import { YouTubeSearchResponse } from '@/types/youtube';
 
 export const searchShorts = async ({ q, count, page }: { q: string; count: number; page: string | null }) => {

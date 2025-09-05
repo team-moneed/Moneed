@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect } from 'react';
-import Button from '@/components/Button';
+import Button from '@/shared/ui/Button';
 import ReactDOM from 'react-dom';
 
 type ModalProps = {

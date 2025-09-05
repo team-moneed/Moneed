@@ -1,6 +1,6 @@
 'use client';
 import CategoryRankBox from '@/components/Community/CategoryRankBox';
-import { useSuspenseHotStocks } from '@/queries/stock.query';
+import { useSuspenseHotStocks } from '@/entities/stock';
 import withSuspense from '@/components/HOC/withSuspense';
 
 export function HotStocks() {

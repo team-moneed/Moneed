@@ -1,7 +1,7 @@
 'use client';
 
 import { usePathname, useRouter } from 'next/navigation';
-import Button from '@/components/Button';
+import Button from '@/shared/ui/Button';
 import Link from 'next/link';
 import Logo from '@/app/onboarding/Logo';
 import NavLink from '@/components/NavLink';

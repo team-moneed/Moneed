@@ -1,5 +1,5 @@
 import { CommentCreateResponse, CommentDeleteResponse, CommentUpdateResponse } from '@/types/comment';
-import { httpWithCredentials } from './client';
+import { httpWithCredentials } from '../shared/api/client';
 
 export const createComment = async ({ postId, content }: { postId: number; content: string }) => {
     const response = await httpWithCredentials.post<CommentCreateResponse>('/api/comments', { postId, content });

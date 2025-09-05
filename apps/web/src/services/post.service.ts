@@ -3,7 +3,7 @@ import { CreatePostRequest, PostDetail, PostThumbnail, TopPostThumbnail, UpdateP
 import S3Service from './s3.service';
 import { urlToS3FileName } from '@/utils/parser';
 import { isFile } from '@/utils/typeChecker';
-import { StockService } from './stock.service';
+import { StockService } from '../features/stock/service/stock.server';
 import { BoardRankResponse } from '@/types/board';
 
 export default class PostService {

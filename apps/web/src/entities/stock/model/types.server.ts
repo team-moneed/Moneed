@@ -1,4 +1,66 @@
+export type { Stock as DbStock } from '@prisma/client';
+
 export type MarketCode = 'NYS' | 'NAS' | 'AMS' | 'TSE' | 'HKS' | 'SHS' | 'SZS' | 'HSX' | 'HNX';
+
+/**
+ * 해외주식 조건 검색 쿼리 파라미터
+ */
+export type OverseasStockConditionSearchParams = {
+    /** 사용자권한정보 - "" (Null 값 설정) */
+    AUTH: string;
+    /** 거래소코드 - NYS: 뉴욕, NAS: 나스닥, AMS: 아멕스, HKS: 홍콩, SHS: 상해, SZS: 심천, HSX: 호치민, HNX: 하노이, TSE: 도쿄 */
+    EXCD: MarketCode;
+    /** 현재가선택조건 - 해당조건 사용시(1), 미사용시 필수항목아님 */
+    CO_YN_PRICECUR?: '1';
+    /** 현재가시작범위가 - 단위: 각국통화(JPY, USD, HKD, CNY, VND) */
+    CO_ST_PRICECUR?: string;
+    /** 현재가끝범위가 - 단위: 각국통화(JPY, USD, HKD, CNY, VND) */
+    CO_EN_PRICECUR?: string;
+    /** 등락율선택조건 - 해당조건 사용시(1), 미사용시 필수항목아님 */
+    CO_YN_RATE?: '1';
+    /** 등락율시작율 - % */
+    CO_ST_RATE?: string;
+    /** 등락율끝율 - % */
+    CO_EN_RATE?: string;
+    /** 시가총액선택조건 - 해당조건 사용시(1), 미사용시 필수항목아님 */
+    CO_YN_VALX?: '1';
+    /** 시가총액시작액 - 단위: 천 */
+    CO_ST_VALX?: string;
+    /** 시가총액끝액 - 단위: 천 */
+    CO_EN_VALX?: string;
+    /** 발행주식수선택조건 - 해당조건 사용시(1), 미사용시 필수항목아님 */
+    CO_YN_SHAR?: '1';
+    /** 발행주식시작수 - 단위: 천 */
+    CO_ST_SHAR?: string;
+    /** 발행주식끝수 - 단위: 천 */
+    CO_EN_SHAR?: string;
+    /** 거래량선택조건 - 해당조건 사용시(1), 미사용시 필수항목아님 */
+    CO_YN_VOLUME?: '1';
+    /** 거래량시작량 - 단위: 주 */
+    CO_ST_VOLUME?: string;
+    /** 거래량끝량 - 단위: 주 */
+    CO_EN_VOLUME?: string;
+    /** 거래대금선택조건 - 해당조건 사용시(1), 미사용시 필수항목아님 */
+    CO_YN_AMT?: '1';
+    /** 거래대금시작금 - 단위: 천 */
+    CO_ST_AMT?: string;
+    /** 거래대금끝금 - 단위: 천 */
+    CO_EN_AMT?: string;
+    /** EPS선택조건 - 해당조건 사용시(1), 미사용시 필수항목아님 */
+    CO_YN_EPS?: '1';
+    /** EPS시작 */
+    CO_ST_EPS?: string;
+    /** EPS끝 */
+    CO_EN_EPS?: string;
+    /** PER선택조건 - 해당조건 사용시(1), 미사용시 필수항목아님 */
+    CO_YN_PER?: '1';
+    /** PER시작 */
+    CO_ST_PER?: string;
+    /** PER끝 */
+    CO_EN_PER?: string;
+    /** NEXT KEY BUFF - "" 공백 입력 */
+    KEYB?: string;
+};
 
 export type KISAccessTokenResponse = {
     access_token: string;

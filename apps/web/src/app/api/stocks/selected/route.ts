@@ -1,8 +1,8 @@
-import { verifyRequestCookies } from '@/utils/cookie.server';
-import { StockService } from '@/services/stock.service';
+import { verifyRequestCookies } from '@/shared/utils/cookie.server';
+import { StockService } from '@/features/stock/service/stock.server';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG } from '@/constants/message';
+import { ERROR_MSG } from '@/shared/config/message';
 
 export async function GET(request: NextRequest) {
     try {

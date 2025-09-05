@@ -1,8 +1,8 @@
-import { verifyRequestCookies, assertAccessTokenPayload } from '@/utils/cookie.server';
+import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/cookie.server';
 import CommentService from '@/services/comment.service';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
+import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
 
 export const dynamic = 'force-dynamic';
 

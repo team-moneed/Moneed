@@ -5,7 +5,7 @@ import { useForm } from 'react-hook-form';
 import ImageUploader from '@/components/ImageUploader';
 import useSnackbarStore from '@/store/useSnackbarStore';
 import { updatePost } from '@/apis/post.api';
-import { REASON_CODES } from '@/constants/snackbar';
+import { REASON_CODES } from '@/shared/config/snackbar';
 import { useRouter } from 'next/navigation';
 import Image from 'next/image';
 import EditPostSkeleton from '@/components/Skeletons/EditPostSkeleton';

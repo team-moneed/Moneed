@@ -1,7 +1,5 @@
-import { httpWithCredentials, http } from '@/apis/client';
-import type { Stock } from '@prisma/client';
-import type { MarketCode, OverseasStockPriceResponse } from '@/types/kis';
-import type { HotStock } from '@/types/stock';
+import { httpWithCredentials, http } from '@/shared/api/client';
+import type { MarketCode, OverseasStockPriceResponse, Stock, DbStock } from '../model';
 
 export async function getStocks({ count = 30, cursor = 0 }: { count?: number; cursor?: number } = {}) {
     const res = await http.get<Stock[]>('/api/stocks', { params: { count, cursor } });
@@ -28,13 +26,13 @@ export async function getOverseasStockPrice({ symbol }: { symbol: string }) {
 }
 
 export async function getHotStock({ market }: { market: MarketCode }) {
-    const res = await http.get<HotStock[]>('/api/stocks/hot', {
+    const res = await http.get<Stock[]>('/api/stocks/hot', {
         params: { market },
     });
     return res.data;
 }
 
 export async function getStockBySymbol({ symbol }: { symbol: string }) {
-    const res = await http.get<Stock>(`/api/stocks/${symbol}`);
+    const res = await http.get<DbStock>(`/api/stocks/${symbol}`);
     return res.data;
 }

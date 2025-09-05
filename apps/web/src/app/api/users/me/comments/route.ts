@@ -1,8 +1,8 @@
-import { verifyRequestCookies, assertAccessTokenPayload } from '@/utils/cookie.server';
+import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/cookie.server';
 import CommentService from '@/services/comment.service';
 import { NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG } from '@/constants/message';
+import { ERROR_MSG } from '@/shared/config/message';
 
 export async function GET() {
     try {

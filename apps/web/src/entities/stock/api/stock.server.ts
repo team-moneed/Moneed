@@ -1,13 +1,14 @@
 import 'server-only';
-import { kis } from './server';
+import { kis } from '@/shared/api/server';
 import {
     KISAccessTokenResponse,
     OverseasStockConditionSearchResponse,
     MarketCode,
     OverseasStockPriceResponse,
     OverseasStockInfoResponse,
-} from '@/types/kis';
+} from '../model';
 import axios from 'axios';
+import { OverseasStockConditionSearchParams } from '../model/types.server';
 
 // 한국 투자증권 API
 
@@ -33,17 +34,18 @@ export const getAccessToken = async () => {
  * 해외주식조건검색[v1_해외주식-015]
  * {@link https://apiportal.koreainvestment.com/apiservice-apiservice?/uapi/overseas-price/v1/quotations/inquire-search API DOCS}
  */
-export const getOverseasStockByCondition = async ({ market }: { market: MarketCode }) => {
+export const getOverseasStockByCondition = async ({
+    market,
+    params,
+}: {
+    market: MarketCode;
+    params?: Omit<OverseasStockConditionSearchParams, 'AUTH' | 'EXCD'>;
+}) => {
     const response = await kis.get<OverseasStockConditionSearchResponse>(searchByConditionUrl, {
         params: {
             AUTH: '',
             EXCD: market,
-            CO_YN_RATE: '1', // 등락율 조건 사용 여부 (1: 사용, 0: 사용안함)
-            CO_ST_RATE: '0.1', // 등락율 시작율
-            CO_EN_RATE: String(10_000), // 등락율 끝율
-            CO_YN_VALX: '1', // 시가총액 조건 사용 여부 (1: 사용, 0: 사용안함)
-            CO_ST_VALX: String(50_000_000), // 시가총액 시작값 (단위: 천$) -> 500억$
-            CO_EN_VALX: String(5_000_000_000), // 시가총액 끝값 (단위: 천$) -> 5조$
+            ...params,
         },
         headers: {
             tr_id: 'HHDFS76410000',

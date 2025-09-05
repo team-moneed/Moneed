@@ -1,4 +1,4 @@
-import { StockService } from '@/services/stock.service';
+import { StockService } from '@/features/stock/service/stock.server';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';

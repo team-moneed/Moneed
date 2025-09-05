@@ -6,7 +6,7 @@ import S3Service from './s3.service';
 import { urlToS3FileName } from '@/utils/parser';
 import type { UpdateUserProfileRequest } from '@/types/user';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG } from '@/constants/message';
+import { ERROR_MSG } from '@/shared/config/message';
 
 class UserService {
     private userRepository = new UserRepository();

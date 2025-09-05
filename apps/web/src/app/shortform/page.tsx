@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { useSuspenseInfiniteShorts } from '@/queries/shorts.query';
-import { useIntersectionObserver } from '@/hooks/useIntersectionObserver';
+import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
 import { ShortformPageSkeleton } from '@/components/Skeletons/shortform/ShortformSkeleton';
 
 export const dynamic = 'force-dynamic';
