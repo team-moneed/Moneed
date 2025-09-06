@@ -1,5 +1,4 @@
-import { MarketCode, DbStock, ApiStockData } from './types.server';
-import { Stock } from './types';
+import { Stock, DbStock, ApiStockData, MarketCode } from './stock.type';
 
 export class StockModel {
     /**
