@@ -3,12 +3,10 @@ import { CreatePostRequest, PostDetail, PostThumbnail, TopPostThumbnail, UpdateP
 import S3Service from './s3.service';
 import { urlToS3FileName } from '@/utils/parser';
 import { isFile } from '@/utils/typeChecker';
-import { StockService } from '../features/stock/service/stock.server';
 import { BoardRankResponse } from '@/types/board';
 
 export default class PostService {
     private readonly postRepository = new PostRepository();
-    private readonly stockService = new StockService();
 
     // 24시간 내 게시판 순위 조회 (게시글 수 > 조회수 > 좋아요수 > 댓글수)
     async getBoardRank({ limit }: { limit: number }) {
@@ -23,12 +21,6 @@ export default class PostService {
             });
             result = [...boardRankWithInHours, ...boardRank];
         }
-        result = await Promise.all(
-            result.map(async item => ({
-                ...item,
-                stockName: await this.stockService.getKoreanStockName(item.stockSymbol),
-            })),
-        );
         return result;
     }
 
@@ -55,7 +47,7 @@ export default class PostService {
                 stock: {
                     id: post.stock.id,
                     symbol: post.stock.symbol,
-                    name: await this.stockService.getKoreanStockName(post.stock.symbol),
+                    name: post.stock.nameKo,
                 },
             })),
         );
@@ -75,7 +67,7 @@ export default class PostService {
                 stock: {
                     id: post.stock.id,
                     symbol: post.stock.symbol,
-                    name: await this.stockService.getKoreanStockName(post.stock.symbol),
+                    name: post.stock.nameKo,
                 },
                 thumbnailImage: post.thumbnailImage ?? undefined,
             })),
@@ -96,6 +88,11 @@ export default class PostService {
             likeCount: post.postLikes.length,
             comments: post.comments,
             thumbnailImage: post.thumbnailImage ?? undefined,
+            stock: {
+                id: post.stock.id,
+                symbol: post.stock.symbol,
+                name: post.stock.nameKo,
+            },
         };
     }
 
@@ -123,7 +120,7 @@ export default class PostService {
                 stock: {
                     id: post.stock.id,
                     symbol: post.stock.symbol,
-                    name: await this.stockService.getKoreanStockName(post.stock.symbol),
+                    name: post.stock.nameKo,
                 },
                 thumbnailImage: post.thumbnailImage ?? undefined,
                 user: post.user,
