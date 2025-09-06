@@ -25,7 +25,7 @@ const StockInfoBox = ({ stock, children }: StockInfoProps) => {
                         <img src={stock.logoUrl} alt='stock logo' className='w-full h-full object-contain' />
                     </div>
                     <div>
-                        <h3 className='text-[1.4rem] font-semibold leading-[140%] text-moneed-black'>{stock.name}</h3>
+                        <h3 className='text-[1.4rem] font-semibold leading-[140%] text-moneed-black'>{stock.nameKo}</h3>
                         <span className='text-[1.2rem] font-normal leading-[135%] text-moneed-gray-8'>
                             {stock.symbol} | {stock.sector}
                         </span>

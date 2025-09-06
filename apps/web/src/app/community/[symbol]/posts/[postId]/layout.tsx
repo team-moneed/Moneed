@@ -57,7 +57,7 @@ const MobileHeader = () => {
         <header className='sticky top-0 z-10 bg-white flex items-center justify-between px-[4rem] pb-[1.8rem] pt-[3rem] lg:hidden'>
             <BackButton />
             <h1 className='text-[1.6rem] font-semibold text-moneed-gray-9'>
-                {isEditingComment ? '댓글 수정' : stock?.name || ''}
+                {isEditingComment ? '댓글 수정' : stock?.nameKo || ''}
             </h1>
             <ExitButton />
             {showModal && (
