@@ -97,7 +97,7 @@ export async function seedPosts() {
     });
 
     const stocks = await prisma.stock.findMany({
-        select: { symbol: true, name: true },
+        select: { symbol: true, nameKo: true },
     });
 
     if (users.length === 0) {
@@ -132,7 +132,7 @@ export async function seedPosts() {
         try {
             const post = await prisma.post.create({
                 data: {
-                    title: `${randomTitle} - ${randomStock.name}`,
+                    title: `${randomTitle} - ${randomStock.nameKo}`,
                     content: randomContent,
                     userId: randomUser.id,
                     stockSymbol: randomStock.symbol,

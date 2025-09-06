@@ -1,5 +1,5 @@
 import { getHotStock, getOverseasStockPrice, getSelectedStocks, getStocks, getStockBySymbol } from '../api';
-import { MarketCode } from '../model';
+import { MarketCode } from '@/entities/stock';
 import { useInfiniteQuery, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 export const useStocks = () => {

@@ -1,5 +1,5 @@
 import PostService from '@/services/post.service';
-import { StockService } from '@/features/stock/service/stock.server';
+import { StockRepository } from '@/features/stock/server/repository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';
@@ -10,9 +10,9 @@ export async function GET(request: NextRequest, { params }: { params: Promise<{ 
         const symbol = (await params).symbol;
 
         const postService = new PostService();
-        const stockService = new StockService();
+        const stockRepository = new StockRepository();
 
-        const stock = await stockService.getStockBySymbol(symbol);
+        const stock = await stockRepository.getStock(symbol);
         if (!stock) {
             return NextResponse.json({ error: 'Stock not found' }, { status: 404 });
         }

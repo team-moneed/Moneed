@@ -1,5 +1,6 @@
 import { httpWithCredentials, http } from '@/shared/api/client';
-import type { MarketCode, OverseasStockPriceResponse, Stock, DbStock } from '../model';
+import type { OverseasStockPriceResponse } from '../server';
+import type { Stock, DbStock, MarketCode } from '@/entities/stock';
 
 export async function getStocks({ count = 30, cursor = 0 }: { count?: number; cursor?: number } = {}) {
     const res = await http.get<Stock[]>('/api/stocks', { params: { count, cursor } });

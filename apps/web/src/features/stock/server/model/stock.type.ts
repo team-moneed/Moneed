@@ -1,6 +1,4 @@
-export type { Stock as DbStock } from '@prisma/client';
-
-export type MarketCode = 'NYS' | 'NAS' | 'AMS' | 'TSE' | 'HKS' | 'SHS' | 'SZS' | 'HSX' | 'HNX';
+import { MarketCode } from '@/entities/stock';
 
 /**
  * 해외주식 조건 검색 쿼리 파라미터
@@ -94,7 +92,7 @@ export type OverseasStockConditionSearchResponse = {
         tvol: string; // 거래량
         rate: string; // 등락율
         diff: string; // 대비
-        sign: '1' | '2' | '3'; // 기호 (1: 하락, 2: 상승, 3:보합)
+        sign: '1' | '2' | '3' | '4' | '5'; // 대비기호 (1: 상한, 2: 상승, 3:보합, 4:하한, 5:하락)
         avol: string; // 거래대금
         eps: string; // EPS
         per: string; // PER

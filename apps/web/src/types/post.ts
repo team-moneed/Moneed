@@ -12,7 +12,7 @@ export interface CreatePostResult {
     score: number;
     stock: {
         id: number;
-        name: string;
+        nameKo: string;
         symbol: string;
     };
     user: {

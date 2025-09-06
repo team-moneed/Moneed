@@ -3,12 +3,12 @@ import { kis } from '@/shared/api/server';
 import {
     KISAccessTokenResponse,
     OverseasStockConditionSearchResponse,
-    MarketCode,
     OverseasStockPriceResponse,
     OverseasStockInfoResponse,
+    OverseasStockConditionSearchParams,
 } from '../model';
 import axios from 'axios';
-import { OverseasStockConditionSearchParams } from '../model/types.server';
+import { MarketCode } from '@/entities/stock';
 
 // 한국 투자증권 API
 

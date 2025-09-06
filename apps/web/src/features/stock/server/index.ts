@@ -6,15 +6,16 @@ export {
     getOverseasStockInfo,
     getOverseasStockPrice,
     getOverseasStockByCondition,
-} from './api/stock.server';
+} from './api/stock.api';
 
 // Repository
-export { StockRepository } from './repository/stock.server';
+export { StockRepository } from './repository/stock.repository';
+
+// Service
+export { StockService } from './service/stock.service';
 
 // Types (server & shared)
 export type {
-    MarketCode,
-    Stock,
     KISAccessTokenResponse,
     OverseasStockConditionSearchResponse,
     OverseasStockPriceResponse,
