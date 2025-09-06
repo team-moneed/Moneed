@@ -1,7 +1,7 @@
 'use server';
 
-import { getOverseasStockByCondition } from '@/entities/stock/server';
-import { StockService } from '@/features/stock/service';
+import { getOverseasStockByCondition } from '@/features/stock/server';
+import { StockService } from '@/features/stock/server';
 import { verifyRequestCookies } from '@/shared/utils/server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';

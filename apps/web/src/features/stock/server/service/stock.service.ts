@@ -1,7 +1,7 @@
-import { StockModel } from '@/entities/stock/model/stock';
-import { getOverseasStockPrice, StockRepository } from '@/entities/stock/server';
-import type { DbStock, ApiStockData } from '@/entities/stock/model/types.server';
-import type { Stock } from '@/entities/stock/model/types';
+import { StockModel } from '@/entities/stock';
+import { StockRepository } from '../repository';
+import { getOverseasStockPrice } from '../api';
+import type { DbStock, ApiStockData, Stock } from '@/entities/stock';
 
 export class StockService {
     private stockRepository: StockRepository;
