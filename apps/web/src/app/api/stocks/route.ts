@@ -1,14 +1,14 @@
 import type { Stock } from '@prisma/client';
-import { StockService } from '@/features/stock/service/stock.server';
 import { NextRequest, NextResponse } from 'next/server';
+import { StockRepository } from '@/features/stock/server/repository';
 
 export async function GET(request: NextRequest) {
     try {
         const count = Number(request.nextUrl.searchParams.get('count')) ?? 30;
         const cursor = Number(request.nextUrl.searchParams.get('cursor')) ?? 0;
 
-        const stockService = new StockService();
-        const stocks = await stockService.getStocks(count, cursor);
+        const stockRepository = new StockRepository();
+        const stocks = await stockRepository.getStocks(count, cursor);
 
         return NextResponse.json<Stock[]>(stocks);
     } catch (error) {

@@ -1,8 +1,7 @@
 'use server';
 
-import { StockModel } from '@/entities/stock/model/stock';
-import { getOverseasStockByCondition, StockRepository } from '@/entities/stock/server';
-import { StockService } from '@/features/stock/service';
+import { getOverseasStockByCondition } from '@/features/stock/server';
+import { StockService } from '@/features/stock/server';
 import { verifyRequestCookies } from '@/shared/utils/server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
@@ -24,14 +23,9 @@ export const getHotStocks = async ({ count }: { count: number }) => {
     });
 
     const stocks = data.output2.slice(0, count);
-    const stockRepository = new StockRepository();
-    const dbStocks = await stockRepository.getStocksBySymbols(stocks.map(stock => stock.symb));
-    return stocks.map(stock =>
-        StockModel.toStock(
-            stock,
-            dbStocks.find(dbStock => dbStock.symbol === stock.symb),
-        ),
-    );
+    const stockService = new StockService();
+
+    return await stockService.convertMultipleApiStocks(stocks);
 };
 
 /**

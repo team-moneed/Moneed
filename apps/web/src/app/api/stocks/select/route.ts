@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/cookie.server';
-import { StockService } from '@/features/stock/service/stock.server';
+import { StockService } from '@/features/stock/server/service/stock.service';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
 

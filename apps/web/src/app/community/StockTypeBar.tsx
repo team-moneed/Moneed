@@ -4,7 +4,7 @@ import { useParams } from 'next/navigation';
 import { ChipLink } from '@/components/Chip';
 import Icon from '@/components/Icon';
 import Link from 'next/link';
-import { useInfiniteSelectedStocks } from '@/entities/stock';
+import { useInfiniteSelectedStocks } from '@/features/stock';
 import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
 import ChipSkeleton from '@/components/Skeletons/ChipSkeleton';
 import { useAuth } from '@/shared/hooks/useAuth';

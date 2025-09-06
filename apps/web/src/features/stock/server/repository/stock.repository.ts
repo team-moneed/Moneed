@@ -4,32 +4,17 @@ import { DbStock } from '@/entities/stock';
 export class StockRepository {
     private prisma = prisma;
 
-    async getSelectedStock(userId: string) {
+    async getSelectedStocks(userId: string, count?: number, cursor?: number) {
         return this.prisma.selectedStock.findMany({
             where: {
                 userId,
-            },
-            include: {
-                stock: true,
-            },
-        });
-    }
-
-    async getSelectedStockWithPagination(userId: string, count: number, cursor: number) {
-        return this.prisma.selectedStock.findMany({
-            where: {
-                userId,
-                id: {
-                    gt: cursor,
-                },
+                id: cursor !== undefined ? { gt: cursor } : undefined,
             },
             include: {
                 stock: true,
             },
             take: count,
-            orderBy: {
-                id: 'asc',
-            },
+            orderBy: count !== undefined ? { id: 'asc' } : undefined,
         });
     }
 
@@ -56,10 +41,10 @@ export class StockRepository {
         });
     }
 
-    async getStock(stockId: number) {
+    async getStock(symbol: string) {
         return this.prisma.stock.findUnique({
             where: {
-                id: stockId,
+                symbol,
             },
         });
     }
@@ -79,14 +64,6 @@ export class StockRepository {
         return this.prisma.stock.findMany({
             where: {
                 symbol: { in: symbols },
-            },
-        });
-    }
-
-    async getStockBySymbol(symbol: string) {
-        return this.prisma.stock.findFirst({
-            where: {
-                symbol,
             },
         });
     }

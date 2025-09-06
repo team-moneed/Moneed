@@ -89,7 +89,7 @@ export default class PostRepository {
                 stock: {
                     select: {
                         id: true,
-                        name: true,
+                        nameKo: true,
                         symbol: true,
                     },
                 },
@@ -214,7 +214,7 @@ export default class PostRepository {
                 stock: {
                     select: {
                         id: true,
-                        name: true,
+                        nameKo: true,
                         symbol: true,
                     },
                 },
@@ -240,7 +240,7 @@ export default class PostRepository {
         const boardsWithInHours = (await this.prisma.$queryRaw`
             SELECT 
                 p."stockSymbol",
-                (SELECT s.name FROM stocks s WHERE s.symbol = p."stockSymbol") as "stockName",
+                (SELECT s."nameKo" FROM stocks s WHERE s.symbol = p."stockSymbol") as "stockName",
                 (SELECT s.symbol FROM stocks s WHERE s.symbol = p."stockSymbol") as "symbol",
                 COUNT(DISTINCT p.id) as "postCount",
                 COALESCE(
@@ -298,7 +298,7 @@ export default class PostRepository {
         const boards = (await this.prisma.$queryRaw`
             SELECT 
                 p."stockSymbol",
-                (SELECT s.name FROM stocks s WHERE s.symbol = p."stockSymbol") as "stockName", 
+                (SELECT s."nameKo" FROM stocks s WHERE s.symbol = p."stockSymbol") as "stockName", 
                 (SELECT s.symbol FROM stocks s WHERE s.symbol = p."stockSymbol") as "symbol",
                 COUNT(DISTINCT p.id) as "postCount",
                 COALESCE(
@@ -373,7 +373,7 @@ export default class PostRepository {
                 stock: {
                     select: {
                         id: true,
-                        name: true,
+                        nameKo: true,
                         symbol: true,
                     },
                 },
@@ -475,7 +475,7 @@ export default class PostRepository {
                 stock: {
                     select: {
                         id: true,
-                        name: true,
+                        nameKo: true,
                         symbol: true,
                     },
                 },
