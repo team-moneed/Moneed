@@ -9,7 +9,7 @@ export type Stock = {
     change: number;
     changeRate: string;
     market: MarketCode;
-    sign: '1' | '2' | '3';
+    sign: '1' | '2' | '3' | '4' | '5';
     rank: number;
     logoUrl: string;
     sector: string;

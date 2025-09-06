@@ -1,23 +1,29 @@
-import { MarketCode, OverseasStockConditionSearchResponse, DbStock } from './types.server';
+import { MarketCode, DbStock, ApiStockData } from './types.server';
 import { Stock } from './types';
 
 export class StockModel {
-    static toStock(stock: OverseasStockConditionSearchResponse['output2'][number], dbStock?: DbStock): Stock {
+    /**
+     * API 응답 데이터를 Stock 도메인 모델로 변환
+     * @param apiStock - API에서 받은 주식 데이터
+     * @param dbStock - 데이터베이스에서 조회한 주식 정보 (옵셔널)
+     * @returns Stock 도메인 모델
+     */
+    static toStock(apiStock: ApiStockData, dbStock: DbStock): Stock {
         return {
-            id: dbStock?.id ?? 0,
-            symbol: stock.symb,
-            nameKo: stock.name,
-            nameEn: stock.ename,
-            price: Number(stock.last),
-            change: Number(stock.diff),
-            changeRate: stock.rate,
-            market: stock.excd as MarketCode,
-            sign: stock.sign as '1' | '2' | '3',
-            rank: Number(stock.rank),
-            logoUrl: dbStock?.logoUrl ?? '',
-            sector: dbStock?.sector ?? '',
-            subSector: dbStock?.subSector ?? '',
-            summary: dbStock?.summary ?? '',
+            id: dbStock.id,
+            nameKo: dbStock.nameKo,
+            nameEn: dbStock.nameEn,
+            logoUrl: dbStock.logoUrl,
+            sector: dbStock.sector,
+            subSector: dbStock.subSector,
+            summary: dbStock.summary,
+            symbol: dbStock.symbol,
+            price: Number(apiStock.last),
+            change: Number(apiStock.diff),
+            changeRate: apiStock.rate,
+            market: apiStock.excd as MarketCode,
+            sign: apiStock.sign as ApiStockData['sign'],
+            rank: Number(apiStock.rank),
         };
     }
 }

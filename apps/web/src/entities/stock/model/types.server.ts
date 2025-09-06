@@ -94,7 +94,7 @@ export type OverseasStockConditionSearchResponse = {
         tvol: string; // 거래량
         rate: string; // 등락율
         diff: string; // 대비
-        sign: '1' | '2' | '3'; // 기호 (1: 하락, 2: 상승, 3:보합)
+        sign: '1' | '2' | '3' | '4' | '5'; // 대비기호 (1: 상한, 2: 상승, 3:보합, 4:하한, 5:하락)
         avol: string; // 거래대금
         eps: string; // EPS
         per: string; // PER
@@ -184,4 +184,17 @@ export type OverseasStockInfoResponse = {
         ovrs_now_pric1: string; // 해외현재가격1
         last_rcvg_dtime: string; // 최종수신일시
     }; // 응답상세1
+};
+
+/**
+ * API에서 받은 주식 데이터 (Stock 모델 변환용)
+ */
+export type ApiStockData = {
+    symb: string; // 종목코드 (symbol)
+    last: string; // 현재가 (price)
+    diff: string; // 대비 (change)
+    rate: string; // 등락율 (changeRate)
+    excd?: string; // 거래소코드 (market)
+    sign: '1' | '2' | '3' | '4' | '5'; // 대비기호 (1: 상한, 2: 상승, 3:보합, 4:하한, 5:하락)
+    rank?: string; // 순위 (rank)
 };
