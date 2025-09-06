@@ -1,5 +1,5 @@
 import PostService from '@/services/post.service';
-import { StockRepository } from '@/entities/stock/repository';
+import { StockRepository } from '@/features/stock/server/repository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';

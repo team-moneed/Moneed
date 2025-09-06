@@ -1,5 +1,6 @@
-import { getOverseasStockByCondition, type MarketCode } from '@/entities/stock/server';
-import { StockService } from '@/features/stock/service/stock.server';
+import { getOverseasStockByCondition } from '@/features/stock/server';
+import { MarketCode } from '@/entities/stock';
+import { StockService } from '@/features/stock/server/service/stock.service';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {

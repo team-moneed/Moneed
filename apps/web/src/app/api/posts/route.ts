@@ -3,7 +3,7 @@ import PostService from '@/services/post.service';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
-import { StockRepository } from '@/entities/stock/repository';
+import { StockRepository } from '@/features/stock/server/repository';
 
 export async function GET(req: NextRequest) {
     try {
