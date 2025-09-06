@@ -1,6 +1,6 @@
 'use client';
 import type { Stock } from '@/entities/stock';
-import { useOverseasStockPrice } from '@/entities/stock';
+import { useOverseasStockPrice } from '@/features/stock';
 import { cn } from '@/utils/style';
 import Link from 'next/link';
 import { ReactNode } from 'react';

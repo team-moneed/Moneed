@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { DesktopHeader } from '@/components/Layout/Header';
-import { useStockBySymbol } from '@/entities/stock';
+import { useStockBySymbol } from '@/features/stock';
 import PostDetailSkeleton from '@/components/Skeletons/PostDetailSkeleton';
 
 const MobileHeader = () => {

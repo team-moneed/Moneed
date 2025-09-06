@@ -2,7 +2,7 @@
 import MyStockBox from '@/components/Mypage/MyStockBox';
 import { useState } from 'react';
 import Hangul from 'hangul-js';
-import { useSelectedStocks } from '@/entities/stock';
+import { useSelectedStocks } from '@/features/stock';
 import { useAuth } from '@/shared/hooks/useAuth';
 
 export const dynamic = 'force-dynamic';

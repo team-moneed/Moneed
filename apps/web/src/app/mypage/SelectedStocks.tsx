@@ -1,6 +1,6 @@
 import MyStockBox from '@/components/Mypage/MyStockBox';
 import { StockBoxSkeletons } from '@/components/Skeletons/mypage/StockBoxSkeleton';
-import { useInfiniteSelectedStocks } from '@/entities/stock';
+import { useInfiniteSelectedStocks } from '@/features/stock';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
 

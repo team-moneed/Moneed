@@ -4,7 +4,7 @@ import type { Stock } from '@prisma/client';
 import { cn } from '@/utils/style';
 import { ReactNode } from 'react';
 import StockInfoBoxSkeleton from '../Skeletons/StockInfoBoxSkeleton';
-import { useSuspenseOverseasStockPrice } from '@/entities/stock';
+import { useSuspenseOverseasStockPrice } from '@/features/stock';
 import withSuspense from '@/components/HOC/withSuspense';
 
 type StockInfoProps = {
