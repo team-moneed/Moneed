@@ -6,7 +6,7 @@ import { useParams, useRouter } from 'next/navigation';
 import { Suspense, useState } from 'react';
 import { useShallow } from 'zustand/react/shallow';
 import { DesktopHeader } from '@/components/Layout/Header';
-import { useStockBySymbol } from '@/queries/stock.query';
+import { useStockBySymbol } from '@/features/stock';
 import PostDetailSkeleton from '@/components/Skeletons/PostDetailSkeleton';
 
 const MobileHeader = () => {
@@ -57,7 +57,7 @@ const MobileHeader = () => {
         <header className='sticky top-0 z-10 bg-white flex items-center justify-between px-[4rem] pb-[1.8rem] pt-[3rem] lg:hidden'>
             <BackButton />
             <h1 className='text-[1.6rem] font-semibold text-moneed-gray-9'>
-                {isEditingComment ? '댓글 수정' : stock?.name || ''}
+                {isEditingComment ? '댓글 수정' : stock?.nameKo || ''}
             </h1>
             <ExitButton />
             {showModal && (

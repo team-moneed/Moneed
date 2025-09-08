@@ -1,5 +1,5 @@
 import { BoardRankResponse } from '@/types/board';
-import { http } from './client';
+import { http } from '../shared/api/client';
 
 export const getBoardRank = async ({ limit }: { limit: number }) => {
     const response = await http.get<BoardRankResponse[]>(`/api/board/rank`, {

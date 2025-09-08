@@ -1,7 +1,7 @@
 'use client';
 
 import { logout } from '@/apis/auth.api';
-import { REASON_CODES } from '@/constants/snackbar';
+import { REASON_CODES } from '@/shared/config/snackbar';
 import useSnackbarStore from '@/store/useSnackbarStore';
 import { clearTokens } from '@/utils/localStorage.browser';
 import { cn } from '@/utils/style';

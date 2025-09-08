@@ -1,9 +1,9 @@
-import { verifyRequestCookies, assertAccessTokenPayload } from '@/utils/cookie.server';
+import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/cookie.server';
 import PostService from '@/services/post.service';
-import { StockService } from '@/services/stock.service';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
+import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
+import { StockRepository } from '@/features/stock/server/repository';
 
 export async function GET(req: NextRequest) {
     try {
@@ -15,14 +15,14 @@ export async function GET(req: NextRequest) {
         const { accessTokenPayload } = await verifyRequestCookies();
 
         const postService = new PostService();
-        const stockService = new StockService();
+        const stockRepository = new StockRepository();
 
         if (!symbol) {
             return NextResponse.json({ error: ERROR_MSG.SYMBOL_REQUIRED }, { status: 400 });
         }
 
         // symbol로 주식을 조회하여 stockId를 얻습니다
-        const stock = await stockService.getStockBySymbol(symbol);
+        const stock = await stockRepository.getStock(symbol);
         if (!stock) {
             return NextResponse.json({ error: ERROR_MSG.STOCK_NOT_FOUND }, { status: 404 });
         }
@@ -56,11 +56,11 @@ export async function POST(req: NextRequest) {
         const { accessTokenPayload } = await verifyRequestCookies();
         assertAccessTokenPayload(accessTokenPayload);
 
-        const stockService = new StockService();
+        const stockRepository = new StockRepository();
         const postService = new PostService();
 
         // symbol로 주식을 조회하여 stockId를 얻습니다
-        const stock = await stockService.getStockBySymbol(symbol);
+        const stock = await stockRepository.getStock(symbol);
         if (!stock) {
             return NextResponse.json({ error: ERROR_MSG.STOCK_NOT_FOUND }, { status: 404 });
         }

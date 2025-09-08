@@ -1,9 +1,9 @@
 import PostService from '@/services/post.service';
-import { verifyRequestCookies } from '@/utils/cookie.server';
+import { verifyRequestCookies } from '@/shared/utils/cookie.server';
 import { NextRequest, NextResponse } from 'next/server';
 import { UpdatePostRequest } from '@/types/post';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
+import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
 
 export const dynamic = 'force-dynamic';
 

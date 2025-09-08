@@ -6,7 +6,7 @@ import { SnackbarConfig } from '@/types/snackbar';
 import { cn } from '@/utils/style';
 import ReactDOM from 'react-dom';
 import { useEffect, useState } from 'react';
-import { REASONS } from '@/constants/snackbar';
+import { REASONS } from '@/shared/config/snackbar';
 
 const SnackbarVariants = cva(
     'fixed z-150 flex h-16 py-[.8rem] w-[90%] max-w-292 rounded-2xl opacity-97 shadow-[0px_2px_8px_rgba(0,0,0,0.25)] items-center justify-center',

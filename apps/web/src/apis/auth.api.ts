@@ -1,5 +1,5 @@
 import { KakaoRefreshTokenResponse } from '@/types/auth';
-import { proxy, proxyWithCredentials } from './client';
+import { proxy, proxyWithCredentials } from '../shared/api/client';
 import { Providers } from '@moneed/auth';
 
 export const logout = async ({ provider }: { provider: Providers }) => {

@@ -16,6 +16,7 @@ NC='\033[0m'
 # 설정 변수
 CONTAINER_NAME="kakao-proxy"
 NGINX_CONTAINER_NAME="nginx-proxy"
+GITHUB_ACTOR="${GITHUB_ACTOR:-team-moneed}"
 IMAGE_NAME="ghcr.io/${GITHUB_ACTOR}/moneed/kakao-proxy"
 ENV_FILE="/home/$USER/.env.production"
 BACKUP_DIR="/home/$USER/backups"

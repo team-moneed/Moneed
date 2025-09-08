@@ -7,7 +7,7 @@ import { SnackbarTrigger } from '@/components/Snackbar';
 import dynamic from 'next/dynamic';
 import { DesktopHeader, MobileHeader } from '@/components/Layout/Header';
 import { useParams, useSearchParams } from 'next/navigation';
-import { useStockBySymbol } from '@/queries/stock.query';
+import { useStockBySymbol } from '@/features/stock';
 const StockTypeBar = dynamic(() => import('@/app/community/StockTypeBar'), { ssr: false });
 const StockInfoBox = dynamic(() => import('@/components/Community/StockInfoBox'), { ssr: false });
 

@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Button from '@/components/Button';
+import Button from '@/shared/ui/Button';
 import SelectProfileImage from '@/components/Mypage/SelectProfileImage';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/queries/user.query';
@@ -9,9 +9,9 @@ import { checkDuplicateNickname, updateUserProfile } from '@/apis/user.api';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
-import { REASON_CODES } from '@/constants/snackbar';
+import { REASON_CODES } from '@/shared/config/snackbar';
 import { MyProfileSkeleton } from '@/components/Skeletons/MyProfileSkeleton';
-import { useDebounce } from '@/hooks/useDebounce';
+import { useDebounce } from '@/shared/hooks/useDebounce';
 import { useModal } from '@/context/ModalContext';
 
 export const dynamic = 'force-dynamic';

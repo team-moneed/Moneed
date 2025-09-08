@@ -1,6 +1,6 @@
 'use client';
-import type { Stock } from '@prisma/client';
-import { useOverseasStockPrice } from '@/queries/stock.query';
+import type { Stock } from '@/entities/stock';
+import { useOverseasStockPrice } from '@/features/stock';
 import { cn } from '@/utils/style';
 import Link from 'next/link';
 import { ReactNode } from 'react';
@@ -30,7 +30,7 @@ const MyStockBox = ({ children, stock, href }: MyStockProps) => {
             >
                 <div className='flex items-center gap-[.6rem] flex-1'>
                     <div className='rounded-full overflow-hidden size-[2rem] md:size-7 flex-shrink-0'>
-                        <img src={stock.logoUrl} alt={stock.name} className='w-full h-full object-cover' />
+                        <img src={stock.logoUrl} alt={stock.nameKo} className='w-full h-full object-cover' />
                     </div>
                     <div className='rounded-[.8rem] bg-moneed-gray-4 py-[.2rem] px-[.4rem]'>
                         <span className='text-[1.2rem] font-normal leading-[135%] text-moneed-gray-9'>
@@ -38,7 +38,7 @@ const MyStockBox = ({ children, stock, href }: MyStockProps) => {
                         </span>
                     </div>
                     <h3 className='flex-shrink-1 text-[1.2rem] md:text-[1.4rem] font-semibold md:leading-[140%] leading-[135%] text-moneed-black line-clamp-1 '>
-                        {stock.name}
+                        {stock.nameKo}
                     </h3>
                 </div>
                 <div className='flex items-center gap-[.6rem]'>

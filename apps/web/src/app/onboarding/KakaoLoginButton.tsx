@@ -1,5 +1,5 @@
 'use client';
-import Button from '@/components/Button';
+import Button from '@/shared/ui/Button';
 
 export default function KakaoLoginButton() {
     const url = process.env.NEXT_PUBLIC_KAKAO_PROXY_SERVER + '/api/auth/kakao/login';

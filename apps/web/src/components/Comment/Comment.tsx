@@ -5,10 +5,10 @@ import { PrimaryDropdown, PrimaryDropdownProps } from '@/components/Dropdown';
 import Image from 'next/image';
 import { Comment as TComment } from '@/types/post';
 import DateFormatter from '../Dateformatter';
-import { getCookie } from '@/utils/cookie.browser';
+import { getCookie } from '@/shared/utils/cookie.browser';
 import { decodeJwt } from 'jose';
 import type { TokenPayload } from '@moneed/auth';
-import { TOKEN_KEY } from '@/constants/token';
+import { TOKEN_KEY } from '@/shared/config/token';
 
 type CommentType = {
     comment: TComment;

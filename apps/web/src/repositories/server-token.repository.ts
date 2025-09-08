@@ -1,5 +1,5 @@
 import { prisma } from '@/database/client';
-import { KISAccessTokenResponse } from '@/types/kis';
+import type { KISAccessTokenResponse } from '@/features/stock/server';
 import { TokenUtils } from '@/utils/token-utils';
 
 export class ServerTokenRepository {

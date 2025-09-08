@@ -4,7 +4,7 @@ set -e
 
 # 변수 설정
 REGISTRY="ghcr.io"
-USERNAME="${GITHUB_ACTOR:team-moneed}"
+USERNAME="${GITHUB_ACTOR:-team-moneed}"
 IMAGE_NAME="moneed/kakao-proxy"
 VERSION="${1:-latest}"
 
@@ -25,10 +25,12 @@ if [ "$VERSION" != "latest" ]; then
                "${REGISTRY}/${USERNAME}/${IMAGE_NAME}:latest"
 fi
 
-# 3. GitHub Container Registry 로그인 확인
-if ! docker info | grep -q "ghcr.io"; then
+# 3. GitHub Container Registry 로그인
+if [ -n "$GITHUB_TOKEN" ]; then
     echo -e "${BLUE}🔐 GitHub Container Registry 로그인...${NC}"
     echo "$GITHUB_TOKEN" | docker login ghcr.io -u "$USERNAME" --password-stdin
+else
+    echo -e "${BLUE}⚠️  GITHUB_TOKEN이 설정되지 않았습니다. 로그인을 건너뜁니다.${NC}"
 fi
 
 # 4. 이미지 푸시

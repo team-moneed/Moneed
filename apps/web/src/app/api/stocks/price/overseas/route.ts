@@ -1,4 +1,4 @@
-import { StockService } from '@/services/stock.service';
+import { StockService } from '@/features/stock/server/service/stock.service';
 import { NextRequest, NextResponse } from 'next/server';
 
 export async function GET(req: NextRequest) {
