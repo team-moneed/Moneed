@@ -10,7 +10,19 @@ import cookieParser from 'cookie-parser';
 
 // 환경변수 로드
 dotenv.config({ path: '.env' });
-const envFile = process.env.NODE_ENV === 'production' ? '.env.production' : '.env.development';
+let envFile: string | string[] | URL | undefined;
+switch (process.env.NODE_ENV) {
+    case 'development':
+        envFile = '.env.development';
+        break;
+    case 'production':
+        envFile = '.env.production';
+        break;
+    case 'production.local':
+        envFile = '.env.production.local';
+        break;
+}
+
 dotenv.config({ path: envFile });
 
 const app = express();
