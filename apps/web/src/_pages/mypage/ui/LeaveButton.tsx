@@ -1,11 +1,12 @@
 'use client';
-import { cn } from '@/utils/style';
+import { cn } from '@/shared/utils/style';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import BottomModal from '@/components/BottomModal';
 import Button from '@/shared/ui/Button';
-import { useSuspenseUser } from '@/queries/user.query';
-import withSuspense from '@/components/HOC/withSuspense';
+import { useSuspenseUser } from '@/features/user/query';
+import withSuspense from '@/shared/ui/withSuspense';
+import { PATH } from '@/shared/config';
 
 function LeaveButton() {
     const router = useRouter();
@@ -14,7 +15,7 @@ function LeaveButton() {
 
     const handleLeave = () => {
         setIsBottomModalOpen(false);
-        router.push(`/leave`);
+        router.push(PATH.LEAVE);
     };
 
     const handleCancel = () => {

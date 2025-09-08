@@ -1,4 +1,4 @@
-import ImageUploader from '../ImageUploader';
+import ImageUploader from '../../../components/ImageUploader';
 
 interface SelectProfileImageProps {
     onSelect: (img: string) => void;

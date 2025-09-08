@@ -1,7 +1,8 @@
 import UserInfoSkeleton from '@/components/Skeletons/mypage/UserInfoSkeleton';
-import { useSuspenseUser } from '@/queries/user.query';
+import { useSuspenseUser } from '@/features/user/query';
 import Link from 'next/link';
-import withSuspense from '@/components/HOC/withSuspense';
+import withSuspense from '@/shared/ui/withSuspense';
+import { PATH } from '@/shared/config';
 
 function UserInfo() {
     const { data: user } = useSuspenseUser();
@@ -15,7 +16,7 @@ function UserInfo() {
             </div>
             <div className='flex gap-4 justify-center items-center'>
                 <div className='text-[2rem] my-[.8rem] font-bold leading-[145%] text-moneed-brand'>{user.nickname}</div>
-                <Link className='aspect-square w-[2.4rem] cursor-pointer' href='myprofile'>
+                <Link className='aspect-square w-[2.4rem] cursor-pointer' href={PATH.MYPROFILE}>
                     <img src='/icon/icon-setting.svg' alt='setting' className='w-full h-full' />
                 </Link>
             </div>

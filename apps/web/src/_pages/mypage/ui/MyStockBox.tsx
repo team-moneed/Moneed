@@ -1,7 +1,7 @@
 'use client';
 import type { Stock } from '@/entities/stock';
-import { useOverseasStockPrice } from '@/features/stock';
-import { cn } from '@/utils/style';
+import { toUSD } from '@/shared/utils/parser';
+import { cn } from '@/shared/utils/style';
 import Link from 'next/link';
 import { ReactNode } from 'react';
 
@@ -13,15 +13,6 @@ type MyStockProps = {
 };
 
 const MyStockBox = ({ children, stock, href }: MyStockProps) => {
-    const { data } = useOverseasStockPrice({ symbol: stock.symbol });
-    const price =
-        data &&
-        new Intl.NumberFormat('en-US', {
-            style: 'currency',
-            currency: 'USD',
-        }).format(Number(data.output.last));
-    const rate = data?.output.rate;
-    const sign = data?.output.sign;
     return (
         <>
             <Link
@@ -43,17 +34,17 @@ const MyStockBox = ({ children, stock, href }: MyStockProps) => {
                 </div>
                 <div className='flex items-center gap-[.6rem]'>
                     <div className='text-[1.2rem] md:text-[1.4rem] font-semibold leading-[135%] md:leading-[140%] text-moneed-black'>
-                        {price}
+                        {toUSD(stock.price)}
                     </div>
                     <div
                         className={cn(
                             'text-[1.2rem] md:text-[1.4rem] font-semibold leading-[135%] md:leading-[140%] rounded-[.8rem] p-[.4rem]',
-                            (sign === '1' || sign === '2') && 'text-moneed-red',
-                            sign === '3' && 'text-moneed-black',
-                            (sign === '4' || sign === '5') && 'text-moneed-blue',
+                            (stock.sign === '1' || stock.sign === '2') && 'text-moneed-red',
+                            stock.sign === '3' && 'text-moneed-black',
+                            (stock.sign === '4' || stock.sign === '5') && 'text-moneed-blue',
                         )}
                     >
-                        {rate} %
+                        {stock.changeRate} %
                     </div>
                 </div>
             </Link>

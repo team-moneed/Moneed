@@ -1,6 +1,6 @@
 'use client';
 
-import { DesktopHeader } from '@/components/Layout/Header';
+import { DesktopHeader } from '@/shared/ui/Header';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
 import Modal from '@/components/Modal';

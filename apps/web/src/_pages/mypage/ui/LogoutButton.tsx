@@ -3,8 +3,8 @@
 import { logout } from '@/apis/auth.api';
 import { REASON_CODES } from '@/shared/config/snackbar';
 import useSnackbarStore from '@/store/useSnackbarStore';
-import { clearTokens } from '@/utils/localStorage.browser';
-import { cn } from '@/utils/style';
+import { clearTokens } from '@/shared/utils/localStorage.browser';
+import { cn } from '@/shared/utils/style';
 import { useMutation } from '@tanstack/react-query';
 
 export default function LogoutButton() {

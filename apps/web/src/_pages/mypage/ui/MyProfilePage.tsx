@@ -2,10 +2,10 @@
 
 import { useState } from 'react';
 import Button from '@/shared/ui/Button';
-import SelectProfileImage from '@/components/Mypage/SelectProfileImage';
+import SelectProfileImage from '@/_pages/mypage/ui/SelectProfileImage';
 import { useRouter } from 'next/navigation';
-import { useUser } from '@/queries/user.query';
-import { checkDuplicateNickname, updateUserProfile } from '@/apis/user.api';
+import { useUser } from '@/features/user/query';
+import { userApi } from '@/features/user/api';
 import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
@@ -13,6 +13,7 @@ import { REASON_CODES } from '@/shared/config/snackbar';
 import { MyProfileSkeleton } from '@/components/Skeletons/MyProfileSkeleton';
 import { useDebounce } from '@/shared/hooks/useDebounce';
 import { useModal } from '@/context/ModalContext';
+import { PATH } from '@/shared/config';
 
 export const dynamic = 'force-dynamic';
 
@@ -45,10 +46,10 @@ const MyProfile = () => {
     const { confirm } = useModal();
 
     const { mutate: updateUserProfileMutation, isPending } = useMutation({
-        mutationFn: updateUserProfile,
+        mutationFn: userApi.updateProfile,
         onSuccess: () => {
             clearErrors('nickname');
-            router.replace(`/mypage?reason=${REASON_CODES.PROFILE_UPDATED}`);
+            router.replace(`${PATH.MYPAGE}?reason=${REASON_CODES.PROFILE_UPDATED}`);
         },
         onError: (error: AxiosError<{ message: string }>) => {
             if (error?.response?.status === 409) {
@@ -60,7 +61,7 @@ const MyProfile = () => {
     });
 
     const { mutate: checkDuplicateNicknameMutation } = useMutation({
-        mutationFn: checkDuplicateNickname,
+        mutationFn: userApi.checkDuplicateNickname,
         onSuccess: () => {},
         onError: (error: AxiosError<{ message: string }>) => {
             if (error?.response?.status === 409) {

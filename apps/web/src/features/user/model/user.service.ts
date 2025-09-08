@@ -1,28 +1,25 @@
-import PostRepository from '@/repositories/post.repository';
-import CommentRepository from '@/repositories/comment.repository';
-import { UserRepository } from '@/repositories/user.repository';
-import { isFile } from '@/utils/typeChecker';
-import S3Service from './s3.service';
-import { urlToS3FileName } from '@/utils/parser';
+import { PostMapper } from '@/entities/post/model';
+import { UserRepository } from '@/entities/user/model/user.repository';
+import { S3Service } from '@/shared/model';
+import { urlToS3FileName, isFile } from '@/shared/utils';
 import type { UpdateUserProfileRequest } from '@/types/user';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG } from '@/shared/config/message';
+import { ERROR_MSG } from '@/shared/config';
 
 class UserService {
     private userRepository = new UserRepository();
-    private postRepository = new PostRepository();
-    private commentRepository = new CommentRepository();
 
     async getUserInfo({ userId }: { userId: string }) {
         return this.userRepository.findFirst({ field: 'id', value: userId });
     }
 
-    async getUserPosts({ userId }: { userId: string }) {
-        return this.postRepository.getUserPosts({ userId });
+    async getUserPosts({ userId, limit, cursor }: { userId: string; limit?: number; cursor?: Date }) {
+        const posts = await this.userRepository.getUserPosts({ userId, limit, cursor });
+        return posts.map(post => PostMapper.toPost(post));
     }
 
-    async getUserComments({ userId }: { userId: string }) {
-        return this.commentRepository.getUserComments({ userId });
+    async getUserComments({ userId, limit, cursor }: { userId: string; limit?: number; cursor?: Date }) {
+        return this.userRepository.getUserComments({ userId, limit, cursor });
     }
 
     async updateUserProfile({

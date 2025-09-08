@@ -2,12 +2,13 @@
 
 import { useState } from 'react';
 import Comment from '@/components/Comment/Comment';
-import { useMyComments } from '@/queries/comments.query';
-import { cn } from '@/utils/style';
+import { useMyComments } from '@/features/user/query';
+import { cn } from '@/shared/utils/style';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/components/QueryClientProvider';
-import { deleteComment } from '@/apis/comment.api';
+import { deleteComment } from '@/features/comment/api/comment.api';
 import useSnackbarStore from '@/store/useSnackbarStore';
+import { DYNAMIC_PATH } from '@/shared/config';
 import { useRouter } from 'next/navigation';
 import { useCommentStore } from '@/store/useCommentStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -79,7 +80,7 @@ export default function Comments() {
                 setIsEditingComment(true);
                 setEditCommentId(comment.id);
                 setEditCommentContent(comment.content);
-                router.push(`/community/${comment.post.stock.symbol}/posts/${comment.postId}`);
+                router.push(DYNAMIC_PATH.COMMUNITY_POST(comment.post.stock.symbol, comment.postId));
             },
         },
         {

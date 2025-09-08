@@ -1,9 +1,9 @@
 'use client';
 
 import { useState } from 'react';
-import PostThumbnail from '../community/[symbol]/PostThumbnail';
-import { cn } from '@/utils/style';
-import { useMyPosts } from '@/queries/posts.query';
+import PostThumbnail from '@/entities/post/ui/PostThumbnail';
+import { cn } from '@/shared/utils/style';
+import { useMyPosts } from '@/features/user/query';
 
 export const dynamic = 'force-dynamic';
 

@@ -1,18 +1,18 @@
-import MyStockBox from '@/components/Mypage/MyStockBox';
+import MyStockBox from '@/_pages/mypage/ui/MyStockBox';
 import { StockBoxSkeletons } from '@/components/Skeletons/mypage/StockBoxSkeleton';
-import { useInfiniteSelectedStocks } from '@/features/stock';
+import { useInfiniteMyStocks } from '../query';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
 
-export default function SelectedStocks() {
+export default function MyStocks() {
     const { accessToken } = useAuth();
     const {
-        data: selectedStocks = [],
+        data: myStocks = [],
         fetchNextPage,
         hasNextPage,
         isLoading,
         isFetchingNextPage,
-    } = useInfiniteSelectedStocks({ count: 10, enabled: !!accessToken });
+    } = useInfiniteMyStocks({ count: 10, enabled: !!accessToken });
 
     const ref = useIntersectionObserver({
         onIntersect: () => {
@@ -28,7 +28,7 @@ export default function SelectedStocks() {
 
     return (
         <section className='space-y-[.8rem] overflow-y-auto h-full max-h-[500px]'>
-            {selectedStocks.map(stock => (
+            {myStocks.map(stock => (
                 <MyStockBox key={stock.symbol} stock={stock} href={`/community/${stock.symbol}`} />
             ))}
             <div className='h-[10px]' ref={ref}></div>

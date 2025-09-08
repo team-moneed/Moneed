@@ -1,4 +1,4 @@
-import { DesktopHeader, MobileHeader } from '@/components/Layout/Header';
+import { DesktopHeader, MobileHeader } from '@/shared/ui/Header';
 import { Suspense } from 'react';
 
 export default function MypageLayout({ children }: { children: React.ReactNode }) {
