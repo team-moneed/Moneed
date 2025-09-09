@@ -56,6 +56,7 @@ DIRECTORIES_TO_COPY=(
 # 환경변수 파일 (선택적)
 ENV_FILES=(
   "apps/kakao-proxy-server/.env.production:~/.env.production"
+  "apps/kakao-proxy-server/.env:~/.env"
 )
 #========================#
 
