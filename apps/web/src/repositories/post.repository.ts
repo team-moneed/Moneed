@@ -1,4 +1,4 @@
-import { prisma } from '@/database/client';
+import { prisma } from '@/shared/model';
 import { BoardRankResponse } from '@/types/board';
 import { CreatePostResult } from '@/types/post';
 

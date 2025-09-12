@@ -1,19 +1,19 @@
+import 'server-only';
 import { prisma } from '@/shared/model';
 
-export default class CommentRepository {
+export class CommentRepository {
     private prisma = prisma;
 
-    async getUserComments({ userId }: { userId: string }) {
+    async getPostComments({ postId, limit, cursor }: { postId: number; limit?: number; cursor?: Date }) {
         return this.prisma.comment.findMany({
-            where: { userId },
+            where: { postId, createdAt: { lt: cursor } },
             include: {
                 user: true,
-                post: {
-                    include: {
-                        stock: true,
-                    },
-                },
             },
+            orderBy: {
+                createdAt: 'desc',
+            },
+            take: limit,
         });
     }
 

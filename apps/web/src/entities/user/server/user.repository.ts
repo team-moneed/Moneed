@@ -1,3 +1,4 @@
+import 'server-only';
 import { prisma } from '@/shared/model';
 import { User } from '@prisma/client';
 

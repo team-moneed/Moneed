@@ -1,7 +1,8 @@
+import 'server-only';
 import { prisma } from '@/shared/model';
 import { Shorts } from '@prisma/client';
 
-export default class ShortRepository {
+export class ShortRepository {
     private readonly prisma = prisma;
 
     async upsertShorts({ shorts }: { shorts: Shorts[] }) {

@@ -1,16 +1,14 @@
+// TODO: 해당 파일 제거하기 (쿠키 httpOnly로 변경, 클라이언트에서는 로컬스토리지 이용)
 import { DecodedToken } from '@moneed/auth';
 import { decodeJwt } from 'jose';
 
-export const getCookie = (key: string) => {
-    const cookie = document.cookie
-        .split('; ')
-        .find(cookie => cookie.startsWith(`${key}=`))
-        ?.split('=')[1];
+export const getToken = (key: string) => {
+    const cookie = localStorage.getItem(key);
     return cookie;
 };
 
 export const decodeToken = (token?: string): DecodedToken | null => {
-    const accessToken = token || getCookie('access_token');
+    const accessToken = token || getToken('access_token');
     if (!accessToken) return null;
 
     return decodeJwt<DecodedToken>(accessToken);
