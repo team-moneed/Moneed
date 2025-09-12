@@ -87,6 +87,10 @@ export async function verifyToken({ jwt, key }: { jwt: string; key: string }): P
             };
         }
 
-        throw error;
+        return {
+            payload: null,
+            isExpired: true,
+            isInvalid: true,
+        };
     }
 }
