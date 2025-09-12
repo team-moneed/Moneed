@@ -6,6 +6,7 @@ import { ERROR_MSG, SUCCESS_MSG } from '@/constants/error';
 import { getKakaoToken, getKakaoUserInfo, leaveKakao, logoutKakao, refreshKakaoToken } from '@/api/kakao.api';
 import { Response } from 'express';
 import { ProviderRepository } from '@/repository/provider.repository';
+import { KakaoRefreshTokenResponse } from '@/types/kakao';
 
 export class KakaoAuthService {
     private authService: AuthService;
@@ -45,6 +46,7 @@ export class KakaoAuthService {
             let payload: TokenPayload = {
                 userId: '',
                 nickname: '',
+                profileImage: '',
             };
             let isNewUser = false;
 
@@ -61,6 +63,7 @@ export class KakaoAuthService {
                 payload = {
                     userId: user.id,
                     nickname: user.nickname,
+                    profileImage: user.profileImage,
                 };
                 isNewUser = false;
             } else {
@@ -85,6 +88,7 @@ export class KakaoAuthService {
                 payload = {
                     userId: newUser.id,
                     nickname: newUser.nickname,
+                    profileImage: newUser.profileImage,
                 };
                 isNewUser = true;
             }
@@ -206,7 +210,14 @@ export class KakaoAuthService {
         return kakaoUserInfo;
     }
 
-    async refresh({ userId }: { userId: string }) {
+    async refresh({
+        userId,
+    }: {
+        userId: string;
+    }): Promise<
+        | { success: true; data: KakaoRefreshTokenResponse; status: number }
+        | { success: false; error: string; status: number }
+    > {
         const currentRefreshToken = await this.providerRepository.getRefreshToken('kakao', userId);
         if (!currentRefreshToken || currentRefreshToken.refreshTokenExpiresIn < new Date()) {
             return {

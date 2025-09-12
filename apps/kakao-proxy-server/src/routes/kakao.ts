@@ -1,7 +1,7 @@
 import express from 'express';
 import { KakaoAuthService } from '@/service/kakaoAuth.service';
 import { verifyRequestTokens } from '@/utils/session';
-import { createToken } from '@moneed/auth';
+import { createToken, verifyToken } from '@moneed/auth';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/constants/error';
 import { generateTempCode, consumeTempCode } from '@/utils/tempCode';
@@ -156,7 +156,16 @@ router.post('/leave', async (req, res, next) => {
 
 router.post('/refresh', async (req, res, next) => {
     try {
-        const { accessTokenPayload: refreshTokenPayload } = await verifyRequestTokens(req);
+        const { refreshToken } = req.body;
+
+        const {
+            payload: refreshTokenPayload,
+            isExpired,
+            isInvalid,
+        } = await verifyToken({ jwt: refreshToken, key: process.env.SESSION_SECRET! });
+        if (isExpired || isInvalid) {
+            throw new ResponseError(403, ERROR_MSG.REFRESH_TOKEN_INVALID);
+        }
 
         const kakaoAuthService = new KakaoAuthService();
         const result = await kakaoAuthService.refresh({
@@ -164,7 +173,26 @@ router.post('/refresh', async (req, res, next) => {
         });
 
         if (result.success) {
-            return res.status(result.status).json(result.data);
+            const key = process.env.SESSION_SECRET;
+            if (!key) {
+                console.error(ERROR_MSG.SESSION_SECRET_NOT_SET);
+                throw new ResponseError(500, ERROR_MSG.INTERNAL_SERVER_ERROR);
+            }
+            const accessToken = await createToken({
+                payload: refreshTokenPayload,
+                duration: process.env.JWT_ACCESS_EXPIRES_IN || '24h',
+                key,
+            });
+            const refreshToken = await createToken({
+                payload: refreshTokenPayload,
+                duration: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
+                key,
+            });
+
+            return res.status(result.status).json({
+                access_token: accessToken,
+                refresh_token: refreshToken,
+            });
         } else {
             return res.status(result.status).json({
                 error: result.error,
