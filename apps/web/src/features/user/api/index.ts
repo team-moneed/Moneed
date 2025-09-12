@@ -1,8 +1,8 @@
 import type { User } from '@prisma/client';
 import { http } from '@/shared/api/client';
 import { isFile } from '@/shared/utils/typeChecker';
-import type { UpdateUserProfileRequest } from '@/types/user';
-import type { CommentWithUser } from '@/types/comment';
+import type { UpdateUserProfileRequest } from '../model';
+import type { CommentWithUserDTO } from '@/features/comment/model/comment.type';
 import type { Stock } from '@/entities/stock';
 import { API_PATH } from '@/shared/config';
 import type { Post } from '@/entities/post';
@@ -18,7 +18,7 @@ async function fetchPosts() {
 }
 
 async function fetchComments() {
-    const res = await http.get<CommentWithUser[]>(API_PATH.USER_ME_COMMENTS);
+    const res = await http.get<CommentWithUserDTO[]>(API_PATH.USER_ME_COMMENTS);
     return res.data;
 }
 

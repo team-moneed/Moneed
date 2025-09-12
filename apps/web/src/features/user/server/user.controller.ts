@@ -3,7 +3,7 @@ import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/i
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/shared/config';
 import UserService from './user.service';
-import { UpdateUserProfileRequest } from '@/types/user';
+import { UpdateUserProfileRequest } from '@/features/user';
 
 export async function getUserPosts() {
     try {

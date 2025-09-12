@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query';
-import { exchangeTempCode } from '@/apis/auth.api';
+import { exchangeTempCode } from '@/features/auth/api';
 
 export const useTempCodeAuth = (tempCode: string) => {
     return useQuery({

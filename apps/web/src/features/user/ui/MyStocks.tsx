@@ -1,8 +1,9 @@
-import MyStockBox from '@/_pages/mypage/ui/MyStockBox';
-import { StockBoxSkeletons } from '@/components/Skeletons/mypage/StockBoxSkeleton';
+import MyStockBox from '@/screens/mypage/ui/MyStockBox';
+import { StockBoxSkeletons } from '@/screens/mypage/ui/StockBoxSkeleton';
 import { useInfiniteMyStocks } from '../query';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
+import { DYNAMIC_PATH } from '@/shared/config';
 
 export default function MyStocks() {
     const { accessToken } = useAuth();
@@ -29,7 +30,7 @@ export default function MyStocks() {
     return (
         <section className='space-y-[.8rem] overflow-y-auto h-full max-h-[500px]'>
             {myStocks.map(stock => (
-                <MyStockBox key={stock.symbol} stock={stock} href={`/community/${stock.symbol}`} />
+                <MyStockBox key={stock.symbol} stock={stock} href={DYNAMIC_PATH.COMMUNITY_SYMBOL(stock.symbol)} />
             ))}
             <div className='h-[10px]' ref={ref}></div>
             {(isLoading || isFetchingNextPage) && <StockBoxSkeletons count={10} />}

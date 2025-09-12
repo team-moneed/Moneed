@@ -1,8 +1,8 @@
 import { PostMapper } from '@/entities/post/model';
-import { UserRepository } from '@/entities/user/model/user.repository';
+import { UserRepository } from '@/entities/user/server/user.repository';
 import { S3Service } from '@/shared/model';
 import { urlToS3FileName, isFile } from '@/shared/utils';
-import type { UpdateUserProfileRequest } from '@/types/user';
+import type { UpdateUserProfileRequest } from '@/features/user';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/shared/config';
 

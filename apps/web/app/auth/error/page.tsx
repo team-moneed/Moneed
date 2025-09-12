@@ -63,8 +63,8 @@ function AuthError() {
     });
 
     useEffect(() => {
-        const error = searchParams.get('error');
-        const description = searchParams.get('description');
+        const error = searchParams?.get('error');
+        const description = searchParams?.get('description');
 
         if (error && ERROR_MESSAGES[error]) {
             setErrorInfo(ERROR_MESSAGES[error]);
