@@ -1,17 +1,26 @@
-import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/cookie.server';
+import { getCookie } from '@/shared/utils/cookie.server';
 import { CommentService } from '@/features/comment/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
+import { verifyToken } from '@moneed/auth';
+import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 
 export async function deleteComment(_: NextRequest, { params }: { params: Promise<{ commentId: string }> }) {
     try {
         const { commentId } = await params;
-        const { accessTokenPayload } = await verifyRequestCookies();
-        assertAccessTokenPayload(accessTokenPayload);
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
         const commentService = new CommentService();
-        await commentService.deleteComment({ commentId: Number(commentId), userId: accessTokenPayload.userId });
+        await commentService.deleteComment({ commentId: Number(commentId), userId });
 
         return NextResponse.json({ message: SUCCESS_MSG.COMMENT_DELETED }, { status: 200 });
     } catch (error) {
@@ -26,7 +35,14 @@ export async function updateComment(req: NextRequest, { params }: { params: Prom
     try {
         const { commentId } = await params;
         const { content } = (await req.json()) as { content: string };
-        await verifyRequestCookies();
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
 
         const commentService = new CommentService();
         await commentService.updateComment({ commentId: Number(commentId), content });
@@ -62,14 +78,18 @@ export async function getPostComments(req: NextRequest) {
 export async function createComment(req: NextRequest) {
     try {
         const { postId, content } = await req.json();
-        const { accessTokenPayload } = await verifyRequestCookies();
-
-        if (!accessTokenPayload) {
-            return NextResponse.json({ error: ERROR_MSG.UNAUTHORIZED }, { status: 401 });
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
         const commentService = new CommentService();
-        await commentService.createComment({ postId, content, userId: accessTokenPayload.userId });
+        await commentService.createComment({ postId, content, userId });
 
         return NextResponse.json({ message: SUCCESS_MSG.COMMENT_CREATED }, { status: 201 });
     } catch (error) {

@@ -44,7 +44,7 @@ export class KakaoAuthService {
             });
 
             let payload: TokenPayload = {
-                userId: '',
+                id: '',
                 nickname: '',
                 profileImage: '',
             };
@@ -61,7 +61,7 @@ export class KakaoAuthService {
                 });
 
                 payload = {
-                    userId: user.id,
+                    id: user.id,
                     nickname: user.nickname,
                     profileImage: user.profileImage,
                 };
@@ -86,7 +86,7 @@ export class KakaoAuthService {
                 });
 
                 payload = {
-                    userId: newUser.id,
+                    id: newUser.id,
                     nickname: newUser.nickname,
                     profileImage: newUser.profileImage,
                 };

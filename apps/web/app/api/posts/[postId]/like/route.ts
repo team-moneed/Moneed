@@ -1,19 +1,27 @@
-import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/cookie.server';
+import { getCookie } from '@/shared/utils/cookie.server';
 import { PostService } from '@/features/post/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
+import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
+import { verifyToken } from '@moneed/auth';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(_: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
     try {
         const { postId } = await params;
-        const { accessTokenPayload } = await verifyRequestCookies();
-        assertAccessTokenPayload(accessTokenPayload);
-
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
         const postService = new PostService();
-        await postService.likePost({ postId: Number(postId), userId: accessTokenPayload.userId });
+        await postService.likePost({ postId: Number(postId), userId });
 
         return NextResponse.json({ message: SUCCESS_MSG.POST_LIKED });
     } catch (error) {
@@ -27,11 +35,18 @@ export async function POST(_: NextRequest, { params }: { params: Promise<{ postI
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
     try {
         const { postId } = await params;
-        const { accessTokenPayload } = await verifyRequestCookies();
-        assertAccessTokenPayload(accessTokenPayload);
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
         const postService = new PostService();
-        await postService.unlikePost({ postId: Number(postId), userId: accessTokenPayload.userId });
+        await postService.unlikePost({ postId: Number(postId), userId });
 
         return NextResponse.json({ message: SUCCESS_MSG.POST_UNLIKED });
     } catch (error) {

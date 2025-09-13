@@ -1,17 +1,26 @@
 import { NextResponse } from 'next/server';
-import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/index.server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/shared/config';
 import UserService from './user.service';
 import { UpdateUserProfileRequest } from '@/features/user';
+import { getCookie } from '@/shared/utils/cookie.server';
+import { verifyToken } from '@moneed/auth';
+import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 
 export async function getUserPosts() {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies();
-        assertAccessTokenPayload(accessTokenPayload);
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
         const userService = new UserService();
-        const posts = await userService.getUserPosts({ userId: accessTokenPayload.userId });
+        const posts = await userService.getUserPosts({ userId });
 
         return NextResponse.json(posts);
     } catch (error) {
@@ -24,11 +33,18 @@ export async function getUserPosts() {
 
 export async function getUserComments() {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies();
-        assertAccessTokenPayload(accessTokenPayload);
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
         const userService = new UserService();
-        const comments = await userService.getUserComments({ userId: accessTokenPayload.userId });
+        const comments = await userService.getUserComments({ userId });
 
         return NextResponse.json(comments);
     } catch (error) {
@@ -41,14 +57,22 @@ export async function getUserComments() {
 
 export async function getUserInfo() {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies();
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
-        if (!accessTokenPayload) {
+        if (!userId) {
             return NextResponse.json({ error: ERROR_MSG.UNAUTHORIZED }, { status: 401 });
         }
 
         const userService = new UserService();
-        const user = await userService.getUserInfo({ userId: accessTokenPayload.userId });
+        const user = await userService.getUserInfo({ userId });
 
         if (!user) {
             return NextResponse.json({ error: ERROR_MSG.USER_NOT_FOUND }, { status: 404 });
@@ -65,9 +89,17 @@ export async function getUserInfo() {
 
 export async function updateUserProfile(request: Request) {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies();
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
-        if (!accessTokenPayload) {
+        if (!userId) {
             return NextResponse.json({ error: ERROR_MSG.UNAUTHORIZED }, { status: 401 });
         }
 
@@ -80,7 +112,7 @@ export async function updateUserProfile(request: Request) {
         const userService = new UserService();
 
         const user = await userService.updateUserProfile({
-            userId: accessTokenPayload.userId,
+            userId,
             nickname,
             profileImage,
             prevProfileImageUrl,

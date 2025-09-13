@@ -1,9 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PostService } from './post.service';
 import { StockRepository } from '@/features/stock/server/repository';
-import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/cookie.server';
+import { getCookie } from '@/shared/utils/cookie.server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
+import { verifyToken } from '@moneed/auth';
+import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 
 export async function getHotPosts(request: NextRequest) {
     try {
@@ -113,8 +115,15 @@ export async function createPost(req: NextRequest) {
         const symbol = formData.get('symbol') as string;
         const thumbnailImage = formData.get('thumbnailImage') as File;
 
-        const { accessTokenPayload } = await verifyRequestCookies();
-        assertAccessTokenPayload(accessTokenPayload);
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
         const stockRepository = new StockRepository();
         const postService = new PostService();
@@ -126,7 +135,7 @@ export async function createPost(req: NextRequest) {
         }
 
         const post = await postService.createPost({
-            userId: accessTokenPayload.userId,
+            userId,
             title,
             content,
             symbol,

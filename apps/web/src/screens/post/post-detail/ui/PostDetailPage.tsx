@@ -3,9 +3,8 @@ import PostSection from './PostSection';
 import CommentSection from './CommentSection';
 import { fetchPost, fetchPostComments } from '@/features/post';
 import { DesktopHeader } from '@/shared/ui/Header';
-import { DecodedToken } from '@moneed/auth';
+import { verifyToken } from '@moneed/auth';
 import { getCookie } from '@/shared/utils/cookie.server';
-import { decodeJwt } from 'jose';
 import { MobileHeader } from './MobileHeader';
 
 export default async function PostDetail({
@@ -17,10 +16,10 @@ export default async function PostDetail({
 }) {
     const { postId } = await params;
     const { reason } = await searchParams;
-    const tokenName = process.env.JWT_ACCESS_NAME || 'access_token';
-    const token = await getCookie(tokenName);
-    const user = decodeJwt(token || '') as DecodedToken;
-    const post = await fetchPost({ postId: Number(postId), userId: user?.id });
+    const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+    const sessionResult = await verifyToken({ jwt: accessToken ?? '', key: process.env.SESSION_SECRET! });
+    const userId = sessionResult.data?.id;
+    const post = await fetchPost({ postId: Number(postId), userId });
     const comments = await fetchPostComments({ postId: Number(postId) });
 
     return (

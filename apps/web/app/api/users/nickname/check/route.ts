@@ -1,18 +1,29 @@
 import { NextResponse } from 'next/server';
 import UserService from '@/features/user/server/user.service';
-import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/cookie.server';
+import { getCookie } from '@/shared/utils/cookie.server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
+import { verifyToken } from '@moneed/auth';
+import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
+
+export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies();
-        assertAccessTokenPayload(accessTokenPayload);
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
         const { nickname } = await request.json();
         const userService = new UserService();
 
-        const isDuplicate = await userService.isDuplicateNickname({ userId: accessTokenPayload.userId, nickname });
+        const isDuplicate = await userService.isDuplicateNickname({ userId, nickname });
         if (isDuplicate) {
             return NextResponse.json({ error: ERROR_MSG.DUPLICATE_NICKNAME, nickname }, { status: 409 });
         } else {

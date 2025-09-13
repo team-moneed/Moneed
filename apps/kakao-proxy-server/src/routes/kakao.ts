@@ -1,7 +1,7 @@
 import express from 'express';
 import { KakaoAuthService } from '@/service/kakaoAuth.service';
 import { verifyRequestTokens } from '@/utils/session';
-import { createToken, verifyToken } from '@moneed/auth';
+import { createToken } from '@moneed/auth';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/constants/error';
 import { generateTempCode, consumeTempCode } from '@/utils/tempCode';
@@ -95,14 +95,13 @@ router.get('/callback', async (req, res, next) => {
 
 router.post('/logout', async (req, res, next) => {
     try {
-        const { accessTokenPayload } = await verifyRequestTokens(req);
-        const { userId } = accessTokenPayload;
+        const sessionResult = await verifyRequestTokens(req);
 
-        if (!userId) {
-            return res.status(200).json({
-                message: '로그아웃 성공',
-            });
+        if (sessionResult.error) {
+            throw sessionResult.error;
         }
+
+        const userId = sessionResult.data.id;
 
         const kakaoAuthService = new KakaoAuthService();
         const result = await kakaoAuthService.logout({ userId, response: res });
@@ -112,9 +111,7 @@ router.post('/logout', async (req, res, next) => {
                 message: result.message,
             });
         } else {
-            return res.status(result.status).json({
-                message: result.error,
-            });
+            throw new ResponseError(result.status, result.error);
         }
     } catch (error) {
         console.error('로그아웃 오류:', error);
@@ -130,20 +127,22 @@ router.post('/logout', async (req, res, next) => {
  */
 router.post('/leave', async (req, res, next) => {
     try {
-        const { accessTokenPayload } = await verifyRequestTokens(req);
+        const sessionResult = await verifyRequestTokens(req);
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
         const { reason } = req.body;
 
         const kakaoAuthService = new KakaoAuthService();
-        const result = await kakaoAuthService.leave({ userId: accessTokenPayload.userId, reason, response: res });
+        const result = await kakaoAuthService.leave({ userId, reason, response: res });
 
         if (result.success) {
             return res.status(result.status).json({
                 message: result.message,
             });
         } else {
-            return res.status(result.status).json({
-                error: result.error,
-            });
+            throw new ResponseError(result.status, result.error);
         }
     } catch (error) {
         console.error('회원탈퇴 오류:', error);
@@ -156,21 +155,15 @@ router.post('/leave', async (req, res, next) => {
 
 router.post('/refresh', async (req, res, next) => {
     try {
-        const { refreshToken } = req.body;
-
-        const {
-            payload: refreshTokenPayload,
-            isExpired,
-            isInvalid,
-        } = await verifyToken({ jwt: refreshToken, key: process.env.SESSION_SECRET! });
-        if (isExpired || isInvalid) {
-            throw new ResponseError(403, ERROR_MSG.REFRESH_TOKEN_INVALID);
+        const sessionResult = await verifyRequestTokens(req);
+        if (sessionResult.error) {
+            throw sessionResult.error;
         }
 
+        const userId = sessionResult.data.id;
+
         const kakaoAuthService = new KakaoAuthService();
-        const result = await kakaoAuthService.refresh({
-            userId: refreshTokenPayload.userId,
-        });
+        const result = await kakaoAuthService.refresh({ userId });
 
         if (result.success) {
             const key = process.env.SESSION_SECRET;
@@ -179,12 +172,12 @@ router.post('/refresh', async (req, res, next) => {
                 throw new ResponseError(500, ERROR_MSG.INTERNAL_SERVER_ERROR);
             }
             const accessToken = await createToken({
-                payload: refreshTokenPayload,
+                payload: sessionResult.data,
                 duration: process.env.JWT_ACCESS_EXPIRES_IN || '24h',
                 key,
             });
             const refreshToken = await createToken({
-                payload: refreshTokenPayload,
+                payload: sessionResult.data,
                 duration: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
                 key,
             });
@@ -194,9 +187,7 @@ router.post('/refresh', async (req, res, next) => {
                 refresh_token: refreshToken,
             });
         } else {
-            return res.status(result.status).json({
-                error: result.error,
-            });
+            throw new ResponseError(result.status, result.error);
         }
     } catch (error) {
         if (error instanceof ResponseError) {

@@ -16,7 +16,15 @@ export const leave = async ({ provider, reason }: { provider: Providers; reason:
 };
 
 export const refresh = async ({ provider, refreshToken }: { provider: Providers; refreshToken: string | null }) => {
-    const res = await proxy.post<RefreshTokenDTO>(`/api/auth/${provider}/refresh`, { refreshToken });
+    const res = await proxy.post<RefreshTokenDTO>(
+        `/api/auth/${provider}/refresh`,
+        {},
+        {
+            headers: {
+                Authorization: `Bearer ${refreshToken}`,
+            },
+        },
+    );
     return res;
 };
 

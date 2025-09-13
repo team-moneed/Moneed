@@ -25,11 +25,11 @@ export async function middleware(req: NextRequest) {
 
     const session = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET || '' });
 
-    if (isGuestOnlyRoute && session.payload) {
+    if (isGuestOnlyRoute && session.data) {
         return NextResponse.redirect(new URL(`${PATH.HOME}?reason=${REASON_CODES.LOGGED_IN}`, req.nextUrl));
     }
 
-    if (isProtectedRoute && (session.isExpired || session.isInvalid || !accessToken)) {
+    if (isProtectedRoute && (session.error || !accessToken)) {
         return NextResponse.redirect(new URL(`${PATH.ONBOARDING}?reason=${REASON_CODES.NO_SESSION}`, req.nextUrl));
     }
 
