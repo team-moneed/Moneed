@@ -2,19 +2,23 @@
 
 import { getOverseasStockByCondition } from '@/features/stock/server';
 import { StockService } from '@/features/stock/server';
-import { verifyRequestCookies } from '@/shared/utils/server';
+import { getCookie } from '@/shared/utils/cookie.server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { MarketCode } from '@/entities/stock';
+import { verifyToken } from '@moneed/auth';
+import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
+
 /**
  * 시가총액 상위 주식 조회
  * @param param0 count: 조회할 주식 개수 (최대 100개)
  * @returns 시가총액 상위 주식 목록
  */
-export const getHotStocks = async ({ count }: { count: number }) => {
+export const getHotStocks = async ({ count, market }: { count: number; market: MarketCode }) => {
     const data = await getOverseasStockByCondition({
-        market: 'NAS',
+        market,
         params: {
             CO_YN_VALX: '1', // 시가총액 조건 사용 여부 (1: 사용, 0: 사용안함)
             CO_ST_VALX: String(0), // 시가총액 시작값 (단위: 천$) -> 500억$
@@ -38,14 +42,19 @@ export const getSelectedStockSymbols = async (): Promise<
     | { success: false; data: null; error: { message: string; status: number } }
 > => {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies();
-
-        if (!accessTokenPayload) {
-            throw new ResponseError(401, ERROR_MSG.UNAUTHORIZED);
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
+        }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
         }
 
+        const userId = sessionResult.data.id;
+
         const stockService = new StockService();
-        const symbols = await stockService.getSelectedStockSymbols(accessTokenPayload.userId);
+        const symbols = await stockService.getSelectedStockSymbols(userId);
 
         return {
             success: true,
@@ -89,14 +98,18 @@ export const selectStockAction = async (
 > => {
     let success = false;
     try {
-        const { accessTokenPayload } = await verifyRequestCookies();
-
-        if (!accessTokenPayload) {
-            throw new ResponseError(401, ERROR_MSG.UNAUTHORIZED);
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
         const stockService = new StockService();
-        await stockService.selectStock(accessTokenPayload.userId, stockSymbols);
+        await stockService.selectStock(userId, stockSymbols);
 
         success = true;
 

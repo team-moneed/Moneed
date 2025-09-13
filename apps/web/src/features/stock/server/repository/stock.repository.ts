@@ -1,4 +1,4 @@
-import { prisma } from '@/database/client';
+import { prisma } from '@/shared/model';
 import { DbStock } from '@/entities/stock';
 
 export class StockRepository {

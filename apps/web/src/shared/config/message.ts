@@ -18,7 +18,9 @@ export const ERROR_MSG = {
     DUPLICATE_NICKNAME: '이미 존재하는 닉네임입니다.',
     USER_ID_REQUIRED: 'userId가 필요합니다',
     UNAUTHORIZED: '권한이 없습니다',
+    TOKEN_REFRESH_FAILED: '토큰 갱신 실패',
     NO_REFRESH_TOKEN: '리프레시 토큰이 없습니다',
+    POST_ID_REQUIRED: 'postId가 필요합니다',
 } as const;
 
 export const SUCCESS_MSG = {

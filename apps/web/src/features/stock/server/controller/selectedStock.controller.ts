@@ -1,18 +1,23 @@
-import { verifyRequestCookies } from '@/shared/utils/cookie.server';
+import { getCookie } from '@/shared/utils/cookie.server';
 import { StockService } from '@/features/stock/server/service/stock.service';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG } from '@/shared/config/message';
 import { StockRepository } from '../repository';
 import { getOverseasStockPrice } from '../api';
+import { verifyToken } from '@moneed/auth';
+import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 
 async function GET(request: NextRequest) {
     try {
-        const { accessTokenPayload } = await verifyRequestCookies();
-
-        if (!accessTokenPayload) {
-            return NextResponse.json({ error: ERROR_MSG.UNAUTHORIZED }, { status: 401 });
+        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        if (!accessToken) {
+            throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
+        const sessionResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
+        if (sessionResult.error) {
+            throw sessionResult.error;
+        }
+        const userId = sessionResult.data.id;
 
         const searchParams = request.nextUrl.searchParams;
         const count = parseInt(searchParams.get('count') || '20');
@@ -20,7 +25,7 @@ async function GET(request: NextRequest) {
 
         const stockRepository = new StockRepository();
         const stockService = new StockService();
-        const selectedStocks = await stockRepository.getSelectedStocks(accessTokenPayload.userId, count, cursor);
+        const selectedStocks = await stockRepository.getSelectedStocks(userId, count, cursor);
         const stocks = await Promise.all(
             selectedStocks.map(stock => getOverseasStockPrice({ symbol: stock.stock.symbol })),
         );

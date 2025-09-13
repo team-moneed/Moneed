@@ -1,0 +1,179 @@
+'use client';
+
+import { usePathname, useRouter } from 'next/navigation';
+import Button from '@/shared/ui/Button';
+import Link from 'next/link';
+import Logo from 'app/onboarding/Logo';
+import NavLink from '@/shared/ui/NavLink';
+import { PATH } from '../config';
+
+export const DesktopHeader = () => {
+    const router = useRouter();
+
+    const movetowritepost = () => {
+        router.push(PATH.WRITEPOST);
+    };
+
+    return (
+        <header className='sticky top-0 z-10 hidden bg-white sm:flex items-center justify-between pb-[1.8rem] pt-[3rem]'>
+            <Link href={PATH.HOME}>
+                <div className='flex'>
+                    <div className='w-[2.8rem] h-[2.8rem] bg-moneed-black rounded-full flex items-center justify-center'>
+                        <img className='w-[1.4rem] h-[1.2rem]' src='/icon/icon-logo.svg' alt='' />
+                    </div>
+                    <span className='font-semibold leading-[140%] text-[1.8rem] ml-[.8rem]'>moneed</span>
+                </div>
+            </Link>
+            <NavLink href={PATH.SHORTFORM}>
+                <span className='text-[1.4rem] font-semibold ml-[2.6rem]'>숏폼</span>
+            </NavLink>
+            <NavLink href={PATH.COMMUNITY}>
+                <span className='text-[1.4rem] font-semibold w-[8.4rem] ml-[2.4rem]'>커뮤니티</span>
+            </NavLink>
+            <div className='flex items-center gap-[2.4rem] ml-auto'>
+                <NavLink
+                    href={PATH.MYPAGE}
+                    icon='/icon/icon-profile-circle.svg'
+                    activeIcon='/icon/icon-profile-circle.svg'
+                />
+                <img className='w-[2.4rem] h-[2.4rem]' src='/icon/icon-alarm.svg' alt='알림' />
+                <Button
+                    onClick={movetowritepost}
+                    className='gap-4 px-[2.4rem] py-[.8rem] items-center flex'
+                    variant='brand'
+                >
+                    <img className='w-[1.8rem] h-[1.8rem]' src='/icon/icon-edit.svg' alt='' />
+                    <span className='font-semibold leading-[135%] text-[1.4rem]'>포스팅</span>
+                </Button>
+            </div>
+        </header>
+    );
+};
+
+export const MobileHeader = () => {
+    return (
+        <header className='sticky top-0 z-10 flex bg-white sm:hidden items-center justify-between pb-[1.8rem] pt-[3rem]'>
+            <Link href={PATH.HOME}>
+                <div className='flex'>
+                    <div className='w-[2.8rem] h-[2.8rem] bg-moneed-black rounded-full flex items-center justify-center'>
+                        <img className='w-[1.4rem] h-[1.2rem]' src='/icon/icon-logo.svg' alt='뒤로가기' />
+                    </div>
+                    <span className='font-semibold leading-[140%] text-[1.8rem] ml-[.8rem]'>moneed</span>
+                </div>
+            </Link>
+            <div className='flex items-center gap-[2.4rem] ml-auto'>
+                <img className='w-[2.4rem] h-[2.4rem]' src='/icon/icon-alarm.svg' alt='알림' />
+            </div>
+        </header>
+    );
+};
+
+export const BackNotificationHeader = ({ title }: { title: string }) => {
+    const router = useRouter();
+
+    const handleBackButtonClick = () => {
+        router.back();
+    };
+    return (
+        <header className='sticky top-0 z-10 bg-white flex items-center justify-between px-[4rem] pb-[1.8rem] pt-[3rem]'>
+            <button onClick={handleBackButtonClick}>
+                <img className='cursor-pointer w-[2.4rem] h-[2.4rem]' src='/icon/icon-arrow-back.svg' alt='뒤로가기' />
+            </button>
+            <h1 className='text-[1.6rem] font-semibold text-moneed-gray-9'>{title}</h1>
+            <Link href={PATH.NOTIFICATION}>
+                <img className='w-[2.4rem] h-[2.4rem]' src='/icon/icon-alarm.svg' alt='알림' />
+            </Link>
+        </header>
+    );
+};
+
+const MenuHeader = () => {
+    const router = useRouter();
+    const pathname = usePathname();
+
+    // 뒤로가기 버튼 클릭 시 동작
+    const handleBackButtonClick = () => {
+        router.back();
+    };
+
+    const getHeaderTitle = (pathname: string) => {
+        switch (pathname) {
+            case PATH.LEAVE:
+                return '탈퇴하기';
+            case PATH.SEARCHSTOCKTYPE:
+                return '게시판 선택';
+            case PATH.COMMUNITY:
+                return '커뮤니티';
+            case PATH.MYPOST:
+                return '내가 작성한 게시글';
+            case PATH.MYCOMMENT:
+                return '내가 작성한 댓글';
+            default:
+                return 'moneed';
+        }
+    };
+
+    const ExitButton = () => {
+        return (
+            <img
+                className='w-[2.4rem] h-[2.4rem] cursor-pointer'
+                onClick={() => router.push(PATH.HOME)}
+                src='/icon/icon-exit.svg'
+                alt='나가기'
+            />
+        );
+    };
+
+    const AlarmButton = () => {
+        return <img className='w-[2.4rem] h-[2.4rem]' src='/icon/icon-alarm.svg' alt='알림버튼' />;
+    };
+
+    const getHeaderRightButton = (pathname: string) => {
+        switch (pathname) {
+            case PATH.LEAVE:
+                return <ExitButton />;
+            default:
+                return <AlarmButton />;
+        }
+    };
+
+    return (
+        <header className='sticky top-0 z-10 bg-white flex items-center justify-between px-[4rem] pb-[1.8rem] pt-[3rem]'>
+            <img
+                className='cursor-pointer w-[2.4rem] h-[2.4rem]'
+                onClick={handleBackButtonClick}
+                src='/icon/icon-arrow-back.svg'
+                alt='뒤로가기'
+            />
+            <h1 className='text-[1.6rem] font-semibold text-moneed-gray-9'>{getHeaderTitle(pathname)}</h1>
+            {getHeaderRightButton(pathname)}
+        </header>
+    );
+};
+
+const NoMenuHeader = () => {
+    return (
+        <header className='sticky top-0 z-10 bg-white flex items-center justify-between md:px-[4rem] md:pb-[1.8rem] md:pt-[3rem] px-[1.8rem] pt-[2rem] pb-[1.2rem]'>
+            <Logo />
+        </header>
+    );
+};
+
+const Header = () => {
+    const menuHeaderPaths = [PATH.MYCOMMENT_LEGACY, PATH.MYPOST, PATH.SEARCHSTOCKTYPE, PATH.LEAVE];
+
+    const noMenuHeaderPaths = [PATH.ONBOARDING, PATH.SELECTSTOCKTYPE];
+    const commonHeaderPaths = [PATH.HOME];
+
+    const pathname = usePathname();
+
+    if (noMenuHeaderPaths.some(path => pathname.startsWith(path))) {
+        return <NoMenuHeader />;
+    } else if (menuHeaderPaths.some(path => pathname.startsWith(path))) {
+        return <MenuHeader />;
+    } else if (commonHeaderPaths.some(path => pathname === path)) {
+        return <DesktopHeader />;
+    }
+};
+
+export default Header;

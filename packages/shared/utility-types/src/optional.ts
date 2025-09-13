@@ -4,3 +4,5 @@
  * type UserWithOptionalFields = MakeOptional<User, 'ageRange' | 'gender'>;
  */
 export type Optional<T, K extends keyof T> = Omit<T, K> & Partial<Pick<T, K>>;
+
+export type Required<T, K extends keyof T> = Pick<T, K> & Partial<Omit<T, K>>;
