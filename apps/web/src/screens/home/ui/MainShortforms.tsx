@@ -1,10 +1,10 @@
 'use client';
 
-import VideoCarousel from '@/components/Carousel/VideoCarousel';
+import VideoCarousel from '@/shared/ui/Carousel/VideoCarousel';
 import { EmblaOptionsType } from 'embla-carousel';
-import { useSuspenseShorts } from '@/queries/shorts.query';
-import withSuspense from '@/components/HOC/withSuspense';
-import { ShortformCarouselSkeleton } from '@/components/Skeletons/shortform/ShortformSkeleton';
+import { useSuspenseShorts } from '@/features/shorts/query/shorts.query';
+import withSuspense from '@/shared/ui/withSuspense';
+import { ShortformCarouselSkeleton } from '@/screens/shortform/ui/ShortformSkeleton';
 
 const MainShortforms = () => {
     const VIDEOOPTIONS: EmblaOptionsType = {

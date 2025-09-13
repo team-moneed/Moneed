@@ -1,13 +1,13 @@
 import { Metadata, Viewport } from 'next';
 import Script from 'next/script';
-import '@/app/globals.css';
-import { ModalProvider } from '@/context/ModalContext';
-import Header from '@/components/Layout/Header';
-import MobileNav from '@/components/Layout/MobileNav';
-import { SnackbarProvider } from '@/components/Snackbar';
-import Footer from '@/components/Layout/Footer';
-import QueryClientProvider from '@/components/QueryClientProvider';
-import ReactQueryDevtools from '@/components/ReactQueryDevtools';
+import '@/app/styles/globals.css';
+import { ModalProvider } from '@/app/provider/ModalContext';
+import Header, { MobileHeader } from '@/shared/ui/Header';
+import MobileNav from '@/shared/ui/MobileNav';
+import { SnackbarProvider } from '@/shared/ui/Snackbar';
+import Footer from '@/shared/ui/Footer';
+import QueryClientProvider from '@/app/provider/QueryClientProvider';
+import ReactQueryDevtools from '@/app/provider/ReactQueryDevtools';
 
 export const metadata: Metadata = {
     title: 'Moneed',
@@ -34,10 +34,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     ></iframe>
                 </noscript>
 
-                <div id='root' className='mx-auto h-screen max-w-7xl flex flex-col'>
+                <div id='root' className='mx-auto h-screen max-w-512 flex flex-col px-8'>
                     <QueryClientProvider>
                         <ModalProvider>
                             <Header />
+                            <MobileHeader />
                             <main className='flex-1'>{children}</main>
                             <Footer />
                             <MobileNav />

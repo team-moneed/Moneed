@@ -1,12 +1,13 @@
 'use client';
+import { DYNAMIC_PATH } from '@/shared/config';
 import Button from '@/shared/ui/Button';
-import { BoardRankResponse } from '@/types/board';
+import { CommunityDTO } from '@/features/community/model';
 import { useRouter } from 'next/navigation';
 
-export default function MoveToCommunityButton({ selectedStock }: { selectedStock: BoardRankResponse }) {
+export default function MoveToCommunityButton({ selectedStock }: { selectedStock: CommunityDTO }) {
     const router = useRouter();
     const movecommunity = (symbol: string) => {
-        router.push(`/community/${symbol}`);
+        router.push(DYNAMIC_PATH.COMMUNITY_SYMBOL(symbol));
     };
 
     return (

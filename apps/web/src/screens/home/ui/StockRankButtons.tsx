@@ -1,5 +1,5 @@
-import { ChipButton } from '@/components/Chip';
-import { BoardRankResponse } from '@/types/board';
+import { ChipButton } from '@/shared/ui/Chip';
+import { CommunityDTO } from '@/features/community/model';
 const rankMedal = (index: number) => {
     if (index === 0) return '🥇';
     if (index === 1) return '🥈';
@@ -12,9 +12,9 @@ export default function StockRankButtons({
     selectedStock,
     setSelectedStock,
 }: {
-    stockList: BoardRankResponse[];
-    selectedStock: BoardRankResponse | undefined;
-    setSelectedStock: (stock: BoardRankResponse) => void;
+    stockList: CommunityDTO[];
+    selectedStock: CommunityDTO | undefined;
+    setSelectedStock: (stock: CommunityDTO) => void;
 }) {
     return (
         <div className='flex gap-4 overflow-x-auto'>

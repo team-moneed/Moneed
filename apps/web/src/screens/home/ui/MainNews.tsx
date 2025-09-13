@@ -1,6 +1,6 @@
 'use client';
 
-import Card from '@/components/Card';
+import Card from '@/shared/ui/Card';
 
 const NewsData = [
     {

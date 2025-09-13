@@ -1,17 +1,18 @@
 'use client';
 
-import PostThumbnailCard from '@/components/PostThumbnailCard';
-import { BoardRankResponse } from '@/types/board';
+import PostThumbnailCard from '@/entities/post/ui/PostThumbnailCard';
+import { CommunityDTO } from '@/features/community/model';
 import { useRouter } from 'next/navigation';
-import { useTop3Posts } from '@/queries/posts.query';
+import { useTop3Posts } from '@/features/post/query';
+import { DYNAMIC_PATH } from '@/shared/config';
 
-export default function Top3Posts({ selectedStock }: { selectedStock: BoardRankResponse }) {
+export default function Top3Posts({ selectedStock }: { selectedStock: CommunityDTO }) {
     const router = useRouter();
     const anHour = 1000 * 60 * 60;
     const { data: postsWithUser } = useTop3Posts({ symbol: selectedStock.symbol, staleTime: anHour });
 
     const moveToDetail = (postId: number) => {
-        router.push(`/community/${selectedStock.symbol}/posts/${postId}`);
+        router.push(DYNAMIC_PATH.POST_DETAIL(postId));
     };
 
     return (
@@ -23,7 +24,7 @@ export default function Top3Posts({ selectedStock }: { selectedStock: BoardRankR
                         <PostThumbnailCard.Content content={post.content} />
                     </PostThumbnailCard.Body>
                     <PostThumbnailCard.Footer>
-                        <PostThumbnailCard.AuthorWithDate user={post.user} createdAt={new Date(post.createdAt)} />
+                        <PostThumbnailCard.AuthorWithDate author={post.author} createdAt={new Date(post.createdAt)} />
                     </PostThumbnailCard.Footer>
                 </PostThumbnailCard>
             ))}

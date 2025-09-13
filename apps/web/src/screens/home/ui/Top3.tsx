@@ -2,14 +2,14 @@
 
 import { useState } from 'react';
 import { useSuspenseQuery } from '@tanstack/react-query';
-import { getBoardRank } from '@/apis/board.api';
-import { BoardRankResponse } from '@/types/board';
+import { getBoardRank } from '@/features/community/api/board.api';
+import { CommunityDTO } from '@/features/community/model';
 import MoveToCommunityButton from './MoveToCommunitButton';
-import { StockRankButtonsSkeleton } from '@/components/Skeletons/StockRankButtonSkeleton';
+import { StockRankButtonsSkeleton } from '@/shared/ui/Skeletons/StockRankButtonSkeleton';
 import StockRankButtons from './StockRankButtons';
-import { Top3PostsSkeleton } from '@/components/Skeletons/Top3PostSkeleton';
+import { Top3PostsSkeleton } from '@/shared/ui/Skeletons/Top3PostSkeleton';
 import Top3Posts from './Top3Posts';
-import withSuspense from '@/components/HOC/withSuspense';
+import withSuspense from '@/shared/ui/withSuspense';
 
 // TODO: 1시간마다 서버에서 업데이트 해야함
 const Top3 = () => {
@@ -20,7 +20,7 @@ const Top3 = () => {
         staleTime: anHour,
     });
 
-    const [selectedStock, setSelectedStock] = useState<BoardRankResponse>(stockList[0]);
+    const [selectedStock, setSelectedStock] = useState<CommunityDTO>(stockList[0]);
 
     if (stockList.length === 0 || !stockList) {
         return <div className='text-4xl text-center text-moneed-gray-8'>게시글이 존재하지 않습니다</div>;

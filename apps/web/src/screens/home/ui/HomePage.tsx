@@ -2,21 +2,22 @@ import MainNews from './MainNews';
 import MainShortforms from './MainShortforms';
 import Top3 from './Top3';
 import Link from 'next/link';
-import { SnackbarTrigger } from '@/components/Snackbar';
+import { SnackbarTrigger } from '@/shared/ui/Snackbar';
+import { PATH } from '@/shared/config';
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ reason: string }> }) {
     const reason = (await searchParams).reason;
 
     return (
         <>
-            <div className='px-8 max-w-512 mx-auto pb-[8rem] flex flex-col gap-[1.2rem] lg:gap-[4.4rem]'>
+            <div className='pb-[8rem] flex flex-col gap-[1.2rem] lg:gap-[4.4rem]'>
                 <section>
                     <div className='flex items-center gap-[.8rem] mb-[1.8rem] justify-between'>
                         <h2 className='text-moneed-black sm:text-h2'>HOT 숏폼</h2>
                         <button className='flex items-center gap-[.8rem] self-stretch'>
                             <Link
                                 className='text-[1.4rem] font-semibold leading-[135%] text-moneed-gray-8'
-                                href='/shortform'
+                                href={PATH.SHORTFORM}
                             >
                                 더보기
                             </Link>
@@ -29,7 +30,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ r
                 </section>
 
                 <section className='aspect-350/106 rounded-[.8rem] overflow-hidden lg:aspect-941/151'>
-                    <Link href='/smarttalk'>
+                    <Link href={PATH.SMARTTALK}>
                         <img
                             src='/images/smarttalk_m.svg'
                             alt='smarttalk-mobile-banner'
