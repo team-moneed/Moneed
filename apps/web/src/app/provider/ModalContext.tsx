@@ -1,7 +1,7 @@
 'use client';
 
 import { createContext, useContext, useState, ReactNode } from 'react';
-import Modal from '@/components/Modal';
+import Modal from '@/shared/ui/Modal';
 
 //수정필요~!
 

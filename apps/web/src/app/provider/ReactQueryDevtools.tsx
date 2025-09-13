@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactQueryDevtools as ReactQueryDevtoolsOriginal } from '@tanstack/react-query-devtools';
-import { queryClient } from './QueryClientProvider';
+import { queryClient } from '@/app/provider/QueryClientProvider';
 
 export default function ReactQueryDevtools() {
     return (
