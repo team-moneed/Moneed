@@ -2,15 +2,17 @@
 
 import { useState, useEffect } from 'react';
 import { useParams, useRouter } from 'next/navigation';
-import { useInfiniteShorts, useShort } from '@/queries/shorts.query';
-import { ShortformPageSkeleton } from '@/components/Skeletons/shortform/ShortformSkeleton';
+import { useInfiniteShorts, useShort } from '@/features/shorts/query/shorts.query';
+import { ShortformPageSkeleton } from '@/screens/shortform/ui/ShortformSkeleton';
 import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
+import { PATH } from '@/shared/config';
 
 // TODO: 추후 현재 쇼츠 자동 재생 로직 추가
 function ShortformVideoPage() {
-    const { videoId } = useParams();
+    const params = useParams();
+    const videoId = params?.videoId as string;
     const router = useRouter();
-    const { data: video } = useShort({ videoId: videoId as string });
+    const { data: video } = useShort({ videoId: videoId });
     const {
         data: videos = [],
         isFetchingNextPage,
@@ -65,7 +67,7 @@ function ShortformVideoPage() {
                             </div>
                             {/* 뒤로가기 버튼 */}
                             <button
-                                onClick={() => router.push('/shortform')}
+                                onClick={() => router.push(PATH.SHORTFORM)}
                                 className='absolute top-4 left-4 z-10 bg-black/50 text-white p-2 rounded-full hover:bg-black/70 transition-colors'
                             >
                                 <img src='/icon/icon-arrow-back.svg' alt='back' className='size-10' />

@@ -1,4 +1,4 @@
-import ShortService from '@/services/short.service';
+import { ShortService } from '@/features/shorts/server/short.service';
 import { ERROR_MSG } from '@/shared/config/message';
 import { NextRequest, NextResponse } from 'next/server';
 

@@ -1,9 +1,10 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useSuspenseInfiniteShorts } from '@/queries/shorts.query';
+import { useSuspenseInfiniteShorts } from '@/features/shorts/query/shorts.query';
 import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
-import { ShortformPageSkeleton } from '@/components/Skeletons/shortform/ShortformSkeleton';
+import { ShortformPageSkeleton } from '@/screens/shortform/ui/ShortformSkeleton';
+import { DYNAMIC_PATH } from '@/shared/config';
 
 export const dynamic = 'force-dynamic';
 
@@ -26,7 +27,7 @@ export default function ShortformPage() {
 
     // 동영상 클릭 핸들러
     const handleVideoClick = (videoId: string) => {
-        router.push(`/shortform/${videoId}`);
+        router.push(DYNAMIC_PATH.SHORTFORM_VIDEO(videoId));
     };
 
     return (

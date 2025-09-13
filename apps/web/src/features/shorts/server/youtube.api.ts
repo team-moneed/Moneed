@@ -1,5 +1,5 @@
 import { youtube } from '@/shared/api/server';
-import { YouTubeSearchResponse } from '@/types/youtube';
+import { YouTubeSearchResponse } from '@/features/shorts/server/youtube.type';
 
 export const searchShorts = async ({ q, count, page }: { q: string; count: number; page: string | null }) => {
     const response = await youtube.get<YouTubeSearchResponse>('/v3/search', {

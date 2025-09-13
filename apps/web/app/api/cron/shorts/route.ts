@@ -1,4 +1,4 @@
-import ShortService from '@/services/short.service';
+import { ShortService } from '@/features/shorts/server/short.service';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';

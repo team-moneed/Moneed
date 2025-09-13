@@ -1,5 +1,5 @@
-import { fetchShorts, fetchShort } from '@/apis/shorts.api';
-import { getMsUntilMidnight } from '@/utils/date';
+import { fetchShorts, fetchShort } from '@/features/shorts/api/shorts.api';
+import { getMsUntilMidnight } from '@/shared/utils/date';
 import { useInfiniteQuery, useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 
 const untilMidnight = getMsUntilMidnight();

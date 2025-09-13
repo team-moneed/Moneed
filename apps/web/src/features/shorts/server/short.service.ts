@@ -1,11 +1,11 @@
-import { searchShorts } from '@/apis/youtube.api';
+import { searchShorts } from '@/features/shorts/server/youtube.api';
 import { ERROR_MSG } from '@/shared/config/message';
 import type { Shorts } from '@prisma/client';
-import ShortRepository from '@/repositories/short.repository';
-import { parseShorts } from '@/utils/parser';
+import { ShortRepository } from '@/features/shorts/server/short.repository';
+import { parseShorts } from '@/shared/utils/parser';
 import { AxiosError } from 'axios';
 
-export default class ShortService {
+export class ShortService {
     private readonly shortRepository = new ShortRepository();
     private totalQuota = 10000;
     private cost = 100;

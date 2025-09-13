@@ -1,5 +1,5 @@
-import { DesktopHeader, MobileHeader } from '@/components/Layout/Header';
-import { ShortformPageSkeleton } from '@/components/Skeletons/shortform/ShortformSkeleton';
+import { DesktopHeader, MobileHeader } from '@/shared/ui/Header';
+import { ShortformPageSkeleton } from '@/screens/shortform/ui/ShortformSkeleton';
 import { Suspense } from 'react';
 
 export const dynamic = 'force-dynamic';
