@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import PostThumbnail from '@/entities/post/ui/PostThumbnail';
+import PostThumbnail from '@/features/post/ui/PostThumbnail';
 import { cn } from '@/shared/utils/style';
 import { useMyPosts } from '@/features/user/query';
 

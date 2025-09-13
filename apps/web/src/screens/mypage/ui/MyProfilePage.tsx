@@ -2,7 +2,7 @@
 
 import { useState } from 'react';
 import Button from '@/shared/ui/Button';
-import SelectProfileImage from '@/_pages/mypage/ui/SelectProfileImage';
+import SelectProfileImage from '@/screens/mypage/ui/SelectProfileImage';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/features/user/query';
 import { userApi } from '@/features/user/api';
@@ -10,9 +10,9 @@ import { useMutation } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
 import { AxiosError } from 'axios';
 import { REASON_CODES } from '@/shared/config/snackbar';
-import { MyProfileSkeleton } from '@/components/Skeletons/MyProfileSkeleton';
+import { MyProfileSkeleton } from '@/shared/ui/Skeletons/MyProfileSkeleton';
 import { useDebounce } from '@/shared/hooks/useDebounce';
-import { useModal } from '@/context/ModalContext';
+import { useModal } from '@/app/provider/ModalContext';
 import { PATH } from '@/shared/config';
 
 export const dynamic = 'force-dynamic';

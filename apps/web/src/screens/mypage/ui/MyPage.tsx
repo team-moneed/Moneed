@@ -1,7 +1,7 @@
 'use client';
-import LogoutButton from '@/_pages/mypage/ui/LogoutButton';
+import LogoutButton from '@/screens/mypage/ui/LogoutButton';
 import Link from 'next/link';
-import { SnackbarTrigger } from '@/components/Snackbar';
+import { SnackbarTrigger } from '@/shared/ui/Snackbar';
 import { useSearchParams } from 'next/navigation';
 import dynamic from 'next/dynamic';
 import { PATH } from '@/shared/config';

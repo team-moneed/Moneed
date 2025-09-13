@@ -1,21 +1,22 @@
 'use client';
 
 import { useState } from 'react';
-import Comment from '@/components/Comment/Comment';
+import Comment from '@/entities/comment/ui/Comment';
 import { useMyComments } from '@/features/user/query';
 import { cn } from '@/shared/utils/style';
 import { useMutation } from '@tanstack/react-query';
-import { queryClient } from '@/components/QueryClientProvider';
-import { deleteComment } from '@/features/comment/api/comment.api';
-import useSnackbarStore from '@/store/useSnackbarStore';
+import { queryClient } from '@/app/provider/QueryClientProvider';
+import { deleteComment } from '@/features/comment';
+import useSnackbarStore from '@/shared/store/useSnackbarStore';
 import { DYNAMIC_PATH } from '@/shared/config';
 import { useRouter } from 'next/navigation';
-import { useCommentStore } from '@/store/useCommentStore';
+import { useCommentStore } from '@/shared/store/useCommentStore';
 import { useShallow } from 'zustand/react/shallow';
-import { PrimaryDropdownProps } from '@/components/Dropdown';
-import { CommentWithUser } from '@/types/comment';
-import { useModal } from '@/context/ModalContext';
+import { PrimaryDropdownProps } from '@/shared/ui/Dropdown';
+import { CommentWithUserDTO } from '@/features/comment/model/comment.type';
+import { useModal } from '@/app/provider/ModalContext';
 
+// TODO: 로직은 User가 맞지만 UI 자체는 Comment에 가까움
 export default function Comments() {
     const [activeTab, setActiveTab] = useState<'thisWeek' | 'notThisWeek'>('thisWeek');
     const showSnackbar = useSnackbarStore(state => state.showSnackbar);
@@ -72,7 +73,7 @@ export default function Comments() {
         });
     };
 
-    const commentDropdownMenus = (comment: CommentWithUser): PrimaryDropdownProps['dropdownMenus'] => [
+    const commentDropdownMenus = (comment: CommentWithUserDTO): PrimaryDropdownProps['dropdownMenus'] => [
         {
             icon: '/icon/icon-scissors.svg',
             text: '댓글 수정',
@@ -80,7 +81,7 @@ export default function Comments() {
                 setIsEditingComment(true);
                 setEditCommentId(comment.id);
                 setEditCommentContent(comment.content);
-                router.push(DYNAMIC_PATH.COMMUNITY_POST(comment.post.stock.symbol, comment.postId));
+                router.push(DYNAMIC_PATH.POST_DETAIL(comment.postId));
             },
         },
         {

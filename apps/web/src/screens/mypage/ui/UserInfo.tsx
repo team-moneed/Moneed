@@ -1,4 +1,4 @@
-import UserInfoSkeleton from '@/components/Skeletons/mypage/UserInfoSkeleton';
+import UserInfoSkeleton from '@/screens/mypage/ui/UserInfoSkeleton';
 import { useSuspenseUser } from '@/features/user/query';
 import Link from 'next/link';
 import withSuspense from '@/shared/ui/withSuspense';

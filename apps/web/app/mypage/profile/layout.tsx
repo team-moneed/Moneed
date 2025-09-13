@@ -3,7 +3,7 @@
 import { DesktopHeader } from '@/shared/ui/Header';
 import { useRouter } from 'next/navigation';
 import { useState } from 'react';
-import Modal from '@/components/Modal';
+import Modal from '@/shared/ui/Modal';
 
 export default function MyProfileLayout({ children }: { children: React.ReactNode }) {
     const router = useRouter();

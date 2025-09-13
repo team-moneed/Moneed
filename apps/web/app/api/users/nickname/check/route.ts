@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import UserService from '@/services/user.service';
+import UserService from '@/features/user/server/user.service';
 import { verifyRequestCookies, assertAccessTokenPayload } from '@/shared/utils/cookie.server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
