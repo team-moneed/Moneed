@@ -1,8 +1,1 @@
-export {
-    getHotStock,
-    getOverseasStockPrice,
-    getSelectedStocks,
-    getStocks,
-    getStockBySymbol,
-    selectStock,
-} from './stock';
+export { getHotStock, getOverseasStockPrice, getStocks, getStockBySymbol, selectStock } from './stock';
