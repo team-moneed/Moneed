@@ -34,7 +34,7 @@ export class PostRepository {
         const posts = await this.prisma.post.findMany({
             where: {
                 score: {
-                    gt: cursor === 0 ? undefined : cursor,
+                    lt: cursor,
                 },
             },
             include: {
@@ -47,6 +47,7 @@ export class PostRepository {
             orderBy: {
                 score: 'desc',
             },
+            take: limit,
         });
 
         // 각 게시물의 점수를 계산하고 정렬

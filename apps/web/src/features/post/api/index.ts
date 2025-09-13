@@ -14,7 +14,7 @@ import { CommentDTO, CommentMapper } from '@/entities/comment';
 
 export const fetchHotPosts = async ({
     limit = 15,
-    cursor = 0,
+    cursor,
     userId,
 }: { limit?: number; cursor?: number; userId?: string } = {}) => {
     const res = await http.get<PostDTO[]>(API_PATH.POSTS_HOT, {

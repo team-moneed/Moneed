@@ -36,8 +36,10 @@ export class PostService {
         return posts;
     }
 
-    async getHotPosts({ limit = 15, cursor = 0 }: { limit?: number; cursor?: number } = {}): Promise<PostDTO[]> {
-        const posts = await this.postRepository.getPostsByScore({ limit, cursor });
+    async getHotPosts({ limit = 15, cursor = null }: { limit?: number; cursor?: number | null } = {}): Promise<
+        PostDTO[]
+    > {
+        const posts = await this.postRepository.getPostsByScore({ limit, cursor: cursor ?? undefined });
         return posts;
     }
 

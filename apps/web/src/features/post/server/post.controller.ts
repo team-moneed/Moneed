@@ -9,8 +9,9 @@ import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 
 export async function getHotPosts(request: NextRequest) {
     try {
-        const limit = Number(request.nextUrl.searchParams.get('limit')) || 5;
-        const cursor = Number(request.nextUrl.searchParams.get('cursor')) || 0;
+        const searchParams = request.nextUrl.searchParams;
+        const limit = searchParams.get('limit') ? Number(searchParams.get('limit')) : 5;
+        const cursor = searchParams.get('cursor') ? Number(searchParams.get('cursor')) : null;
 
         const postService = new PostService();
         const posts = await postService.getHotPosts({ limit, cursor });

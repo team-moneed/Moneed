@@ -7,9 +7,10 @@ export const useSuspenseHotPosts = () => {
     const user = useUserStore(state => state.user);
     return useSuspenseInfiniteQuery({
         queryKey: ['hot-posts', user?.id],
-        queryFn: ({ pageParam = 0 }) => fetchHotPosts({ limit: 15, cursor: pageParam, userId: user?.id }),
-        getNextPageParam: lastPage => (lastPage.length > 0 ? lastPage[lastPage.length - 1].score : undefined),
-        initialPageParam: 0,
+        queryFn: ({ pageParam = null }) =>
+            fetchHotPosts({ limit: 15, cursor: pageParam ?? undefined, userId: user?.id }),
+        getNextPageParam: lastPage => (lastPage.length > 0 ? lastPage.at(-1)!.score : null),
+        initialPageParam: null as number | null,
         select: data => data.pages.flat(),
     });
 };
