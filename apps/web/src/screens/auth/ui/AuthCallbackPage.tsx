@@ -1,7 +1,7 @@
 'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { useTempCodeAuth } from '@/screens/auth/query/auth.query';
-import { setTokens } from '@/shared/utils/token';
+import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { PATH } from '@/shared/config';
 import useUserStore from '@/entities/user/model/user.store';
 import { useEffect } from 'react';
@@ -21,7 +21,7 @@ export default function AuthCallbackPage() {
             // 토큰들을 로컬스토리지와 쿠키에 저장
             const saveTokens = async () => {
                 try {
-                    await setTokens(access_token, refresh_token);
+                    await TokenUtils.setTokens(access_token, refresh_token);
                     setUser(payload);
 
                     // 성공 시 적절한 페이지로 리다이렉트

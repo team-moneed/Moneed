@@ -1,4 +1,4 @@
-import { getAccessToken, getRefreshToken } from '@/shared/utils/token';
+import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { useEffect, useState } from 'react';
 
 export const useAuth = () => {
@@ -6,8 +6,8 @@ export const useAuth = () => {
     const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
     useEffect(() => {
-        const accessTokenCookie = getAccessToken();
-        const refreshTokenCookie = getRefreshToken();
+        const accessTokenCookie = TokenUtils.getAccessToken();
+        const refreshTokenCookie = TokenUtils.getRefreshToken();
         setAccessToken(accessTokenCookie);
         setRefreshToken(refreshTokenCookie);
     }, []);

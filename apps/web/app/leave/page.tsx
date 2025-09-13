@@ -6,7 +6,7 @@ import { useMutation } from '@tanstack/react-query';
 import LeaveReasonDropdown from './LeaveReasonDropdown';
 import { useState } from 'react';
 import { LEAVE_REASON } from '@/shared/config/leaveReason';
-import { clearTokens } from '@/shared/utils/token';
+import { TokenUtils } from '@/shared/utils/tokenUtils';
 
 export default function Leave() {
     const [selectedReason, setSelectedReason] = useState(0);
@@ -14,7 +14,7 @@ export default function Leave() {
     const { mutate: leaveKakao } = useMutation({
         mutationFn: (reason: string) => leave({ provider: 'kakao', reason }),
         onSuccess: async () => {
-            await clearTokens();
+            await TokenUtils.clearTokens();
             window.location.href = `/?reason=${REASON_CODES.LEAVE}`;
         },
         onError: error => {

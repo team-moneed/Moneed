@@ -3,7 +3,7 @@ import { ERROR_MSG } from '@/shared/config/message';
 import axios, { AxiosRequestConfig } from 'axios';
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { refresh } from '@/features/auth/api';
-import { getAccessToken, getRefreshToken, clearTokens, setTokens } from '@/shared/utils/token';
+import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { REASON_CODES } from '@/shared/config/snackbar';
 import { PATH } from '../config';
 
@@ -51,7 +51,7 @@ class TokenManager {
      */
     private async performTokenRefresh(): Promise<string> {
         try {
-            const refreshToken = getRefreshToken();
+            const refreshToken = TokenUtils.getRefreshToken();
             if (!refreshToken) {
                 throw new Error(ERROR_MSG.NO_REFRESH_TOKEN);
             }
@@ -64,12 +64,12 @@ class TokenManager {
             const { access_token, refresh_token } = refreshResponse.data;
 
             // 새 토큰들을 로컬스토리지와 쿠키에 저장
-            await setTokens(access_token, refresh_token);
+            await TokenUtils.setTokens(access_token, refresh_token);
 
             return access_token;
         } catch (error) {
             // 토큰 갱신 실패 시 로그아웃 처리
-            await clearTokens();
+            await TokenUtils.clearTokens();
 
             if (typeof window !== 'undefined') {
                 window.location.href = `${PATH.ONBOARDING}?reason=${REASON_CODES.EXPIRED_SESSION}`;
@@ -166,7 +166,7 @@ const getAxiosInstance = (config: AxiosRequestConfig): AxiosInstance => {
     // 요청 인터셉터: 액세스 토큰을 헤더에 자동 추가
     instance.interceptors.request.use(
         (config: InternalAxiosRequestConfig) => {
-            const accessToken = getAccessToken();
+            const accessToken = TokenUtils.getAccessToken();
             if (accessToken) {
                 config.headers.Authorization = `Bearer ${accessToken}`;
             }

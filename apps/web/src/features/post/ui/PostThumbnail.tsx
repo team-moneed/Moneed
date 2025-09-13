@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation';
 import { Post } from '@/entities/post';
 import PostThumbnailCard from '@/entities/post/ui/PostThumbnailCard';
 import { useEffect, useState } from 'react';
-import { getAccessToken } from '@/shared/utils/token';
+import { TokenUtils } from '@/shared/utils/tokenUtils';
 import type { TokenPayload } from '@moneed/auth';
 import { DYNAMIC_PATH } from '@/shared/config';
 import { decodeJwt } from 'jose';
@@ -30,7 +30,7 @@ const PostThumbnail = ({ post }: { post: Post }) => {
     };
 
     useEffect(() => {
-        const accessToken = getAccessToken();
+        const accessToken = TokenUtils.getAccessToken();
         if (accessToken) {
             setDecodedToken(decodeJwt<TokenPayload>(accessToken));
         }

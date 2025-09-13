@@ -1,21 +1,21 @@
 import { KisTokenRepository } from '@/shared/server/kisToken.repository';
 import { getAccessToken, type KISAccessTokenResponse } from '@/features/stock/server';
-import { TokenUtils } from '@/shared/utils/token-utils';
+import { TokenUtils } from '@/shared/utils/kisTokenUtils';
 
 export class KISTokenService {
-    private serverTokenRepository: KisTokenRepository;
+    private kisTokenRepository: KisTokenRepository;
     private tokenRefreshPromise: Promise<KISAccessTokenResponse> | null = null;
 
     constructor() {
-        this.serverTokenRepository = new KisTokenRepository();
+        this.kisTokenRepository = new KisTokenRepository();
     }
 
     async getValidToken(): Promise<KISAccessTokenResponse> {
         // 데이터베이스에서 토큰 조회
-        const token = await this.serverTokenRepository.getKisToken();
+        const token = await this.kisTokenRepository.getKisToken();
 
         // 토큰이 없거나 만료된 경우 새로 발급
-        if (!token || (await this.serverTokenRepository.isTokenExpired(token))) {
+        if (!token || (await this.kisTokenRepository.isTokenExpired(token))) {
             return this.refreshToken();
         }
 
@@ -42,7 +42,7 @@ export class KISTokenService {
             const token = await getAccessToken();
 
             // 새 토큰을 데이터베이스에 저장
-            await this.serverTokenRepository.saveKisToken(token);
+            await this.kisTokenRepository.saveKisToken(token);
 
             TokenUtils.logTokenInfo(token, 'refreshed');
             return token;
@@ -53,6 +53,6 @@ export class KISTokenService {
     }
 
     async clearToken(): Promise<void> {
-        await this.serverTokenRepository.deleteKisToken();
+        await this.kisTokenRepository.deleteKisToken();
     }
 }

@@ -1,5 +1,5 @@
 import PostThumbnailCard from '@/entities/post/ui/PostThumbnailCard';
-import { getAccessToken } from '@/shared/utils/token';
+import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { EmblaOptionsType } from 'embla-carousel';
 import { useRouter } from 'next/navigation';
 import { decodeJwt } from 'jose';
@@ -28,7 +28,7 @@ export default function HotPostThumbnail({ post }: { post: Post }) {
     };
 
     useEffect(() => {
-        const accessToken = getAccessToken();
+        const accessToken = TokenUtils.getAccessToken();
         if (accessToken) {
             setDecodedToken(decodeJwt<TokenPayload>(accessToken));
         }

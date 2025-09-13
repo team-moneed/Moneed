@@ -19,9 +19,8 @@ export const getCookie = async (key: string) => {
  * 쿠키에서 액세스 토큰을 추출합니다.
  */
 async function getAccessTokenFromCookies(): Promise<string | undefined> {
-    const cookieStore = await cookies();
-    const tokenName = process.env.JWT_ACCESS_NAME || 'access_token';
-    return cookieStore.get(tokenName)?.value;
+    const tokenName = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+    return tokenName;
 }
 
 /**

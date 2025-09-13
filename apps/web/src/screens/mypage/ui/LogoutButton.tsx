@@ -3,7 +3,7 @@
 import { logout } from '@/features/auth/api';
 import { REASON_CODES } from '@/shared/config/snackbar';
 import useSnackbarStore from '@/shared/store/useSnackbarStore';
-import { clearTokens } from '@/shared/utils/token';
+import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { cn } from '@/shared/utils/style';
 import { useMutation } from '@tanstack/react-query';
 import useUserStore from '@/entities/user/model/user.store';
@@ -14,7 +14,7 @@ export default function LogoutButton() {
     const { mutate: mutateLogout, isPending } = useMutation({
         mutationFn: ({ provider }: { provider: 'kakao' }) => logout({ provider }),
         onSuccess: async () => {
-            await clearTokens();
+            await TokenUtils.clearTokens();
             clearUser();
             window.location.href = `/onboarding?reason=${REASON_CODES.LOGOUT}`;
         },

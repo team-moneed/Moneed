@@ -1,9 +1,9 @@
 import { prisma } from '@/shared/model';
 import type { KISAccessTokenResponse } from '@/features/stock/server';
-import { TokenUtils } from '@/shared/utils/token-utils';
+import { TokenUtils } from '@/shared/utils/kisTokenUtils';
 
 export class KisTokenRepository {
-    private readonly TOKEN_KEY = 'kis_access_token';
+    private readonly TOKEN_KEY = process.env.KIS_TOKEN_KEY || 'kis_access_token';
 
     async getKisToken(): Promise<KISAccessTokenResponse | null> {
         try {
