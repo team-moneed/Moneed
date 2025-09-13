@@ -1,4 +1,4 @@
-const Vote = ({ id }: { id: string }) => {
+export default function HotVote({ id }: { id: string }) {
     const title = '지금 핫한 투표';
     const standardDate =
         new Date().toLocaleDateString('ko-KR', {
@@ -21,6 +21,4 @@ const Vote = ({ id }: { id: string }) => {
             </div>
         </section>
     );
-};
-
-export default Vote;
+}

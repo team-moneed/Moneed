@@ -1,13 +1,14 @@
 'use client';
 
 import { useParams } from 'next/navigation';
-import { ChipLink } from '@/components/Chip';
-import Icon from '@/components/Icon';
+import { ChipLink } from '@/shared/ui/Chip';
+import Icon from '@/shared/ui/Icon';
 import Link from 'next/link';
-import { useInfiniteSelectedStocks } from '@/features/stock';
+import { useInfiniteMyStocks } from '@/features/user/query';
 import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
-import ChipSkeleton from '@/components/Skeletons/ChipSkeleton';
+import ChipSkeleton from '@/shared/ui/Skeletons/ChipSkeleton';
 import { useAuth } from '@/shared/hooks/useAuth';
+import { PATH } from '@/shared/config';
 
 function StockTypeBar() {
     const params = useParams();
@@ -19,7 +20,7 @@ function StockTypeBar() {
         fetchNextPage,
         hasNextPage,
         isFetchingNextPage,
-    } = useInfiniteSelectedStocks({ count: 10, enabled: !!accessToken });
+    } = useInfiniteMyStocks({ count: 10, enabled: !!accessToken });
 
     const ref = useIntersectionObserver({
         onIntersect: () => {
@@ -36,16 +37,16 @@ function StockTypeBar() {
     return (
         <div className='relative'>
             <div className='flex gap-4 mb-6 overflow-x-auto whitespace-nowrap items-center'>
-                <Link href='/selectstocktype' className='shrink-0'>
+                <Link href={PATH.SELECTSTOCKTYPE} className='shrink-0'>
                     <Icon iconUrl='/icon/icon-addcircle.svg' width={30} height={30} />
                 </Link>
-                <ChipLink label='전체' active={symbol ? false : true} href='/community' />
+                <ChipLink label='전체' active={symbol ? false : true} href={PATH.COMMUNITY} />
                 {stocks?.map(stock => (
                     <ChipLink
                         key={stock.symbol}
                         label={stock.nameKo}
                         active={symbol ? symbol === stock.symbol : false}
-                        href={`/community/${stock.symbol}`}
+                        href={`${PATH.COMMUNITY}/${stock.symbol}`}
                     />
                 ))}
                 {(isLoading || isFetchingNextPage) &&

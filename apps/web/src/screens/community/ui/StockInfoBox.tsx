@@ -1,11 +1,11 @@
 'use client';
 
 import type { Stock } from '@prisma/client';
-import { cn } from '@/utils/style';
+import { cn } from '@/shared/utils/style';
 import { ReactNode } from 'react';
-import StockInfoBoxSkeleton from '../Skeletons/StockInfoBoxSkeleton';
+import StockInfoBoxSkeleton from '../../../shared/ui/Skeletons/StockInfoBoxSkeleton';
 import { useSuspenseOverseasStockPrice } from '@/features/stock';
-import withSuspense from '@/components/HOC/withSuspense';
+import withSuspense from '@/shared/ui/withSuspense';
 
 type StockInfoProps = {
     infoBoxImgages?: string[] | string;

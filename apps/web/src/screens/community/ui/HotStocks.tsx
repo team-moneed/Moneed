@@ -1,7 +1,7 @@
 'use client';
-import CategoryRankBox from '@/components/Community/CategoryRankBox';
+import CategoryRankBox from '@/screens/community/ui/CategoryRankBox';
 import { useSuspenseHotStocks } from '@/features/stock';
-import withSuspense from '@/components/HOC/withSuspense';
+import withSuspense from '@/shared/ui/withSuspense';
 
 export function HotStocks() {
     const { data: hotStocks } = useSuspenseHotStocks({ market: 'NAS' });

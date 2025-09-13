@@ -1,15 +1,15 @@
 'use client';
 
-import PostThumbnailCard from '@/components/PostThumbnailCard';
-import { TopPostThumbnail } from '@/types/post';
+import PostThumbnailCard from '@/entities/post/ui/PostThumbnailCard';
+import { Post } from '@/entities/post';
 import { useRouter } from 'next/navigation';
+import { DYNAMIC_PATH } from '@/shared/config';
 
-const Top5Thumbnail = ({ posts }: { posts: TopPostThumbnail }) => {
-    const { user, content, title, createdAt, id, stock } = posts;
-    const { symbol } = stock;
+const Top5Thumbnail = ({ post }: { post: Post }) => {
+    const { author, content, title, createdAt, id } = post;
     const router = useRouter();
     const movetoDetail = () => {
-        router.push(`/community/${symbol}/posts/${id}`);
+        router.push(DYNAMIC_PATH.POST_DETAIL(id));
     };
     return (
         <PostThumbnailCard onClick={movetoDetail}>
@@ -18,7 +18,7 @@ const Top5Thumbnail = ({ posts }: { posts: TopPostThumbnail }) => {
                 <PostThumbnailCard.Content content={content} />
             </PostThumbnailCard.Body>
             <PostThumbnailCard.Footer>
-                <PostThumbnailCard.AuthorWithDate user={user} createdAt={new Date(createdAt)} />
+                <PostThumbnailCard.AuthorWithDate author={author} createdAt={new Date(createdAt)} />
             </PostThumbnailCard.Footer>
         </PostThumbnailCard>
     );

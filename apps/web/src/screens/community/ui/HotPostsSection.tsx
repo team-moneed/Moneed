@@ -2,7 +2,7 @@
 
 import dynamic from 'next/dynamic';
 
-const HotPosts = dynamic(() => import('./HotPosts'), { ssr: false });
+const HotPosts = dynamic(() => import('../../../features/post/ui/HotPosts'), { ssr: false });
 
 export default function HotPostsSection({ id }: { id: string }) {
     const title = '인기 급상승 게시글';

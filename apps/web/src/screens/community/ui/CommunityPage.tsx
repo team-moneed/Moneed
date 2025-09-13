@@ -1,10 +1,10 @@
-import HotStockSection from '@/app/community/HotStockSection';
-import CommunityTabNav from '@/app/community/CommunityTabNav';
-import Vote from './Vote';
+import HotStockSection from '@/screens/community/ui/HotStockSection';
+import CommunityTabNav from '@/screens/community/ui/CommunityTabNav';
 import HotPostsSection from './HotPostsSection';
 import Top5Section from './Top5Section';
-import { DesktopHeader, MobileHeader } from '@/components/Layout/Header';
+import { DesktopHeader, MobileHeader } from '@/shared/ui/Header';
 import StockTypeBar from './StockTypeBar';
+import HotVote from './HotVote';
 
 const hashObj = {
     top5: 'top5',
@@ -50,7 +50,7 @@ export default function CommunityPage() {
                 <CommunityTabNav tabs={communityTabs} />
                 <Top5Section id={hashObj.top5} />
                 <HotStockSection id={hashObj.category} />
-                <Vote id={hashObj.vote} />
+                <HotVote id={hashObj.vote} />
                 <HotPostsSection id={hashObj.hotPosts} />
             </div>
         </>

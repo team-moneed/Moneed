@@ -1,10 +1,10 @@
 'use client';
 
-import PostCarousel from '@/components/Carousel/PostCarousel';
+import PostCarousel from '@/shared/ui/Carousel/PostCarousel';
 import Top5Thumbnail from './Top5Thumbnail';
-import { useTopPosts } from '@/queries/posts.query';
-import PostThumbnailCarouselSkeleton from '@/components/Skeletons/community/PostThumbnailCarouselSkeleton';
-import withSuspense from '@/components/HOC/withSuspense';
+import { useTopPosts } from '@/features/post/query';
+import PostThumbnailCarouselSkeleton from '@/screens/community/ui/PostThumbnailCarouselSkeleton';
+import withSuspense from '@/shared/ui/withSuspense';
 
 function Top5() {
     const POSTOPTIONS = {
@@ -21,7 +21,7 @@ function Top5() {
         <PostCarousel options={POSTOPTIONS}>
             {topPosts.map(post => (
                 <div key={post.id} className='shrink-0 w-[calc(85%-1.6rem)] lg:w-[calc(50%+.8rem)]'>
-                    <Top5Thumbnail posts={post} />
+                    <Top5Thumbnail post={post} />
                 </div>
             ))}
         </PostCarousel>

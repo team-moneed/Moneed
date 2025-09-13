@@ -1,7 +1,7 @@
 'use client';
 import { useIntersectionObserver } from '@/shared/hooks/useIntersectionObserver';
-import PostThumbnail from '@/app/community/[symbol]/PostThumbnail';
-import { useInfinitePosts } from '@/queries/posts.query';
+import PostThumbnail from '@/features/post/ui/PostThumbnail';
+import { useInfinitePosts } from '@/features/post/query';
 
 type PostsProps = {
     symbol: string;

@@ -1,4 +1,4 @@
-export interface BoardRankResponse {
+export type CommunityDTO = {
     stockSymbol: string;
     symbol: string;
     stockName: string;
@@ -6,4 +6,4 @@ export interface BoardRankResponse {
     totalViews: number;
     totalLikes: number;
     totalComments: number;
-}
+};
