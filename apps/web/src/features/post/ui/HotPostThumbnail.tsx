@@ -1,11 +1,11 @@
 import PostThumbnailCard from '@/entities/post/ui/PostThumbnailCard';
-import { getToken } from '@/shared/utils/index.client';
+import { getAccessToken } from '@/shared/utils/token';
 import { EmblaOptionsType } from 'embla-carousel';
 import { useRouter } from 'next/navigation';
 import { decodeJwt } from 'jose';
 import type { TokenPayload } from '@moneed/auth';
 import { useEffect, useState } from 'react';
-import { DYNAMIC_PATH, TOKEN_KEY } from '@/shared/config';
+import { DYNAMIC_PATH } from '@/shared/config';
 import { Post } from '@/entities/post';
 import { usePostComments } from '../query';
 
@@ -28,7 +28,7 @@ export default function HotPostThumbnail({ post }: { post: Post }) {
     };
 
     useEffect(() => {
-        const accessToken = getToken(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = getAccessToken();
         if (accessToken) {
             setDecodedToken(decodeJwt<TokenPayload>(accessToken));
         }

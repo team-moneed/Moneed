@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation';
 import { Post } from '@/entities/post';
 import PostThumbnailCard from '@/entities/post/ui/PostThumbnailCard';
 import { useEffect, useState } from 'react';
-import { getToken } from '@/shared/utils/index.client';
+import { getAccessToken } from '@/shared/utils/token';
 import type { TokenPayload } from '@moneed/auth';
-import { TOKEN_KEY, DYNAMIC_PATH } from '@/shared/config';
+import { DYNAMIC_PATH } from '@/shared/config';
 import { decodeJwt } from 'jose';
 import { usePostComments } from '../query';
 
@@ -30,7 +30,7 @@ const PostThumbnail = ({ post }: { post: Post }) => {
     };
 
     useEffect(() => {
-        const accessToken = getToken(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = getAccessToken();
         if (accessToken) {
             setDecodedToken(decodeJwt<TokenPayload>(accessToken));
         }
