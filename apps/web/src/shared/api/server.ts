@@ -1,6 +1,6 @@
 import axios from 'axios';
 import 'server-only';
-import { KISTokenService } from '@/services/kis-token.service';
+import { KISTokenService } from '@/shared/server/kisToken.service';
 import { AxiosError } from 'axios';
 
 const kisTokenService = new KISTokenService();

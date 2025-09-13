@@ -1,43 +1,25 @@
 import 'server-only';
-import { ERROR_MSG, verifyToken } from '@moneed/auth';
+import { ERROR_MSG, SessionResult, verifyToken } from '@moneed/auth';
 import { cookies } from 'next/headers';
-import { ResponseError } from '@moneed/utils';
-import { TokenPayload } from '@moneed/auth';
 
-export function assertAccessTokenPayload(payload: TokenPayload | undefined): asserts payload is TokenPayload {
-    if (!payload) {
-        throw new ResponseError(401, ERROR_MSG.UNAUTHORIZED);
-    }
-}
-
-export const getServerSideCookie = async (key: string) => {
+export const getCookie = async (key: string) => {
     const cookieStore = await cookies();
     return cookieStore.get(key)?.value;
 };
 
-// refreshToken 은 proxy server 에서 검증
-export async function verifyRequestCookies() {
-    const cookieStore = await cookies();
-    const accessToken = cookieStore.get(process.env.JWT_ACCESS_NAME || 'access_token')?.value;
+/**
+ * 요청 쿠키를 검증하고 토큰 정보를 반환합니다.
+ * 단일 책임: 전체 인증 플로우 조합 및 관리
+ */
+export async function verifyRequestCookies(): Promise<SessionResult> {
+    const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
 
     if (!accessToken) {
         return {
-            accessToken: undefined,
-            accessTokenPayload: undefined,
+            data: null,
+            error: new Error(ERROR_MSG.NO_ACCESS_TOKEN),
         };
     }
 
-    const accessTokenResult = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET || '' });
-    if (accessTokenResult.isExpired) {
-        throw new ResponseError(401, ERROR_MSG.ACCESS_TOKEN_EXPIRED);
-    }
-
-    if (accessTokenResult.isInvalid) {
-        throw new ResponseError(401, ERROR_MSG.ACCESS_TOKEN_INVALID);
-    }
-
-    return {
-        accessToken: accessToken as string,
-        accessTokenPayload: accessTokenResult.payload as TokenPayload,
-    };
+    return await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET! });
 }

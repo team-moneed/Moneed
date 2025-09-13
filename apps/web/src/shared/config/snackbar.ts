@@ -1,4 +1,4 @@
-import { SnackbarConfig } from '@/types/snackbar';
+import { SnackbarConfig } from '@/shared/model/snackbar.type';
 
 export const REASON_CODES = {
     LOGGED_IN: 'logged_in',
