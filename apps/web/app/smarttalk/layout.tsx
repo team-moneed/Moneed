@@ -1,4 +1,4 @@
-import { BackNotificationHeader } from '@/components/Layout/Header';
+import { BackNotificationHeader } from '@/shared/ui/Header';
 
 export default function SmartTalkLayout({ children }: { children: React.ReactNode }) {
     return (

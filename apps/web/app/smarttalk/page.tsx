@@ -1,5 +1,5 @@
 'use client';
-import FillHeartIcon from '@/components/Icons/FillHeartIcon';
+import FillHeartIcon from '@/screens/smarttalk/ui/FillHeartIcon';
 import { useState } from 'react';
 
 const SmartTalkCardDatas = [

@@ -1,4 +1,4 @@
-import { SnackbarTrigger } from '@/components/Snackbar';
+import { SnackbarTrigger } from '@/shared/ui/Snackbar';
 import KakaoLoginButton from './KakaoLoginButton';
 
 export default async function Onboarding({ searchParams }: { searchParams: Promise<{ reason: string }> }) {

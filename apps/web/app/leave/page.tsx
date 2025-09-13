@@ -1,12 +1,12 @@
 'use client';
-import { leave } from '@/apis/auth.api';
+import { leave } from '@/features/auth/api';
 import { REASON_CODES } from '@/shared/config/snackbar';
 import Button from '@/shared/ui/Button';
 import { useMutation } from '@tanstack/react-query';
 import LeaveReasonDropdown from './LeaveReasonDropdown';
 import { useState } from 'react';
 import { LEAVE_REASON } from '@/shared/config/leaveReason';
-import { clearTokens } from '@/utils/localStorage.browser';
+import { clearTokens } from '@/shared/utils/token';
 
 export default function Leave() {
     const [selectedReason, setSelectedReason] = useState(0);
