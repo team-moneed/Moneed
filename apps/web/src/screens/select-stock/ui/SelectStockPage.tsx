@@ -1,11 +1,14 @@
 import { getHotStocks, getSelectedStockSymbols } from '@/features/stock';
 import { SelectStockClientPage } from './SelectStockClientPage';
+import { PATH } from '@/shared/config';
 
 export default async function SelectStockPage({ searchParams }: { searchParams: Promise<{ url: string }> }) {
     const { url } = await searchParams;
 
     // Server Actions 호출
-    const stocks = await getHotStocks({ count: 20 });
+    const nasStocks = await getHotStocks({ count: 15, market: 'NAS' });
+    const nysStocks = await getHotStocks({ count: 15, market: 'NYS' });
+    const stocks = [...nasStocks, ...nysStocks].sort((a, b) => b.price - a.price);
     const selectedStocksResult = await getSelectedStockSymbols();
 
     // 401 에러가 아닌 경우에만 선택된 주식 목록 사용
@@ -16,7 +19,7 @@ export default async function SelectStockPage({ searchParams }: { searchParams: 
         <SelectStockClientPage
             stocks={stocks}
             mySelectedStockSymbols={mySelectedStockSymbols}
-            redirectUrl={url || '/'}
+            redirectUrl={url || PATH.HOME}
         />
     );
 }

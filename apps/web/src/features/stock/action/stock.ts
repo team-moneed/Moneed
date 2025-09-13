@@ -2,19 +2,20 @@
 
 import { getOverseasStockByCondition } from '@/features/stock/server';
 import { StockService } from '@/features/stock/server';
-import { verifyRequestCookies } from '@/shared/utils/server';
+import { verifyRequestCookies } from '@/shared/utils/index.server';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
+import { MarketCode } from '@/entities/stock';
 /**
  * 시가총액 상위 주식 조회
  * @param param0 count: 조회할 주식 개수 (최대 100개)
  * @returns 시가총액 상위 주식 목록
  */
-export const getHotStocks = async ({ count }: { count: number }) => {
+export const getHotStocks = async ({ count, market }: { count: number; market: MarketCode }) => {
     const data = await getOverseasStockByCondition({
-        market: 'NAS',
+        market,
         params: {
             CO_YN_VALX: '1', // 시가총액 조건 사용 여부 (1: 사용, 0: 사용안함)
             CO_ST_VALX: String(0), // 시가총액 시작값 (단위: 천$) -> 500억$

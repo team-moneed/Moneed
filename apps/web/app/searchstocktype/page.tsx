@@ -1,16 +1,17 @@
 'use client';
-import MyStockBox from '@/components/Mypage/MyStockBox';
+import MyStockBox from '@/screens/mypage/ui/MyStockBox';
 import { useState } from 'react';
 import Hangul from 'hangul-js';
-import { useSelectedStocks } from '@/features/stock';
+import { useMyStocks } from '@/features/user/query';
 import { useAuth } from '@/shared/hooks/useAuth';
+import { PATH } from '@/shared/config';
 
 export const dynamic = 'force-dynamic';
 
 function SearchStockTypeContent() {
     const [searchStockType, setsearchStockType] = useState('');
     const { accessToken } = useAuth();
-    const { data: stocks = [], isLoading, error } = useSelectedStocks({ accessToken: !!accessToken });
+    const { data: stocks = [], isLoading, error } = useMyStocks({ accessToken: !!accessToken });
 
     const getInitialConsonant = (str: string) => {
         return Hangul.d(str)
@@ -64,7 +65,7 @@ function SearchStockTypeContent() {
                         <MyStockBox
                             key={stock.symbol}
                             stock={stock}
-                            href={`/writepost?symbol=${stock.symbol}&stockName=${stock.nameKo}`}
+                            href={`${PATH.WRITEPOST}?symbol=${stock.symbol}&stockName=${stock.nameKo}`}
                         />
                     ))}
                 </div>
