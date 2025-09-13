@@ -1,9 +1,9 @@
 import { useRef, useState } from 'react';
-import useSnackbarStore from '@/store/useSnackbarStore';
-import { createComment, updateComment } from '@/apis/comment.api';
-import { queryClient } from '@/components/QueryClientProvider';
+import useSnackbarStore from '@/shared/store/useSnackbarStore';
+import { createComment, updateComment } from '@/features/comment/api/comment.api';
+import { queryClient } from '@/app/provider/QueryClientProvider';
 import { useMutation } from '@tanstack/react-query';
-import { useCommentStore } from '@/store/useCommentStore';
+import { useCommentStore } from '@/shared/store/useCommentStore';
 
 type CommentFormProps = {
     postId: number;

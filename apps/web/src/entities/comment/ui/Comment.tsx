@@ -1,11 +1,11 @@
 'use client';
 
 import { useEffect, useState } from 'react';
-import { PrimaryDropdown, PrimaryDropdownProps } from '@/components/Dropdown';
+import { PrimaryDropdown, PrimaryDropdownProps } from '@/shared/ui/Dropdown';
 import Image from 'next/image';
-import { Comment as TComment } from '@/types/post';
-import DateFormatter from '../Dateformatter';
-import { getCookie } from '@/shared/utils/cookie.browser';
+import { Comment as TComment } from '@/entities/comment';
+import DateFormatter from '@/shared/ui/Dateformatter';
+import { getToken } from '@/shared/utils/cookie.browser';
 import { decodeJwt } from 'jose';
 import type { TokenPayload } from '@moneed/auth';
 import { TOKEN_KEY } from '@/shared/config/token';
@@ -34,7 +34,7 @@ const Comment = ({ comment, actions }: CommentType) => {
     };
 
     useEffect(() => {
-        const accessToken = getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = getToken(TOKEN_KEY.ACCESS_TOKEN);
         if (accessToken) {
             setDecodedToken(decodeJwt<TokenPayload>(accessToken));
         }

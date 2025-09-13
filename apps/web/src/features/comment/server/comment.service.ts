@@ -1,10 +1,10 @@
-import CommentRepository from '@/repositories/comment.repository';
+import { CommentRepository } from '@/entities/comment/server';
 
-export default class CommentService {
+export class CommentService {
     private commentRepository = new CommentRepository();
 
-    async getUserComments({ userId }: { userId: string }) {
-        const comments = await this.commentRepository.getUserComments({ userId });
+    async getPostComments({ postId, limit, cursor }: { postId: number; limit?: number; cursor?: Date }) {
+        const comments = await this.commentRepository.getPostComments({ postId, limit, cursor });
         return comments;
     }
 

@@ -1,18 +1,18 @@
 import type { Comment, User, Post, Stock } from '@prisma/client';
 
-export type CommentDeleteResponse = {
+export type CommentDeleteDTO = {
     message: string;
 };
 
-export type CommentUpdateResponse = {
+export type CommentUpdateDTO = {
     message: string;
 };
 
-export type CommentCreateResponse = {
+export type CommentCreateDTO = {
     message: string;
 };
 
-export type CommentWithUser = Comment & {
+export type CommentWithUserDTO = Comment & {
     user: User;
     post: Post & {
         stock: Stock;
