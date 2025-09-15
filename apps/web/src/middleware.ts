@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { REASON_CODES } from './shared/config/snackbar';
 import { verifyToken } from '@moneed/auth';
-import { PATH } from './shared/config';
+import { PATH, TOKEN_KEY } from './shared/config';
 import { REGEXP_PATH } from './shared/config/path';
 
 const protectedRoutes = [
@@ -21,7 +21,7 @@ export async function middleware(req: NextRequest) {
     const path = req.nextUrl.pathname;
     const isProtectedRoute = protectedRoutes.some(route => route.test(path));
     const isGuestOnlyRoute = guestOnlyRoutes.some(route => route.test(path));
-    const accessToken = req.cookies.get(process.env.JWT_ACCESS_NAME || 'access_token')?.value || '';
+    const accessToken = req.cookies.get(TOKEN_KEY.ACCESS_TOKEN)?.value || '';
 
     const session = await verifyToken({ jwt: accessToken, key: process.env.SESSION_SECRET || '' });
 

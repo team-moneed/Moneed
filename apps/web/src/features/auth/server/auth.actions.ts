@@ -1,8 +1,6 @@
 'use server';
 import { cookies } from 'next/headers';
-
-const ACCESS_TOKEN_NAME = process.env.JWT_ACCESS_NAME || 'access_token';
-const REFRESH_TOKEN_NAME = process.env.JWT_REFRESH_NAME || 'refresh_token';
+import { TOKEN_KEY } from '@/shared/config';
 
 /**
  * 서버 액션: 토큰들을 쿠키에 저장
@@ -10,7 +8,7 @@ const REFRESH_TOKEN_NAME = process.env.JWT_REFRESH_NAME || 'refresh_token';
 export async function setTokensInCookies(accessToken: string, refreshToken: string) {
     const cookieStore = await cookies();
 
-    cookieStore.set(ACCESS_TOKEN_NAME, accessToken, {
+    cookieStore.set(TOKEN_KEY.ACCESS_TOKEN, accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
@@ -18,7 +16,7 @@ export async function setTokensInCookies(accessToken: string, refreshToken: stri
         maxAge: 24 * 60 * 60, // 24시간
     });
 
-    cookieStore.set(REFRESH_TOKEN_NAME, refreshToken, {
+    cookieStore.set(TOKEN_KEY.REFRESH_TOKEN, refreshToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',
@@ -33,8 +31,8 @@ export async function setTokensInCookies(accessToken: string, refreshToken: stri
 export async function clearTokensFromCookies() {
     const cookieStore = await cookies();
 
-    cookieStore.delete(ACCESS_TOKEN_NAME);
-    cookieStore.delete(REFRESH_TOKEN_NAME);
+    cookieStore.delete(TOKEN_KEY.ACCESS_TOKEN);
+    cookieStore.delete(TOKEN_KEY.REFRESH_TOKEN);
 }
 
 /**
@@ -43,7 +41,7 @@ export async function clearTokensFromCookies() {
 export async function updateAccessTokenInCookies(accessToken: string) {
     const cookieStore = await cookies();
 
-    cookieStore.set(ACCESS_TOKEN_NAME, accessToken, {
+    cookieStore.set(TOKEN_KEY.ACCESS_TOKEN, accessToken, {
         httpOnly: true,
         secure: process.env.NODE_ENV === 'production',
         sameSite: 'lax',

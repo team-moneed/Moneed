@@ -5,12 +5,13 @@ import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
 import { verifyToken } from '@moneed/auth';
 import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
+import { TOKEN_KEY } from '@/shared/config';
 
 export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
     try {
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

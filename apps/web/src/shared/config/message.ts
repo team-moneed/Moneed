@@ -21,6 +21,7 @@ export const ERROR_MSG = {
     TOKEN_REFRESH_FAILED: '토큰 갱신 실패',
     NO_REFRESH_TOKEN: '리프레시 토큰이 없습니다',
     POST_ID_REQUIRED: 'postId가 필요합니다',
+    NO_TOKEN: '토큰이 존재하지않습니다',
 } as const;
 
 export const SUCCESS_MSG = {

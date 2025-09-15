@@ -5,6 +5,7 @@ import {
 } from '@/features/auth/server/auth.actions';
 import { DecodedToken } from '@moneed/auth';
 import { decodeJwt } from 'jose';
+import { ERROR_MSG } from '../config';
 
 const ACCESS_TOKEN_KEY = process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token';
 const REFRESH_TOKEN_KEY = process.env.NEXT_PUBLIC_JWT_REFRESH_NAME || 'refresh_token';
@@ -30,23 +31,11 @@ export class TokenUtils {
         }
     };
 
-    /**
-     * 로컬스토리지에서 액세스 토큰 조회
-     */
-    static getAccessToken = (): string | null => {
-        if (typeof window === 'undefined') return null;
-
-        return localStorage.getItem(ACCESS_TOKEN_KEY);
-    };
-
-    /**
-     * 로컬스토리지에서 리프레쉬 토큰 조회
-     */
-    static getRefreshToken = (): string | null => {
-        if (typeof window === 'undefined') return null;
-
-        return localStorage.getItem(REFRESH_TOKEN_KEY);
-    };
+    static getToken(key: string) {
+        const token = localStorage.getItem(key);
+        if (!token) throw new Error(ERROR_MSG.NO_TOKEN);
+        return token;
+    }
 
     /**
      * 모든 토큰을 로컬스토리지와 쿠키에서 삭제 (로그아웃)
@@ -71,7 +60,7 @@ export class TokenUtils {
      * 토큰 디코딩
      */
     static decodeToken = (token?: string): DecodedToken | null => {
-        const accessToken = token || TokenUtils.getAccessToken();
+        const accessToken = token || TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
         if (!accessToken) return null;
 
         try {
@@ -97,7 +86,7 @@ export class TokenUtils {
      * 유효한 액세스 토큰이 있는지 확인
      */
     static hasValidAccessToken = (): boolean => {
-        const accessToken = TokenUtils.getAccessToken();
+        const accessToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
         if (!accessToken) return false;
 
         return !TokenUtils.isTokenExpired(accessToken);

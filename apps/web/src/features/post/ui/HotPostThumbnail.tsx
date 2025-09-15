@@ -28,7 +28,7 @@ export default function HotPostThumbnail({ post }: { post: Post }) {
     };
 
     useEffect(() => {
-        const accessToken = TokenUtils.getAccessToken();
+        const accessToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
         if (accessToken) {
             setDecodedToken(decodeJwt<TokenPayload>(accessToken));
         }

@@ -51,7 +51,7 @@ class TokenManager {
      */
     private async performTokenRefresh(): Promise<string> {
         try {
-            const refreshToken = TokenUtils.getRefreshToken();
+            const refreshToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_REFRESH_NAME || 'refresh_token');
             if (!refreshToken) {
                 throw new Error(ERROR_MSG.NO_REFRESH_TOKEN);
             }
@@ -166,7 +166,7 @@ const getAxiosInstance = (config: AxiosRequestConfig): AxiosInstance => {
     // 요청 인터셉터: 액세스 토큰을 헤더에 자동 추가
     instance.interceptors.request.use(
         (config: InternalAxiosRequestConfig) => {
-            const accessToken = TokenUtils.getAccessToken();
+            const accessToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
             if (accessToken) {
                 config.headers.Authorization = `Bearer ${accessToken}`;
             }

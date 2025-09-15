@@ -5,11 +5,12 @@ import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
 import { verifyToken } from '@moneed/auth';
 import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
+import { TOKEN_KEY } from '@/shared/config';
 
 export async function deleteComment(_: NextRequest, { params }: { params: Promise<{ commentId: string }> }) {
     try {
         const { commentId } = await params;
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -35,7 +36,7 @@ export async function updateComment(req: NextRequest, { params }: { params: Prom
     try {
         const { commentId } = await params;
         const { content } = (await req.json()) as { content: string };
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -78,7 +79,7 @@ export async function getPostComments(req: NextRequest) {
 export async function createComment(req: NextRequest) {
     try {
         const { postId, content } = await req.json();
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

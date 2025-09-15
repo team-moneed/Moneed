@@ -6,8 +6,8 @@ export const useAuth = () => {
     const [refreshToken, setRefreshToken] = useState<string | null>(null);
 
     useEffect(() => {
-        const accessTokenCookie = TokenUtils.getAccessToken();
-        const refreshTokenCookie = TokenUtils.getRefreshToken();
+        const accessTokenCookie = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
+        const refreshTokenCookie = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_REFRESH_NAME || 'refresh_token');
         setAccessToken(accessTokenCookie);
         setRefreshToken(refreshTokenCookie);
     }, []);

@@ -10,6 +10,7 @@ import { revalidatePath } from 'next/cache';
 import { MarketCode } from '@/entities/stock';
 import { verifyToken } from '@moneed/auth';
 import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
+import { TOKEN_KEY } from '@/shared/config';
 
 /**
  * 시가총액 상위 주식 조회
@@ -42,7 +43,7 @@ export const getSelectedStockSymbols = async (): Promise<
     | { success: false; data: null; error: { message: string; status: number } }
 > => {
     try {
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -98,7 +99,7 @@ export const selectStockAction = async (
 > => {
     let success = false;
     try {
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

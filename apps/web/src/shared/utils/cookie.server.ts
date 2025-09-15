@@ -1,6 +1,7 @@
 import 'server-only';
 import { ERROR_MSG, SessionResult, verifyToken } from '@moneed/auth';
 import { cookies } from 'next/headers';
+import { TOKEN_KEY } from '../config';
 
 export const getCookie = async (key: string) => {
     const cookieStore = await cookies();
@@ -12,7 +13,7 @@ export const getCookie = async (key: string) => {
  * 단일 책임: 전체 인증 플로우 조합 및 관리
  */
 export async function verifyRequestCookies(): Promise<SessionResult> {
-    const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+    const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
 
     if (!accessToken) {
         return {

@@ -6,6 +6,7 @@ import { DesktopHeader } from '@/shared/ui/Header';
 import { verifyToken } from '@moneed/auth';
 import { getCookie } from '@/shared/utils/cookie.server';
 import { MobileHeader } from './MobileHeader';
+import { TOKEN_KEY } from '@/shared/config';
 
 export default async function PostDetail({
     params,
@@ -16,7 +17,7 @@ export default async function PostDetail({
 }) {
     const { postId } = await params;
     const { reason } = await searchParams;
-    const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+    const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
     const sessionResult = await verifyToken({ jwt: accessToken ?? '', key: process.env.SESSION_SECRET! });
     const userId = sessionResult.data?.id;
     const post = await fetchPost({ postId: Number(postId), userId });
