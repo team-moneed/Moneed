@@ -25,7 +25,7 @@ export const refresh = async ({ provider, refreshToken }: { provider: Providers;
             },
         },
     );
-    return res;
+    return res.data;
 };
 
 export const exchangeTempCode = async ({ tempCode }: { tempCode: string }) => {
