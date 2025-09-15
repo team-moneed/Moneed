@@ -3,6 +3,7 @@ import { ERROR_MSG } from '@/shared/config/message';
 import axios, { AxiosRequestConfig } from 'axios';
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { TokenUtils } from '@/shared/utils/tokenUtils';
+import { TOKEN_KEY } from '../config';
 
 const moneedBaseConfig = {
     withCredentials: true,
@@ -26,7 +27,8 @@ const getAxiosInstance = (config: AxiosRequestConfig): AxiosInstance => {
     // 요청 인터셉터: 액세스 토큰을 헤더에 자동 추가
     instance.interceptors.request.use(
         (config: InternalAxiosRequestConfig) => {
-            const accessToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
+            if (typeof window === 'undefined') return config;
+            const accessToken = TokenUtils.getToken(TOKEN_KEY.ACCESS_TOKEN);
             if (accessToken) {
                 config.headers.Authorization = `Bearer ${accessToken}`;
             }

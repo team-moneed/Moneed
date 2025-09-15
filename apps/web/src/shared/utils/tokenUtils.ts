@@ -34,9 +34,9 @@ export class TokenUtils {
     };
 
     static getToken(key: string) {
-        const token = localStorage.getItem(key);
-        if (!token) throw new Error(ERROR_MSG.NO_TOKEN);
-        return token;
+        if (typeof window === 'undefined') return null;
+
+        return localStorage.getItem(key);
     }
 
     /**
