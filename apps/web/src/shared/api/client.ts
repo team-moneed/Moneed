@@ -4,6 +4,7 @@ import axios, { AxiosRequestConfig } from 'axios';
 import { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } from 'axios';
 import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { TOKEN_KEY } from '../config';
+import useUserStore from '@/entities/user/model/user.store';
 
 const moneedBaseConfig = {
     withCredentials: true,
@@ -55,6 +56,7 @@ const getAxiosInstance = (config: AxiosRequestConfig): AxiosInstance => {
                     return instance.request(originalRequest);
                 } catch (retryError) {
                     console.error(ERROR_MSG.TOKEN_REFRESH_FAILED, retryError);
+                    useUserStore.getState().clearUser();
                     window.location.href = `/onboarding?reason=${REASON_CODES.EXPIRED_SESSION}`;
                 }
             }
