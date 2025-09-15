@@ -5,12 +5,14 @@ import {
 } from '@/features/auth/server/auth.actions';
 import { DecodedToken } from '@moneed/auth';
 import { decodeJwt } from 'jose';
-import { ERROR_MSG } from '../config';
-
-const ACCESS_TOKEN_KEY = process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token';
-const REFRESH_TOKEN_KEY = process.env.NEXT_PUBLIC_JWT_REFRESH_NAME || 'refresh_token';
+import { ERROR_MSG, TOKEN_KEY } from '../config';
+import { refresh } from '@/features/auth/api';
 
 export class TokenUtils {
+    private static tokenPromise: Promise<{ access_token: string; refresh_token: string }> | null = null;
+    private static refreshAttempts = 0;
+    private static maxRefreshAttempts = 3;
+
     /**
      * 액세스 토큰과 리프레쉬 토큰을 로컬스토리지와 쿠키에 저장
      */
@@ -18,8 +20,8 @@ export class TokenUtils {
         if (typeof window === 'undefined') return;
 
         // 로컬스토리지에 저장
-        localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
-        localStorage.setItem(REFRESH_TOKEN_KEY, refreshToken);
+        localStorage.setItem(TOKEN_KEY.ACCESS_TOKEN, accessToken);
+        localStorage.setItem(TOKEN_KEY.REFRESH_TOKEN, refreshToken);
         console.log('로컬스토리지 저장 성공');
 
         // 서버 액션으로 쿠키에도 저장
@@ -32,9 +34,9 @@ export class TokenUtils {
     };
 
     static getToken(key: string) {
-        const token = localStorage.getItem(key);
-        if (!token) throw new Error(ERROR_MSG.NO_TOKEN);
-        return token;
+        if (typeof window === 'undefined') return null;
+
+        return localStorage.getItem(key);
     }
 
     /**
@@ -44,8 +46,8 @@ export class TokenUtils {
         if (typeof window === 'undefined') return;
 
         // 로컬스토리지에서 삭제
-        localStorage.removeItem(ACCESS_TOKEN_KEY);
-        localStorage.removeItem(REFRESH_TOKEN_KEY);
+        localStorage.removeItem(TOKEN_KEY.ACCESS_TOKEN);
+        localStorage.removeItem(TOKEN_KEY.REFRESH_TOKEN);
 
         // 서버 액션으로 쿠키에서도 삭제
         try {
@@ -60,7 +62,7 @@ export class TokenUtils {
      * 토큰 디코딩
      */
     static decodeToken = (token?: string): DecodedToken | null => {
-        const accessToken = token || TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
+        const accessToken = token || TokenUtils.getToken(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) return null;
 
         try {
@@ -86,7 +88,7 @@ export class TokenUtils {
      * 유효한 액세스 토큰이 있는지 확인
      */
     static hasValidAccessToken = (): boolean => {
-        const accessToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
+        const accessToken = TokenUtils.getToken(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) return false;
 
         return !TokenUtils.isTokenExpired(accessToken);
@@ -106,7 +108,7 @@ export class TokenUtils {
         if (typeof window === 'undefined') return;
 
         // 로컬스토리지 업데이트
-        localStorage.setItem(ACCESS_TOKEN_KEY, accessToken);
+        localStorage.setItem(TOKEN_KEY.ACCESS_TOKEN, accessToken);
 
         // 서버 액션으로 쿠키도 업데이트
         try {
@@ -115,4 +117,37 @@ export class TokenUtils {
             console.warn('쿠키 업데이트 실패:', error);
         }
     };
+
+    static refreshToken(): Promise<{
+        access_token: string;
+        refresh_token: string;
+    }> {
+        if (TokenUtils.refreshAttempts >= TokenUtils.maxRefreshAttempts) {
+            throw new Error('세션 갱신 실패');
+        }
+
+        if (TokenUtils.tokenPromise) {
+            return TokenUtils.tokenPromise;
+        }
+
+        TokenUtils.refreshAttempts++;
+        TokenUtils.tokenPromise = refresh({
+            provider: 'kakao',
+            refreshToken: TokenUtils.getToken(TOKEN_KEY.REFRESH_TOKEN),
+        })
+            .then(({ access_token, refresh_token }) => {
+                TokenUtils.setTokens(access_token, refresh_token);
+                TokenUtils.refreshAttempts = 0;
+                return { access_token, refresh_token };
+            })
+            .catch(error => {
+                TokenUtils.clearTokens();
+                throw error;
+            })
+            .finally(() => {
+                TokenUtils.tokenPromise = null;
+            });
+
+        return TokenUtils.tokenPromise;
+    }
 }
