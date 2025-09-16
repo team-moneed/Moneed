@@ -1,5 +1,9 @@
 import { Suspense } from 'react';
 
-export default function CommunityLayout({ children }: { children: React.ReactNode }) {
-    return <Suspense>{children}</Suspense>;
+export default function CommunityStockLayout({ children }: { children: React.ReactNode }) {
+    return (
+        <>
+            <Suspense>{children}</Suspense>
+        </>
+    );
 }

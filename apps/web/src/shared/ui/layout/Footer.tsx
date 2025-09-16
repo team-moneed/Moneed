@@ -5,10 +5,10 @@ import { cn } from '@/shared/utils/style';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
 import { useState } from 'react';
-import { URL } from '../config/url';
-import { REGEXP_PATH } from '../config/path';
+import { URL } from '@/shared/config/url';
+import { REGEXP_PATH } from '@/shared/config/path';
 
-const Footer = () => {
+export default function Footer() {
     const pathname = usePathname();
     const [isOpen, setIsOpen] = useState(false);
 
@@ -87,6 +87,4 @@ const Footer = () => {
             </div>
         </footer>
     );
-};
-
-export default Footer;
+}
