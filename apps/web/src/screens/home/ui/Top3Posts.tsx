@@ -16,7 +16,7 @@ export default function Top3Posts({ selectedStock }: { selectedStock: CommunityD
     };
 
     return (
-        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-[.6rem] gap-x-[1.6rem] mt-4 md:gap-y-[1.2rem]'>
+        <div className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-x-[1.6rem]'>
             {postsWithUser.map(post => (
                 <PostThumbnailCard key={post.id} onClick={() => moveToDetail(post.id)}>
                     <PostThumbnailCard.Body>

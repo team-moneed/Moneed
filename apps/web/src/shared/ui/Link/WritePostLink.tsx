@@ -1,5 +1,5 @@
 import { PATH } from '@/shared/config';
-import ButtonLink from '../ButtonLink';
+import ButtonLink from './ButtonLink';
 
 export default function WritePostLink() {
     return (
