@@ -1,3 +1,12 @@
+import Footer from '@/shared/ui/layout/Footer';
+import RootNav from '@/shared/ui/layout/RootNav';
+
 export default async function PostDetailLayout({ children }: { children: React.ReactNode }) {
-    return <div className='max-w-512 mx-auto px-8'>{children}</div>;
+    return (
+        <>
+            <RootNav />
+            {children}
+            <Footer />
+        </>
+    );
 }

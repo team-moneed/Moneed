@@ -9,7 +9,7 @@ export default function RandomNickname() {
     const [nickname, setNickname] = useState<string>('');
 
     useEffect(() => {
-        const accessToken = TokenUtils.getAccessToken();
+        const accessToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
         if (!accessToken) {
             return;
         }

@@ -1,8 +1,8 @@
 import { NextRequest, NextResponse } from 'next/server';
-import { REASON_CODES } from './shared/config/snackbar';
+import { REASON_CODES } from './src/shared/config/snackbar';
 import { verifyToken } from '@moneed/auth';
-import { PATH, TOKEN_KEY } from './shared/config';
-import { REGEXP_PATH } from './shared/config/path';
+import { PATH, TOKEN_KEY } from './src/shared/config';
+import { REGEXP_PATH } from './src/shared/config/path';
 
 const protectedRoutes = [
     REGEXP_PATH.MYPAGE,

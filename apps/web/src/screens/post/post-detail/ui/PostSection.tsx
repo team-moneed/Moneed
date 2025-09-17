@@ -37,14 +37,14 @@ export default function PostSection({ post, commentsCount }: PostSectionProps) {
     ];
 
     return (
-        <div className='lg:w-[60%] lg:border lg:border-moneed-gray-4 rounded-[1.2rem] lg:p-8'>
+        <div className='sm:w-[60%] sm:border sm:border-moneed-gray-4 rounded-[1.2rem] sm:p-8'>
             <div className='pb-[1.3rem] pt-[1.4rem]'>
                 <div className='flex items-center justify-between'>
-                    <div className='flex items-center gap-[.6rem] lg:gap-[.8rem]'>
+                    <div className='flex items-center gap-[.6rem] sm:gap-[.8rem]'>
                         <Image
                             src={author.profileImage}
                             alt='profile'
-                            className='rounded-full size-[2.4rem] lg:size-[3.2rem]'
+                            className='rounded-full size-[2.4rem] sm:size-[3.2rem]'
                             width={32}
                             height={32}
                         />

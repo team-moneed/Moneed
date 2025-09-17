@@ -48,12 +48,12 @@ export default function CommentSection({ postId, comments }: CommentSectionProps
     ];
 
     return (
-        <div className='lg:w-[40%] lg:ml-auto flex flex-col'>
+        <div className='sm:w-[40%] sm:ml-auto flex flex-col'>
             <div className='order-1 lg:order-2 flex gap-4 py-[1.8rem]'>
                 <div className='text-[1.8rem] font-semibold leading-[140%] text-moneed-black'>댓글</div>
                 <div className='text-[1.8rem] font-semibold leading-[140%] text-moneed-black'>{comments.length}</div>
             </div>
-            <div className='order-2 lg:order-3 flex flex-col gap-[3.6rem]'>
+            <div className='order-2 sm:order-3 flex flex-col gap-[3.6rem]'>
                 {comments.length == 0 ? (
                     <div>
                         <div className='flex justify-center items-center mt-8'>
@@ -71,7 +71,7 @@ export default function CommentSection({ postId, comments }: CommentSectionProps
                 )}
             </div>
             {/* 모바일 UI 수정: 댓글 입력창이 가장 아래에 붙도록*/}
-            <div className='order-3 lg:order-1 mt-16 lg:mt-4 relative flex items-center bg-moneed-gray-4 rounded-[1.2rem]'>
+            <div className='order-3 sm:order-1 mt-16 sm:mt-4 relative flex items-center bg-moneed-gray-4 rounded-[1.2rem]'>
                 <CommentForm postId={postId} />
             </div>
         </div>

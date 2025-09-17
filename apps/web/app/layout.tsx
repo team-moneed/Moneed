@@ -1,7 +1,7 @@
 import { Metadata, Viewport } from 'next';
 import Script from 'next/script';
 import '@/app/styles/globals.css';
-import { ModalProvider } from '@/app/provider/ModalContext';
+import ModalProvider from '@/app/provider/ModalProvider';
 import { SnackbarProvider } from '@/shared/ui/Snackbar';
 import QueryClientProvider from '@/app/provider/QueryClientProvider';
 import ReactQueryDevtools from '@/app/provider/ReactQueryDevtools';

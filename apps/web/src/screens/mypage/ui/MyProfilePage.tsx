@@ -1,7 +1,7 @@
 'use client';
 
 import { useState } from 'react';
-import Button from '@/shared/ui/Button';
+import Button from '@/shared/ui/Button/Button';
 import SelectProfileImage from '@/screens/mypage/ui/SelectProfileImage';
 import { useRouter } from 'next/navigation';
 import { useUser } from '@/features/user/query';
@@ -12,8 +12,9 @@ import { AxiosError } from 'axios';
 import { REASON_CODES } from '@/shared/config/snackbar';
 import { MyProfileSkeleton } from '@/shared/ui/Skeletons/MyProfileSkeleton';
 import { useDebounce } from '@/shared/hooks/useDebounce';
-import { useModal } from '@/app/provider/ModalContext';
+import { useModal } from '@/shared/hooks/useModal';
 import { PATH } from '@/shared/config';
+import CancelEditModalContent from '@/features/user/ui/CancelEditModalContent';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,7 +44,7 @@ const MyProfile = () => {
 
     const nickname = watch('nickname');
 
-    const { confirm } = useModal();
+    const { openModal } = useModal();
 
     const { mutate: updateUserProfileMutation, isPending } = useMutation({
         mutationFn: userApi.updateProfile,
@@ -85,21 +86,7 @@ const MyProfile = () => {
     };
 
     const cancelChangeProfile = () => {
-        confirm(
-            <span>
-                수정하던 내용은 저장되지 않아요.
-                <br />
-                다음에 수정할까요?
-            </span>,
-            {
-                leftButtontext: '이어서 하기',
-                rightButtontext: '나가기',
-            },
-        ).then(result => {
-            if (result) {
-                router.back();
-            }
-        });
+        openModal(<CancelEditModalContent />);
     };
 
     const handleImageSelect = (img: string) => {

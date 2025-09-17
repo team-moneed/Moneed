@@ -8,7 +8,7 @@ import { useForm } from 'react-hook-form';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { createPost } from '@/features/post/api';
 import { REASON_CODES } from '@/shared/config/snackbar';
-import Button from '@/shared/ui/Button';
+import Button from '@/shared/ui/Button/Button';
 import { PATH } from '@/shared/config';
 import { CreatePostForm } from '@/entities/post/model/post.type';
 import { PostMapper } from '@/entities/post';

@@ -1,6 +1,6 @@
 'use client';
 
-import { logout } from '@/features/auth/api';
+import { logout } from '@/features/user/api/auth';
 import { REASON_CODES } from '@/shared/config/snackbar';
 import useSnackbarStore from '@/shared/store/useSnackbarStore';
 import { TokenUtils } from '@/shared/utils/tokenUtils';
