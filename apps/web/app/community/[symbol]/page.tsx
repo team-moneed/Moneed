@@ -1,1 +1,1 @@
-export { default } from '@/screens/community/ui/CommunityStockPage';
+export { default } from '@/screens/community-stock/ui/CommunityStockPage';

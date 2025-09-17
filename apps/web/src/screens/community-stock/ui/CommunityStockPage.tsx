@@ -1,13 +1,13 @@
 'use client';
 
-import CompanyInfoBox from '@/screens/community/ui/CompanyInfoBox';
+import CompanyInfoBox from '@/screens/community-stock/ui/CompanyInfoBox';
 import Vote from '@/screens/community/ui/Vote';
-import PostSection from '@/screens/community/ui/PostsSection';
+import PostSection from '@/screens/community-stock/ui/PostsSection';
 import { SnackbarTrigger } from '@/shared/ui/Snackbar';
 import dynamic from 'next/dynamic';
 import { useParams, useSearchParams } from 'next/navigation';
 import { useStockBySymbol } from '@/features/stock';
-const StockInfoBox = dynamic(() => import('@/screens/community/ui/StockInfoBox'), { ssr: false });
+const StockInfoBox = dynamic(() => import('@/screens/community-stock/ui/StockInfoBox'), { ssr: false });
 
 export default function CommunityStockPage() {
     const { symbol } = useParams<{ symbol: string }>();

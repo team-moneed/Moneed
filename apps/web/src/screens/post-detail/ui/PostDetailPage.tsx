@@ -1,6 +1,6 @@
 import { SnackbarTrigger } from '@/shared/ui/Snackbar';
-import PostSection from '@/screens/post/post-detail/ui/PostSection';
-import CommentSection from '@/screens/post/post-detail/ui/CommentSection';
+import PostSection from '@/screens/post-detail/ui/PostSection';
+import CommentSection from '@/screens/post-detail/ui/CommentSection';
 import { fetchPost, fetchPostComments } from '@/features/post';
 import { verifyToken } from '@moneed/auth';
 import { getCookie } from '@/shared/utils/cookie.server';

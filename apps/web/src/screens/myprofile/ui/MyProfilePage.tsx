@@ -12,9 +12,7 @@ import { AxiosError } from 'axios';
 import { REASON_CODES } from '@/shared/config/snackbar';
 import { MyProfileSkeleton } from '@/shared/ui/Skeletons/MyProfileSkeleton';
 import { useDebounce } from '@/shared/hooks/useDebounce';
-import { useModal } from '@/shared/hooks/useModal';
 import { PATH } from '@/shared/config';
-import CancelEditModalContent from '@/features/user/ui/CancelEditModalContent';
 
 export const dynamic = 'force-dynamic';
 
@@ -43,8 +41,6 @@ const MyProfile = () => {
     });
 
     const nickname = watch('nickname');
-
-    const { openModal } = useModal();
 
     const { mutate: updateUserProfileMutation, isPending } = useMutation({
         mutationFn: userApi.updateProfile,
@@ -86,7 +82,10 @@ const MyProfile = () => {
     };
 
     const cancelChangeProfile = () => {
-        openModal(<CancelEditModalContent />);
+        const result = confirm('수정하던 내용은 저장되지 않아요. 다음에 수정할까요?');
+        if (result) {
+            router.back();
+        }
     };
 
     const handleImageSelect = (img: string) => {

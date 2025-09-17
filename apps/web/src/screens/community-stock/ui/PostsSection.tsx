@@ -1,5 +1,5 @@
 import PostThumbnailSkeleton from '@/shared/ui/Skeletons/PostThumbnailSkeleton';
-import Posts from './Posts';
+import Posts from '../../community/ui/Posts';
 import withSuspense from '@/shared/ui/withSuspense';
 
 export default function PostSection({ symbol }: { symbol: string }) {
