@@ -1,12 +1,9 @@
 'use client';
-import { useModal } from '@/app/provider/ModalContext';
+import { useModal } from '@/shared/hooks/useModal';
 import { PrimaryDropdownProps } from '@/shared/ui/Dropdown';
 import Comment from '@/entities/comment/ui/Comment';
 import CommentForm from '@/entities/comment/ui/CommentForm';
-import { deleteComment } from '@/features/comment/api/comment.api';
-import { useMutation } from '@tanstack/react-query';
-import { queryClient } from '@/app/provider/QueryClientProvider';
-import useSnackbarStore from '@/shared/store/useSnackbarStore';
+import DeleteCommentModalContent from '@/features/comment/ui/DeleteCommentModalContent';
 import type { Comment as TComment } from '@/entities/comment';
 import { useCommentStore } from '@/shared/store/useCommentStore';
 import { useShallow } from 'zustand/react/shallow';
@@ -17,8 +14,7 @@ interface CommentSectionProps {
 }
 
 export default function CommentSection({ postId, comments }: CommentSectionProps) {
-    const { confirm } = useModal();
-    const showSnackbar = useSnackbarStore(state => state.showSnackbar);
+    const { openModal } = useModal();
     const { setEditCommentId, setEditCommentContent, setIsEditingComment } = useCommentStore(
         useShallow(state => ({
             setEditCommentId: state.setEditCommentId,
@@ -27,19 +23,6 @@ export default function CommentSection({ postId, comments }: CommentSectionProps
         })),
     );
 
-    const { mutate: deleteCommentMutation } = useMutation({
-        mutationFn: deleteComment,
-        onSuccess: data => {
-            queryClient.invalidateQueries({ queryKey: ['post', postId] });
-            showSnackbar({
-                message: data.message,
-                variant: 'action',
-                position: 'bottom',
-                icon: '',
-            });
-        },
-    });
-
     const handleEditComment =
         (commentId: number, commentContent: string) => (e: React.MouseEvent<HTMLButtonElement>) => {
             e.stopPropagation();
@@ -47,23 +30,6 @@ export default function CommentSection({ postId, comments }: CommentSectionProps
             setEditCommentContent(commentContent);
             setEditCommentId(commentId);
         };
-
-    //댓글 삭제할건지 묻는 모달
-    const openCommentDeletemodal = (commentId: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
-        e.stopPropagation();
-        const result = confirm(
-            <span>
-                삭제된 내용은 복구되지 않아요.
-                <br />
-                정말 삭제하실건가요?
-            </span>,
-        );
-        result.then(confirmed => {
-            if (confirmed) {
-                deleteCommentMutation({ commentId });
-            }
-        });
-    };
 
     const createCommentDropdownMenus = (
         commentId: number,
@@ -77,7 +43,7 @@ export default function CommentSection({ postId, comments }: CommentSectionProps
         {
             icon: '/icon/icon-trashcan.svg',
             text: '댓글 삭제',
-            onClick: openCommentDeletemodal(commentId),
+            onClick: () => openModal(<DeleteCommentModalContent commentId={commentId} postId={postId} />),
         },
     ];
 

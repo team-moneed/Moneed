@@ -48,4 +48,10 @@ export const MODAL_MSG = {
 `,
     DELETE_POST_MODAL_MSG: `삭제된 내용은 복구되지 않아요.
 정말 삭제하실건가요?`,
+    DELETE_COMMENT_MODAL_MSG: `삭제된 내용은 복구되지 않아요.
+정말 삭제하실건가요?`,
+    CANCEL_EDIT_MODAL_MSG: `수정하던 내용은 저장되지 않아요.
+다음에 수정할까요?`,
+    CANCEL_WRITE_MODAL_MSG: `작성하던 글은 저장되지않아요.
+다음에 작성할까요?`,
 };

@@ -4,23 +4,19 @@ import { useState } from 'react';
 import Comment from '@/entities/comment/ui/Comment';
 import { useMyComments } from '@/features/user/query';
 import { cn } from '@/shared/utils/style';
-import { useMutation } from '@tanstack/react-query';
-import { queryClient } from '@/app/provider/QueryClientProvider';
-import { deleteComment } from '@/features/comment';
-import useSnackbarStore from '@/shared/store/useSnackbarStore';
 import { DYNAMIC_PATH } from '@/shared/config';
 import { useRouter } from 'next/navigation';
 import { useCommentStore } from '@/shared/store/useCommentStore';
 import { useShallow } from 'zustand/react/shallow';
 import { PrimaryDropdownProps } from '@/shared/ui/Dropdown';
 import { CommentWithUserDTO } from '@/features/comment/model/comment.type';
-import { useModal } from '@/app/provider/ModalContext';
+import { useModal } from '@/shared/hooks/useModal';
+import DeleteCommentModalContent from '@/features/comment/ui/DeleteCommentModalContent';
 
 // TODO: 로직은 User가 맞지만 UI 자체는 Comment에 가까움
 export default function Comments() {
     const [activeTab, setActiveTab] = useState<'thisWeek' | 'notThisWeek'>('thisWeek');
-    const showSnackbar = useSnackbarStore(state => state.showSnackbar);
-    const { confirm } = useModal();
+    const { openModal } = useModal();
     const router = useRouter();
     const { setEditCommentId, setIsEditingComment, setEditCommentContent } = useCommentStore(
         useShallow(state => ({
@@ -29,18 +25,6 @@ export default function Comments() {
             setEditCommentContent: state.setEditCommentContent,
         })),
     );
-    const { mutate: deleteCommentMutation } = useMutation({
-        mutationFn: (commentId: number) => deleteComment({ commentId }),
-        onSuccess: data => {
-            showSnackbar({
-                message: data.message,
-                variant: 'action',
-                position: 'bottom',
-                icon: '',
-            });
-            queryClient.invalidateQueries({ queryKey: ['user', 'me', 'comments'] });
-        },
-    });
 
     const { data: comments } = useMyComments();
 
@@ -57,20 +41,9 @@ export default function Comments() {
     const currentTabComments = activeTab === 'thisWeek' ? thisweekComments : comments;
 
     //댓글 삭제할건지 묻는 모달
-    const openCommentDeletemodal = (commentId: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
+    const openCommentDeletemodal = (commentId: number, postId: number) => (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        const result = confirm(
-            <span>
-                삭제된 내용은 복구되지 않아요.
-                <br />
-                정말 삭제하실건가요?
-            </span>,
-        );
-        result.then(confirmed => {
-            if (confirmed) {
-                deleteCommentMutation(commentId);
-            }
-        });
+        openModal(<DeleteCommentModalContent commentId={commentId} postId={postId} />);
     };
 
     const commentDropdownMenus = (comment: CommentWithUserDTO): PrimaryDropdownProps['dropdownMenus'] => [
@@ -87,7 +60,7 @@ export default function Comments() {
         {
             icon: '/icon/icon-trashcan.svg',
             text: '댓글 삭제',
-            onClick: openCommentDeletemodal(comment.id),
+            onClick: openCommentDeletemodal(comment.id, comment.postId),
         },
     ];
 
