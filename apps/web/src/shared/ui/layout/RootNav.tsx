@@ -3,7 +3,6 @@ import NavLinks from '../Link/NavLinks';
 import MyPageLink from '../Link/MyPageLink';
 import NotiButton from '../Button/NotiButton';
 import WritePostLink from '../Link/WritePostLink';
-import BottomNavBar from './BottomNavBar';
 
 export default function RootNav() {
     return (
@@ -21,7 +20,6 @@ export default function RootNav() {
                     <WritePostLink />
                 </div>
             </header>
-            <BottomNavBar />
         </>
     );
 }
