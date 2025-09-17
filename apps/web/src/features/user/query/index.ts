@@ -1,5 +1,6 @@
 import { useInfiniteQuery, useQuery, useSuspenseQuery } from '@tanstack/react-query';
 import { userApi } from '../api';
+import { exchangeTempCode } from '../api/auth';
 
 export const useUser = () => {
     return useQuery({
@@ -71,5 +72,17 @@ export const useMyComments = () => {
     return useSuspenseQuery({
         queryKey: ['myComments'],
         queryFn: () => userApi.fetchComments(),
+    });
+};
+
+export const useTempCodeAuth = (tempCode: string) => {
+    return useQuery({
+        queryKey: ['tempCodeAuth', tempCode],
+        queryFn: () => exchangeTempCode({ tempCode }),
+        enabled: !!tempCode,
+        retry: false,
+        refetchOnWindowFocus: false,
+        refetchOnMount: false,
+        select: data => data.data,
     });
 };

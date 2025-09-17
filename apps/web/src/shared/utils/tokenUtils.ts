@@ -1,12 +1,8 @@
-import {
-    clearTokensFromCookies,
-    setTokensInCookies,
-    updateAccessTokenInCookies,
-} from '@/features/auth/server/auth.actions';
+import { clearTokensFromCookies, setTokensInCookies, updateAccessTokenInCookies } from '@/features/user/server';
 import { DecodedToken } from '@moneed/auth';
 import { decodeJwt } from 'jose';
-import { ERROR_MSG, TOKEN_KEY } from '../config';
-import { refresh } from '@/features/auth/api';
+import { TOKEN_KEY } from '../config';
+import { refresh } from '@/features/user/api/auth';
 
 export class TokenUtils {
     private static tokenPromise: Promise<{ access_token: string; refresh_token: string }> | null = null;

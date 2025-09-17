@@ -4,7 +4,7 @@ import { getOverseasStockByCondition } from '@/features/stock/server';
 import { StockService } from '@/features/stock/server';
 import { getCookie } from '@/shared/utils/cookie.server';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
+import { ERROR_MSG } from '@/shared/config/message';
 import { redirect } from 'next/navigation';
 import { revalidatePath } from 'next/cache';
 import { MarketCode } from '@/entities/stock';
@@ -93,10 +93,7 @@ export const getSelectedStockSymbols = async (): Promise<
 export const selectStockAction = async (
     stockSymbols: string[],
     redirectUrl?: string,
-): Promise<
-    | { success: true; message: string; error: null }
-    | { success: false; message: null; error: { message: string; status: number } }
-> => {
+): Promise<{ message: string } | void> => {
     let success = false;
     try {
         const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
@@ -113,33 +110,11 @@ export const selectStockAction = async (
         await stockService.selectStock(userId, stockSymbols);
 
         success = true;
-
-        return {
-            success,
-            message: SUCCESS_MSG.STOCKS_SELECTED,
-            error: null,
-        };
-    } catch (error) {
+    } catch {
         success = false;
-        if (error instanceof ResponseError) {
-            return {
-                success,
-                message: null,
-                error: {
-                    message: error.message,
-                    status: error.code,
-                },
-            };
-        }
-        return {
-            success,
-            message: null,
-            error: {
-                message: ERROR_MSG.INTERNAL_SERVER_ERROR,
-                status: 500,
-            },
-        };
+        return { message: ERROR_MSG.STOCKS_SELECT_FAILED };
     } finally {
+        console.log(redirectUrl, success);
         if (redirectUrl && success) {
             revalidatePath(decodeURIComponent(redirectUrl));
             redirect(decodeURIComponent(redirectUrl));

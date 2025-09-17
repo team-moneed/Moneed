@@ -54,4 +54,6 @@ export const MODAL_MSG = {
 다음에 수정할까요?`,
     CANCEL_WRITE_MODAL_MSG: `작성하던 글은 저장되지않아요.
 다음에 작성할까요?`,
+    PROFILE_EDIT_CANCEL_MODAL_MSG: `수정하던 내용은 저장되지 않아요.
+다음에 수정할까요?`,
 };
