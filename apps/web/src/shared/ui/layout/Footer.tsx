@@ -1,6 +1,6 @@
 'use client';
 
-import Logo from 'app/onboarding/Logo';
+import Logo from '@/screens/onboarding/ui/Logo';
 import { cn } from '@/shared/utils/style';
 import Link from 'next/link';
 import { usePathname } from 'next/navigation';
