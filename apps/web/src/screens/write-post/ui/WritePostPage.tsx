@@ -9,7 +9,7 @@ import { useRouter, useSearchParams } from 'next/navigation';
 import { createPost } from '@/features/post/api';
 import { REASON_CODES } from '@/shared/config/snackbar';
 import Button from '@/shared/ui/Button/Button';
-import { PATH } from '@/shared/config';
+import { DYNAMIC_PATH, PATH } from '@/shared/config';
 import { CreatePostForm } from '@/entities/post/model/post.type';
 import { PostMapper } from '@/entities/post';
 
@@ -128,9 +128,7 @@ const WritePost = () => {
 
         if (res.status === 201) {
             const { post } = res.data;
-            router.replace(
-                `${PATH.COMMUNITY}/${post.stock.symbol}/posts/${post.id}?reason=${REASON_CODES.POST_CREATED}`,
-            );
+            router.replace(DYNAMIC_PATH.POST_DETAIL(post.id).concat(`?reason=${REASON_CODES.POST_CREATED}`));
         }
     };
 
