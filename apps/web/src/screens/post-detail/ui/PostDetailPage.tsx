@@ -6,6 +6,7 @@ import { verifyToken } from '@moneed/auth';
 import { getCookie } from '@/shared/utils/cookie.server';
 import { TOKEN_KEY } from '@/shared/config';
 import SubNav from '@/shared/ui/layout/SubNav';
+import RootNav from '@/shared/ui/layout/RootNav';
 
 export default async function PostDetailPage({
     params,
@@ -24,7 +25,8 @@ export default async function PostDetailPage({
 
     return (
         <>
-            <SubNav title={post.stock.nameKo + ' 커뮤니티'} />
+            <RootNav className='hidden sm:flex' />
+            <SubNav title={post.stock.nameKo + ' 커뮤니티'} className='sm:hidden' />
             <main className='flex-1'>
                 <div className='hidden sm:block font-semibold leading-[140%] text-[1.6rem] ml-[.4rem] text-moneed-gray-9 mb-4'>
                     {post.stock.nameKo} 커뮤니티

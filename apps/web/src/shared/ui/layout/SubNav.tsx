@@ -1,16 +1,27 @@
 'use client';
 
 import NotiButton from '../Button/NotiButton';
-import PrevButton from '../Button/PrevButton';
+import GoBackButton from '../Button/GoBackButton';
+import { cn } from '@/shared/utils/style';
 
-export default function SubNav({ title }: { title: string }) {
+interface SubNavProps {
+    title: string;
+    className?: string;
+}
+
+export default function SubNav({ title, className }: SubNavProps) {
     return (
-        <header className='sticky top-0 z-10 bg-white sm:hidden flex items-center justify-between pb-[1.8rem] pt-[3rem] gap-[2.4rem]'>
+        <header
+            className={cn(
+                'sticky top-0 z-10 bg-white sm:hidden flex items-center justify-between pb-[1.8rem] pt-[3rem] gap-[2.4rem]',
+                className,
+            )}
+        >
             <div>
-                <PrevButton />
+                <GoBackButton />
             </div>
-            <h1 className='hidden sm:block text-center text-[1.6rem] font-semibold text-moneed-gray-9'>{title}</h1>
-            <div className='flex items-center gap-[2.4rem]'>
+            <h1 className='text-center text-[1.6rem] font-semibold text-moneed-gray-9'>{title}</h1>
+            <div>
                 <NotiButton />
             </div>
         </header>

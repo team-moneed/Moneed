@@ -2,13 +2,35 @@ import Footer from '@/shared/ui/layout/Footer';
 import StockTypeBar from '@/screens/community/ui/StockTypeBar';
 import RootNav from '@/shared/ui/layout/RootNav';
 import BottomNav from '@/shared/ui/layout/BottomNav';
+import { hashObj } from './CommunityPage';
+import CommunityTabNav from './CommunityTabNav';
 
-export const hashObj = {
-    top5: 'top5',
-    category: 'category',
-    vote: 'vote',
-    hotPosts: 'hotPosts',
-} as const;
+const stringToHash = (str: string) => {
+    return `#${str}`;
+};
+
+const communityTabs = [
+    {
+        id: hashObj.top5,
+        label: 'Top 5',
+        href: stringToHash(hashObj.top5),
+    },
+    {
+        id: hashObj.category,
+        label: '지금 뜨는 종목',
+        href: stringToHash(hashObj.category),
+    },
+    {
+        id: hashObj.vote,
+        label: '지금 핫한 투표',
+        href: stringToHash(hashObj.vote),
+    },
+    {
+        id: hashObj.hotPosts,
+        label: '인기 급상승 게시글',
+        href: stringToHash(hashObj.hotPosts),
+    },
+];
 
 export default function CommunityLayout({ children }: { children: React.ReactNode }) {
     return (
@@ -16,6 +38,7 @@ export default function CommunityLayout({ children }: { children: React.ReactNod
             <RootNav />
             <BottomNav />
             <StockTypeBar />
+            <CommunityTabNav tabs={communityTabs} />
             <main className='flex-1'>{children}</main>
             <Footer />
         </>

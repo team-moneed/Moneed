@@ -3,11 +3,21 @@ import NavLinks from '../Link/NavLinks';
 import MyPageLink from '../Link/MyPageLink';
 import NotiButton from '../Button/NotiButton';
 import WritePostLink from '../Link/WritePostLink';
+import { cn } from '@/shared/utils/style';
 
-export default function RootNav() {
+interface RootNavProps {
+    className?: string;
+}
+
+export default function RootNav({ className }: RootNavProps) {
     return (
         <>
-            <header className='flex sticky top-0 z-10 bg-white items-center justify-between pb-[1.8rem] pt-[3rem] gap-[2.4rem]'>
+            <header
+                className={cn(
+                    'flex sticky top-0 z-10 bg-white items-center justify-between pb-[1.8rem] pt-[3rem] gap-[2.4rem]',
+                    className,
+                )}
+            >
                 <div className='flex items-center'>
                     <LogoLink />
                 </div>
