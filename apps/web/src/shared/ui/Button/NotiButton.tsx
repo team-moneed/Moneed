@@ -12,7 +12,7 @@ export default function NotiButton(props: PropType) {
 
     return (
         <button
-            className={cn('w-[2.4rem] h-[2.4rem] relative ', !isLoggedIn && 'hidden', props.className)}
+            className={cn('w-[2.4rem] h-[2.4rem] relative ', !isLoggedIn && 'hidden sm:hidden', props.className)}
             type='button'
             {...props}
         >

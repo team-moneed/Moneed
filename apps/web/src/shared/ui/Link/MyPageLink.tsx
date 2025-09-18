@@ -8,7 +8,7 @@ export default function MyPageLink() {
     const { isLoggedIn } = useAuth();
     return (
         <IconLink
-            className={cn('hidden sm:block w-auto', !isLoggedIn && 'hidden')}
+            className={cn('hidden sm:block w-auto', !isLoggedIn && 'hidden sm:hidden')}
             href={PATH.MYPAGE}
             icon='/icon/icon-profile-circle.svg'
             activeIcon='/icon/icon-profile-circle.svg'
