@@ -13,7 +13,7 @@ export default function SubNav({ title, className }: SubNavProps) {
     return (
         <header
             className={cn(
-                'sticky top-0 z-10 bg-white sm:hidden flex items-center justify-between pb-[1.8rem] pt-[3rem] gap-[2.4rem]',
+                'sticky top-0 z-10 bg-white flex items-center justify-between pb-[1.8rem] pt-[3rem] gap-[2.4rem]',
                 className,
             )}
         >
