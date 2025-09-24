@@ -6,6 +6,7 @@ import { SnackbarTrigger } from '@/shared/ui/Snackbar';
 import { PATH } from '@/shared/config';
 import Footer from '@/shared/ui/layout/Footer';
 import RootNav from '@/shared/ui/layout/RootNav';
+import BottomNav from '@/shared/ui/layout/BottomNav';
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ reason: string }> }) {
     const reason = (await searchParams).reason;
@@ -13,6 +14,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ r
     return (
         <>
             <RootNav />
+            <BottomNav />
             <div className='pb-[8rem] flex flex-col gap-[1.2rem] lg:gap-[4.4rem]'>
                 <section>
                     <div className='flex items-center gap-[.8rem] mb-[1.8rem] justify-between'>
