@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG } from '@/shared/config';
+import { ERROR_MSG, TOKEN_KEY } from '@/shared/config';
 import UserService from './user.service';
 import { UpdateUserProfileRequest } from '@/features/user';
 import { getCookie } from '@/shared/utils/cookie.server';
@@ -9,7 +9,7 @@ import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 
 export async function getUserPosts() {
     try {
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -33,7 +33,7 @@ export async function getUserPosts() {
 
 export async function getUserComments() {
     try {
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -57,7 +57,7 @@ export async function getUserComments() {
 
 export async function getUserInfo() {
     try {
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -89,7 +89,7 @@ export async function getUserInfo() {
 
 export async function updateUserProfile(request: Request) {
     try {
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

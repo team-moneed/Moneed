@@ -71,6 +71,7 @@ export async function verifyToken({ jwt, key }: { jwt: string; key: string }): P
             error: null,
         };
     } catch (error) {
+        // TODO: ResponseError 로 변경
         if (error instanceof JWTExpired) {
             return {
                 data: null,

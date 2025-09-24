@@ -2,10 +2,11 @@
 
 import { EmblaOptionsType } from 'embla-carousel';
 import useEmblaCarousel from 'embla-carousel-react';
-import { NextButton, PrevButton } from '@/shared/ui/ArrowButton';
+import NextButton from '@/shared/ui/Button/NextButton';
+import PrevButton from '@/shared/ui/Button/PrevButton';
 import { usePrevNextButtons } from '@/shared/hooks/usePrevNextButtons';
 import { useState } from 'react';
-import ShortformDetail from 'app/shortform/ShortformDetail';
+import ShortformDetail from '@/screens/shortform/ui/ShortformDetail';
 import { cn } from '@/shared/utils/style';
 import type { Shorts } from '@prisma/client';
 

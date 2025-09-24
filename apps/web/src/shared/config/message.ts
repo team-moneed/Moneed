@@ -21,6 +21,9 @@ export const ERROR_MSG = {
     TOKEN_REFRESH_FAILED: '토큰 갱신 실패',
     NO_REFRESH_TOKEN: '리프레시 토큰이 없습니다',
     POST_ID_REQUIRED: 'postId가 필요합니다',
+    NO_TOKEN: '토큰이 존재하지않습니다',
+    STOCKS_SELECT_FAILED: '주식 선택에 실패했습니다',
+    MODAL_CONTEXT_NOT_FOUND: 'useModal은 반드시 ModalProvider 내에서 사용되어야 합니다.',
 } as const;
 
 export const SUCCESS_MSG = {
@@ -35,3 +38,22 @@ export const SUCCESS_MSG = {
     COMMENT_UPDATED: '댓글이 수정되었습니다.',
     NICKNAME_CHECK_SUCCESS: '사용 가능한 닉네임입니다.',
 } as const;
+
+export const MODAL_MSG = {
+    LEAVE_MODAL_MSG: `지금 탈퇴하시면, 
+그동안 함께한 기록들이 모두 사라져요. 
+모아두신 종목 정보도와 댓글, 좋아요까지도요. 
+요즘 미국장도 활발해지고 있어요! 
+조금 더 함께해보시는 건 어떠세요?
+`,
+    DELETE_POST_MODAL_MSG: `삭제된 내용은 복구되지 않아요.
+정말 삭제하실건가요?`,
+    DELETE_COMMENT_MODAL_MSG: `삭제된 내용은 복구되지 않아요.
+정말 삭제하실건가요?`,
+    CANCEL_EDIT_MODAL_MSG: `수정하던 내용은 저장되지 않아요.
+다음에 수정할까요?`,
+    CANCEL_WRITE_MODAL_MSG: `작성하던 글은 저장되지않아요.
+다음에 작성할까요?`,
+    PROFILE_EDIT_CANCEL_MODAL_MSG: `수정하던 내용은 저장되지 않아요.
+다음에 수정할까요?`,
+};

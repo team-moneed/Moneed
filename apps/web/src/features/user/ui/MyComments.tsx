@@ -4,7 +4,7 @@ import withSuspense from '@/shared/ui/withSuspense';
 import Link from 'next/link';
 
 function MyComments() {
-    const { data: comments } = useMyComments();
+    const { data: comments = [] } = useMyComments();
     return (
         <Link
             className='p-[1.6rem] flex-col justify-center gap-4 rounded-[1.6rem] border border-solid border-moneed-gray-5 cursor-pointer'

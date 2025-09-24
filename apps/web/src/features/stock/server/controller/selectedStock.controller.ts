@@ -6,10 +6,11 @@ import { StockRepository } from '../repository';
 import { getOverseasStockPrice } from '../api';
 import { verifyToken } from '@moneed/auth';
 import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
+import { TOKEN_KEY } from '@/shared/config';
 
 async function GET(request: NextRequest) {
     try {
-        const accessToken = await getCookie(process.env.JWT_ACCESS_NAME || 'access_token');
+        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

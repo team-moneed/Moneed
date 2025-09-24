@@ -1,1 +1,1 @@
-export { default } from '@/screens/post/edit-post/ui/EditPostPage';
+export { default } from '@/screens/edit-post/ui/EditPostPage';

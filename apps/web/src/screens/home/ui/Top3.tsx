@@ -27,7 +27,7 @@ const Top3 = () => {
     }
 
     return (
-        <>
+        <div className='flex flex-col gap-[1.2rem]'>
             <StockRankButtons
                 stockList={stockList ?? []}
                 selectedStock={selectedStock}
@@ -35,7 +35,7 @@ const Top3 = () => {
             />
             <Top3Posts selectedStock={selectedStock} />
             <MoveToCommunityButton selectedStock={selectedStock} />
-        </>
+        </div>
     );
 };
 

@@ -1,5 +1,1 @@
-import { Suspense } from 'react';
-
-export default function CommunityLayout({ children }: { children: React.ReactNode }) {
-    return <Suspense>{children}</Suspense>;
-}
+export { default } from '@/screens/community-stock/ui/CommunityStockLayout';

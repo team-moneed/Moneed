@@ -1,4 +1,4 @@
 export const TOKEN_KEY = {
-    ACCESS_TOKEN: process.env.JWT_ACCESS_NAME || 'access_token',
-    REFRESH_TOKEN: process.env.JWT_REFRESH_NAME || 'refresh_token',
+    ACCESS_TOKEN: process.env.NEXT_PUBLIC_ACCESS_TOKEN || 'access_token',
+    REFRESH_TOKEN: process.env.NEXT_PUBLIC_REFRESH_TOKEN || 'refresh_token',
 } as const;

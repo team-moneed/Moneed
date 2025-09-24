@@ -4,12 +4,11 @@ import { PrimaryDropdown, PrimaryDropdownProps } from '@/shared/ui/Dropdown';
 import DateFormatter from '@/shared/ui/Dateformatter';
 import ImageCarousel from '@/shared/ui/Carousel/ImageCarousel';
 import { EmblaOptionsType } from 'embla-carousel';
-import { useModal } from '@/app/provider/ModalContext';
+import { useModal } from '@/shared/hooks/useModal';
 import { useRouter } from 'next/navigation';
 import type { Post } from '@/entities/post';
-import { deletePost } from '@/features/post/api';
-import { DYNAMIC_PATH, REASON_CODES } from '@/shared/config';
-import { queryClient } from '@/app/provider/QueryClientProvider';
+import { DYNAMIC_PATH } from '@/shared/config';
+import DeletePostModalContent from '@/features/post/ui/DeletePostModalContent';
 import PostLikeButton from '@/features/post/ui/PostLikeButton';
 import CommentIcon from '@/entities/comment/ui/CommentIcon';
 import ClipBoardButton from '@/shared/ui/ClipBoardButton';
@@ -80,7 +79,7 @@ export const PostAuthorWithDate = ({
 };
 
 export const PostDropdown = ({ post }: { post: Post }) => {
-    const { confirm } = useModal();
+    const { openModal } = useModal();
     const router = useRouter();
     const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -92,29 +91,8 @@ export const PostDropdown = ({ post }: { post: Post }) => {
     //게시글 삭제할건지 묻는 모달
     const openPostDeletemodal = (e: React.MouseEvent<HTMLButtonElement>) => {
         e.stopPropagation();
-        const result = confirm(
-            <span>
-                삭제된 내용은 복구되지 않아요.
-                <br />
-                정말 삭제하실건가요?
-            </span>,
-        );
-        result.then(confirmed => {
-            if (confirmed) {
-                handleDeletePost();
-            }
-        });
+        openModal(<DeletePostModalContent postId={post.id} stockSymbol={post.stock.symbol} />);
         setIsDropdownOpen(false);
-    };
-
-    //게시글 삭제 api 연동
-    const handleDeletePost = async () => {
-        const res = await deletePost({ postId: post.id });
-        if (res.status === 200) {
-            // TODO: 연속 두 개의 게시글 삭제 시 쿼리 파라미터(?reason)이 변경되지 않아 스낵바가 표시되지 않음
-            router.push(DYNAMIC_PATH.COMMUNITY_SYMBOL(post.stock.symbol) + `?reason=${REASON_CODES.POST_DELETED}`);
-            queryClient.invalidateQueries({ queryKey: ['posts'] });
-        }
     };
 
     // TODO: 자기 게시글인 경우에만 표시하도록 수정

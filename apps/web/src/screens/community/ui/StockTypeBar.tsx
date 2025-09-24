@@ -10,7 +10,7 @@ import ChipSkeleton from '@/shared/ui/Skeletons/ChipSkeleton';
 import { useAuth } from '@/shared/hooks/useAuth';
 import { PATH } from '@/shared/config';
 
-function StockTypeBar() {
+export default function StockTypeBar() {
     const params = useParams();
     const symbol = params ? params.symbol : undefined;
     const { accessToken } = useAuth();
@@ -56,5 +56,3 @@ function StockTypeBar() {
         </div>
     );
 }
-
-export default StockTypeBar;
