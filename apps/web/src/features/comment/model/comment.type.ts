@@ -8,10 +8,6 @@ export type CommentUpdateDTO = {
     message: string;
 };
 
-export type CommentCreateDTO = {
-    message: string;
-};
-
 export type CommentWithUserDTO = Comment & {
     user: User;
     post: Post & {

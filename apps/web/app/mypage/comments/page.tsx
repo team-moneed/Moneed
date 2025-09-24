@@ -1,1 +1,1 @@
-export { default } from '@/screens/mypage/ui/MyCommentPage';
+export { default } from '@/screens/mycomment/ui/MyCommentPage';

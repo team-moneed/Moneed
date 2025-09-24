@@ -1,6 +1,6 @@
 'use client';
 import { useRouter, useSearchParams } from 'next/navigation';
-import { useTempCodeAuth } from '@/screens/auth/query/auth.query';
+import { useTempCodeAuth } from '@/features/user/query';
 import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { PATH } from '@/shared/config';
 import useUserStore from '@/entities/user/model/user.store';

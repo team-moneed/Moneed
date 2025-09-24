@@ -6,9 +6,9 @@ export default async function SelectStockPage({ searchParams }: { searchParams: 
     const { url } = await searchParams;
 
     // Server Actions 호출
-    const nasStocks = await getHotStocks({ count: 15, market: 'NAS' });
-    const nysStocks = await getHotStocks({ count: 15, market: 'NYS' });
-    const stocks = [...nasStocks, ...nysStocks].sort((a, b) => b.price - a.price);
+    const nasStocks = await getHotStocks({ count: 30, market: 'NAS' });
+    // const nysStocks = await getHotStocks({ count: 15, market: 'NYS' });
+    const stocks = [...nasStocks].sort((a, b) => b.price - a.price);
     const selectedStocksResult = await getSelectedStockSymbols();
 
     // 401 에러가 아닌 경우에만 선택된 주식 목록 사용
@@ -19,7 +19,7 @@ export default async function SelectStockPage({ searchParams }: { searchParams: 
         <SelectStockClientPage
             stocks={stocks}
             mySelectedStockSymbols={mySelectedStockSymbols}
-            redirectUrl={url || PATH.HOME}
+            redirectUrl={url ?? PATH.MYPAGE}
         />
     );
 }

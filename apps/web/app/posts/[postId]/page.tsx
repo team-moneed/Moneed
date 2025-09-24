@@ -1,1 +1,1 @@
-export { PostDetailPage as default } from '@/screens/community';
+export { default } from '@/screens/post-detail/ui/PostDetailPage';

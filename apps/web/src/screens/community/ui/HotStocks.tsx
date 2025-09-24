@@ -3,7 +3,7 @@ import CategoryRankBox from '@/screens/community/ui/CategoryRankBox';
 import { useSuspenseHotStocks } from '@/features/stock';
 import withSuspense from '@/shared/ui/withSuspense';
 
-export function HotStocks() {
+function HotStocks() {
     const { data: hotStocks } = useSuspenseHotStocks({ market: 'NAS' });
     return (
         <>
