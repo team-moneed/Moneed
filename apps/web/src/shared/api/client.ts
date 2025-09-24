@@ -28,7 +28,6 @@ const getAxiosInstance = (config: AxiosRequestConfig): AxiosInstance => {
     // 요청 인터셉터: 액세스 토큰을 헤더에 자동 추가
     instance.interceptors.request.use(
         (config: InternalAxiosRequestConfig) => {
-            if (typeof window === 'undefined') return config;
             const accessToken = TokenUtils.getToken(TOKEN_KEY.ACCESS_TOKEN);
             if (accessToken) {
                 config.headers.Authorization = `Bearer ${accessToken}`;

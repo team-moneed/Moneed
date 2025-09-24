@@ -1,9 +1,11 @@
 import { useRef, useState } from 'react';
 import useSnackbarStore from '@/shared/store/useSnackbarStore';
-import { createComment, updateComment } from '@/features/comment/api/comment.api';
+import { createComment } from '@/features/write-comment/api';
+import { updateComment } from '@/features/comment/api';
 import { queryClient } from '@/app/provider/QueryClientProvider';
 import { useMutation } from '@tanstack/react-query';
 import { useCommentStore } from '@/shared/store/useCommentStore';
+import { useRouter } from 'next/navigation';
 
 type CommentFormProps = {
     postId: number;
@@ -13,6 +15,7 @@ export default function CommentForm({ postId }: CommentFormProps) {
     const inputRef = useRef<HTMLInputElement>(null);
     const { isEditingComment, setIsEditingComment, editCommentId, editCommentContent, setEditCommentContent } =
         useCommentStore();
+    const router = useRouter();
     const [newComment, setNewComment] = useState('');
     const { mutate: createCommentMutation } = useMutation({
         mutationFn: createComment,
@@ -23,8 +26,9 @@ export default function CommentForm({ postId }: CommentFormProps) {
                 position: 'bottom',
                 icon: '',
             });
-            queryClient.invalidateQueries({ queryKey: ['post', postId] });
+            queryClient.invalidateQueries({ queryKey: ['post', Number(postId)] });
             setNewComment('');
+            router.refresh();
         },
     });
 
@@ -40,6 +44,7 @@ export default function CommentForm({ postId }: CommentFormProps) {
             queryClient.invalidateQueries({ queryKey: ['post', Number(postId)] });
             setEditCommentContent('');
             setIsEditingComment(false);
+            router.refresh();
         },
     });
 

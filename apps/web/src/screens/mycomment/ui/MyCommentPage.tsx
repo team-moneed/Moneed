@@ -26,7 +26,7 @@ const MyComment = () => {
         })),
     );
 
-    const { data: comments } = useMyComments();
+    const { data: comments = [] } = useMyComments();
 
     const thisweekComments = comments.filter(comment => {
         const now = new Date();

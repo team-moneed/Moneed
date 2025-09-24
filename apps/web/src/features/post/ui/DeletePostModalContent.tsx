@@ -10,6 +10,7 @@ interface DeletePostModalContentProps {
     stockSymbol: string;
 }
 
+// TODO: 디자인 수정
 export default function DeletePostModalContent({ postId, stockSymbol }: DeletePostModalContentProps) {
     const { closeModal } = useModal();
     const router = useRouter();

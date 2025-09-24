@@ -1,6 +1,6 @@
 import Button from '@/shared/ui/Button/Button';
 import { useModal } from '@/shared/hooks/useModal';
-import { deleteComment } from '@/features/comment/api/comment.api';
+import { deleteComment } from '@/features/comment/api';
 import { useMutation } from '@tanstack/react-query';
 import { queryClient } from '@/app/provider/QueryClientProvider';
 import useSnackbarStore from '@/shared/store/useSnackbarStore';

@@ -2,7 +2,7 @@
 import { useModal } from '@/shared/hooks/useModal';
 import { PrimaryDropdownProps } from '@/shared/ui/Dropdown';
 import Comment from '@/entities/comment/ui/Comment';
-import CommentForm from '@/entities/comment/ui/CommentForm';
+import CommentForm from '@/features/write-comment/ui/CommentForm';
 import DeleteCommentModalContent from '@/features/comment/ui/DeleteCommentModalContent';
 import type { Comment as TComment } from '@/entities/comment';
 import { useCommentStore } from '@/shared/store/useCommentStore';

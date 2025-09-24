@@ -69,7 +69,7 @@ export const useInfiniteMyStocks = ({ count = 20, enabled }: { count?: number; e
 };
 
 export const useMyComments = () => {
-    return useSuspenseQuery({
+    return useQuery({
         queryKey: ['myComments'],
         queryFn: () => userApi.fetchComments(),
     });
