@@ -1,15 +1,15 @@
 import { JWTPayload } from 'jose';
+import { JWTExpired, JWTInvalid } from 'jose/errors';
 
-export type UserInfo = {
+export type User = {
     id: string;
     nickname: string;
-    email?: string;
-    profileImage?: string;
+    profileImage: string;
 };
 
-export type TokenPayload = { userId: string; nickname: string } & JWTPayload;
+export type TokenPayload = User & JWTPayload;
 
-export type DecodedToken = UserInfo & {
+export type DecodedToken = User & {
     exp: number;
     iat: number;
     expiresAt: Date;
@@ -23,6 +23,5 @@ export type ProviderInfo = {
 export type Providers = 'kakao';
 
 export type SessionResult =
-    | { isExpired: false; isInvalid: false; payload: TokenPayload }
-    | { isExpired: true; isInvalid: false; payload: null }
-    | { isExpired: false; isInvalid: true; payload: null };
+    | { data: TokenPayload; error: null }
+    | { data: null; error: Error | JWTExpired | JWTInvalid };

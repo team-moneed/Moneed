@@ -13,8 +13,9 @@ describe('Session Encryption/Decryption', () => {
     beforeEach(async () => {
         // Given: 고정된 테스트 데이터
         testPayload = {
-            userId: 'test-user-123',
+            id: 'test-user-123',
             nickname: 'TestUser',
+            profileImage: 'test-profile-image',
             iat: Math.floor(Date.now() / 1000),
             exp: Math.floor(Date.now() / 1000) + 3600,
         };
@@ -34,14 +35,6 @@ describe('Session Encryption/Decryption', () => {
             expect(typeof encryptedToken).toBe('string');
             expect(encryptedToken.split('.')).toHaveLength(3); // JWT는 3부분으로 구성
         });
-
-        test('should include payload data in encrypted token', async () => {
-            // 구현 내용
-        });
-
-        test('should set correct expiration time', async () => {
-            // 구현 내용
-        });
     });
 
     describe('decrypt 단위 테스트', () => {
@@ -50,7 +43,7 @@ describe('Session Encryption/Decryption', () => {
             const decryptedPayload = await decrypt<TokenPayload>(testJwt, testKey);
 
             // Then: 원본 payload와 동일한지 확인
-            expect(decryptedPayload.userId).toBe(testPayload.userId);
+            expect(decryptedPayload.id).toBe(testPayload.id);
             expect(decryptedPayload.nickname).toBe(testPayload.nickname);
             expect(decryptedPayload.exp).toBeDefined();
             expect(decryptedPayload.iat).toBeDefined();
@@ -84,7 +77,7 @@ describe('Session Encryption/Decryption', () => {
             const decryptedPayload = await decrypt<TokenPayload>(encryptedToken, testKey);
 
             // Then: 원본 payload와 동일한지 확인
-            expect(decryptedPayload.userId).toBe(testPayload.userId);
+            expect(decryptedPayload.id).toBe(testPayload.id);
             expect(decryptedPayload.nickname).toBe(testPayload.nickname);
             expect(decryptedPayload.exp).toBeDefined();
             expect(decryptedPayload.iat).toBeDefined();

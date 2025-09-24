@@ -1,0 +1,134 @@
+@import 'tailwindcss';
+@source 'tailwind-scrollbar';
+@source 'tailwind-scrollbar-hide';
+@source '@tailwindcss/aspect-ratio';
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard@v1.3.8/dist/web/variable/pretendardvariable-dynamic-subset.css');
+
+@theme {
+    --shadow-custom: 0 0 10px 0 rgba(0, 0, 0, 0.1);
+    --bg-mask-gradient-right: linear-gradient(to left, transparent, #000 4.8rem);
+    --snackbar-top: slideDown 0.5s ease-in-out;
+    --snackbar-bottom: slideUp 0.5s ease-in-out;
+    --color-moneed-brand: #25c5ad;
+    --color-moneed-brand-point: #00ecc9;
+    --color-moneed-navy: #46467f;
+    --color-moneed-blue: #266df1;
+    --color-moneed-blue-light: #eef7ff;
+    --color-moneed-green: #1bcb1b;
+    --color-moneed-green-light: #f4fff5;
+    --color-moneed-red: #f60007;
+    --color-moneed-red-hover: #ff4f54;
+    --color-moneed-red-light: #ffeaf0;
+    --color-moneed-bred-light: #fff4f4;
+    --color-moneed-black: #171717;
+    --color-moneed-black-3: #f9fafc;
+    --color-moneed-shade-bg: #efeff3;
+    --color-moneed-gray-9: #454954;
+    --color-moneed-gray-8: #5e6167;
+    --color-moneed-gray-7: #86898f;
+    --color-moneed-gray-6: #bbbdc3;
+    --color-moneed-gray-5: #e4e6ea;
+    --color-moneed-gray-4: #f0f1f4;
+    --color-moneed-gray-3: #fbfbfb;
+    --color-moneed-gray-2: #fbfbfb;
+    --color-moneed-gray-1: #fdfdfe;
+    --color-moneed-white: #ffffff;
+    --container-7xl: calc(80rem * 1.6);
+    --text-2xl: 2.4rem;
+    --text-xl: 2rem;
+    --text-lg: 1.8rem;
+    --text-md: 1.6rem;
+    --text-sm: 1.4rem;
+    --text-h1: 2.4rem;
+    --text-h1--line-height: 140%;
+    --text-h1--font-weight: 700;
+    --text-h2: 2.2rem;
+    --text-h2--line-height: 145%;
+    --text-h2--font-weight: 700;
+    --text-h3: 2rem;
+    --text-h3--line-height: 140%;
+    --text-h3--font-weight: 600;
+    --text-h4: 1.8rem;
+    --text-h4--line-height: 140%;
+    --text-h4--font-weight: 600;
+    --text-h5: 1.6rem;
+    --text-h5--line-height: 140%;
+    --text-h5--font-weight: 600;
+    --text-h6: 1.4rem;
+    --text-h6--line-height: 140%;
+    --text-h6--font-weight: 600;
+}
+
+@utility mask-right {
+    -webkit-mask-image: linear-gradient(to left, transparent, #000 4.8rem);
+    mask-image: linear-gradient(to left, transparent, #000 4.8rem);
+    -webkit-mask-repeat: no-repeat;
+    mask-repeat: no-repeat;
+}
+
+@keyframes slideDown {
+    from {
+        opacity: 0;
+        transform: translateY(-100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes slideUp {
+    from {
+        opacity: 0;
+        transform: translateY(100%);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@layer base {
+    button:not(:disabled),
+    [role='button']:not(:disabled) {
+        cursor: pointer;
+    }
+    body,
+    button,
+    select,
+    textarea,
+    input,
+    pre {
+        font-family:
+            'Pretendard Variable',
+            Pretendard,
+            -apple-system,
+            BlinkMacSystemFont,
+            system-ui,
+            Roboto,
+            'Helvetica Neue',
+            'Segoe UI',
+            'Apple SD Gothic Neo',
+            'Noto Sans KR',
+            'Malgun Gothic',
+            'Apple Color Emoji',
+            'Segoe UI Emoji',
+            'Segoe UI Symbol',
+            sans-serif;
+    }
+    body,
+    html {
+        min-height: 100vh;
+        font-size: 10px;
+    }
+    h2 {
+        font-weight: 700;
+        font-size: 2.2rem;
+        line-height: 145%;
+    }
+    h3 {
+        font-size: 2rem;
+        font-weight: 600;
+        line-height: 140%;
+    }
+}

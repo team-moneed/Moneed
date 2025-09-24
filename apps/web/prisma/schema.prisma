@@ -117,7 +117,9 @@ model OAuthAccount {
 }
 
 model Stock {
-  name           String
+  nameKo         String          // 한국어 이름
+  nameEn         String          // 영어 이름
+  nation         String          // 국가명
   id             Int             @id @default(autoincrement())
   logoUrl        String
   refUrl         String?

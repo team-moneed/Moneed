@@ -10,6 +10,7 @@ export const getAccessTokenCookie = (duration: string | Date | number, name: str
     return {
         name,
         options: {
+            httpOnly: true,
             secure: true,
             sameSite: 'none' as const,
             path: '/',
@@ -66,27 +67,25 @@ export async function verifyToken({ jwt, key }: { jwt: string; key: string }): P
     try {
         const payload = await decrypt<TokenPayload>(jwt, key);
         return {
-            payload,
-            isExpired: false,
-            isInvalid: false,
+            data: payload,
+            error: null,
         };
     } catch (error) {
+        // TODO: ResponseError 로 변경
         if (error instanceof JWTExpired) {
-            // 토큰 만료
             return {
-                payload: null,
-                isExpired: true,
-                isInvalid: false,
+                data: null,
+                error: error,
             };
         } else if (error instanceof JWSInvalid) {
-            // 토큰 유효하지 않음
             return {
-                payload: null,
-                isExpired: false,
-                isInvalid: true,
+                data: null,
+                error: error,
             };
         }
-
-        throw error;
+        return {
+            data: null,
+            error: error as Error,
+        };
     }
 }
