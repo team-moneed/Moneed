@@ -1,4 +1,4 @@
-import type { TokenPayload } from '@moneed/auth';
+import { Provider, type TokenPayload } from '@moneed/auth';
 import { AuthService } from '@/service/auth.service';
 import { AxiosError } from 'axios';
 import { ERROR_MSG, SUCCESS_MSG } from '@/constants/error';
@@ -23,7 +23,7 @@ export class KakaoAuthService {
         { success: true; message: string; status: number } | { success: false; error: string; status: number }
     > {
         try {
-            const result = await this.authService.logout({ userId, provider: 'kakao' });
+            const result = await this.authService.logout({ userId, provider: Provider.KAKAO });
             if (result.success === false) {
                 return result;
             }
@@ -57,7 +57,7 @@ export class KakaoAuthService {
 
     async leave({ userId, reason }: { userId: string; reason: string }) {
         try {
-            const result = await this.authService.leave({ userId, reason, provider: 'kakao' });
+            const result = await this.authService.leave({ userId, reason, provider: Provider.KAKAO });
             if (!result.success) {
                 return result;
             }
@@ -90,7 +90,7 @@ export class KakaoAuthService {
         | { success: true; data: KakaoRefreshTokenResponse; status: number }
         | { success: false; error: string; status: number }
     > {
-        const currentRefreshToken = await this.providerRepository.getRefreshToken('kakao', userId);
+        const currentRefreshToken = await this.providerRepository.getRefreshToken(Provider.KAKAO, userId);
         if (!currentRefreshToken || currentRefreshToken.refreshTokenExpiresIn < new Date()) {
             return {
                 success: false,
@@ -100,7 +100,7 @@ export class KakaoAuthService {
         }
 
         const newToken = await refreshKakaoToken(currentRefreshToken.refreshToken);
-        const providerData = await this.providerRepository.findProviderInfo(userId, 'kakao');
+        const providerData = await this.providerRepository.findProviderInfo(userId, Provider.KAKAO);
 
         if (!providerData) {
             return {
@@ -112,7 +112,7 @@ export class KakaoAuthService {
 
         await this.providerRepository.updateTokenData(
             {
-                provider: 'kakao',
+                provider: Provider.KAKAO,
                 providerUserId: providerData.providerUserId,
             },
             {

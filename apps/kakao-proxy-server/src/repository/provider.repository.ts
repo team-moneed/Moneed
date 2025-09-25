@@ -3,6 +3,7 @@ import type { OAuthAccount } from '@prisma/client';
 import type { Optional } from '@moneed/utility-types';
 import { KakaoTokenResponse } from '@/types/kakao';
 import type { InsertProviderParams } from '@/types/auth.types';
+import { Provider } from '@moneed/auth';
 
 export class ProviderRepository {
     private prisma = prisma;
@@ -60,7 +61,7 @@ export class ProviderRepository {
             include: {
                 oauthAccounts: {
                     where: {
-                        provider: 'kakao',
+                        provider: Provider.KAKAO,
                     },
                 },
             },
@@ -73,7 +74,7 @@ export class ProviderRepository {
         this.prisma.oAuthAccount.update({
             where: {
                 provider_providerUserId: {
-                    provider: 'kakao',
+                    provider: Provider.KAKAO,
                     providerUserId: user.oauthAccounts[0].providerUserId,
                 },
             },

@@ -1,10 +1,9 @@
 import type { OAuthAccount, User } from '@prisma/client';
 import { KakaoTokenResponse } from './kakao';
-
-type Providers = 'kakao';
+import { Provider } from '@moneed/auth';
 
 export interface CheckExistingUserParams {
-    provider: Providers;
+    provider: Provider;
     providerUserId: string;
 }
 
@@ -22,7 +21,7 @@ export type SignUpParams = Pick<
 
 export interface LogoutParams {
     userId: string;
-    provider: Providers;
+    provider: Provider;
 }
 
 export type LogoutResult =
@@ -32,7 +31,7 @@ export type LogoutResult =
 export interface LeaveParams {
     userId: string;
     reason: string;
-    provider: Providers;
+    provider: Provider;
 }
 
 export type LeaveResult =

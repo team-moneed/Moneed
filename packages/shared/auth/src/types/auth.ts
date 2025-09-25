@@ -5,7 +5,12 @@ export type User = {
     id: string;
     nickname: string;
     profileImage: string;
+    provider: Provider;
 };
+
+export const enum Provider {
+    KAKAO = 'kakao',
+}
 
 export type TokenPayload = User & JWTPayload;
 

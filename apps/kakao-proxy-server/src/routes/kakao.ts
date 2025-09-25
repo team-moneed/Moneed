@@ -1,7 +1,7 @@
 import express from 'express';
 import { KakaoAuthService } from '@/service/kakaoAuth.service';
 import { verifyRequestTokens } from '@/utils/session';
-import { createToken } from '@moneed/auth';
+import { createToken, Provider } from '@moneed/auth';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/constants/error';
 import { generateTempCode, consumeTempCode } from '@/utils/tempCode';
@@ -71,7 +71,7 @@ router.get('/callback', async (req, res, next) => {
         const kakaoUserInfo = await fetchKakaoUserInfo(kakaoToken.access_token);
         // 3. 기존 유저인지 확인
         const existingUser = await authService.checkExistingUser({
-            provider: 'kakao',
+            provider: Provider.KAKAO,
             providerUserId: kakaoUserInfo.id.toString(),
         });
 
@@ -85,7 +85,7 @@ router.get('/callback', async (req, res, next) => {
         } else {
             // 3-2. 기존 유저가 아닐 경우 회원가입
             user = await authService.signUp({
-                provider: 'kakao',
+                provider: Provider.KAKAO,
                 providerUserId: kakaoUserInfo.id.toString(),
                 accessToken: kakaoToken.access_token,
                 refreshToken: kakaoToken.refresh_token,
@@ -100,6 +100,7 @@ router.get('/callback', async (req, res, next) => {
             id: user.id,
             nickname: user.nickname,
             profileImage: user.profileImage,
+            provider: Provider.KAKAO,
         };
         if (!key) {
             console.error(ERROR_MSG.SESSION_SECRET_NOT_SET);
