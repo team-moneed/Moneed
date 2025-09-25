@@ -1,10 +1,8 @@
-import type { RequiredUserInfo } from '@/database/types';
 import type { TokenPayload } from '@moneed/auth';
 import { AuthService } from '@/service/auth.service';
-import { AxiosError, isAxiosError } from 'axios';
+import { AxiosError } from 'axios';
 import { ERROR_MSG, SUCCESS_MSG } from '@/constants/error';
-import { getKakaoToken, getKakaoUserInfo, leaveKakao, logoutKakao, refreshKakaoToken } from '@/api/kakao.api';
-import { Response } from 'express';
+import { leaveKakao, logoutKakao, refreshKakaoToken } from '@/api/kakao.api';
 import { ProviderRepository } from '@/repository/provider.repository';
 import { KakaoRefreshTokenResponse } from '@/types/kakao';
 
@@ -17,119 +15,15 @@ export class KakaoAuthService {
         this.providerRepository = new ProviderRepository();
     }
 
-    async login({
-        code,
-    }: {
-        code: string;
-    }): Promise<
-        | { success: true; data: { payload: TokenPayload; isNewUser: boolean }; status: number }
-        | { success: false; error: string; status: number }
-    > {
-        try {
-            const { accessToken, refreshToken, accessTokenExpiresInSec, refreshTokenExpiresInSec } =
-                await this.getToken(code);
-            const kakaoUserInfo = await this.getUserInfo(accessToken);
-
-            const existingUser = await this.authService.checkExistingUser({
-                userInfo: {
-                    name: kakaoUserInfo.kakao_account.name,
-                    email: kakaoUserInfo.kakao_account.email,
-                    birthyear: kakaoUserInfo.kakao_account.birthyear,
-                    birthday: kakaoUserInfo.kakao_account.birthday,
-                },
-                provider: {
-                    provider: 'kakao',
-                    providerUserId: kakaoUserInfo.id.toString(),
-                },
-            });
-
-            let payload: TokenPayload = {
-                id: '',
-                nickname: '',
-                profileImage: '',
-            };
-            let isNewUser = false;
-
-            if (existingUser.isExisting) {
-                const user = await this.authService.signIn(existingUser.user.id, {
-                    provider: 'kakao',
-                    providerUserId: kakaoUserInfo.id.toString(),
-                    accessToken,
-                    refreshToken,
-                    accessTokenExpiresIn: new Date(Date.now() + accessTokenExpiresInSec * 1000),
-                    refreshTokenExpiresIn: new Date(Date.now() + refreshTokenExpiresInSec * 1000),
-                });
-
-                payload = {
-                    id: user.id,
-                    nickname: user.nickname,
-                    profileImage: user.profileImage,
-                };
-                isNewUser = false;
-            } else {
-                const user: Omit<RequiredUserInfo, 'nickname'> = {
-                    name: kakaoUserInfo.kakao_account.name,
-                    email: kakaoUserInfo.kakao_account.email,
-                    birthyear: kakaoUserInfo.kakao_account.birthyear,
-                    birthday: kakaoUserInfo.kakao_account.birthday,
-                    profileImage: this.authService.createDefaultProfileImage(),
-                    ageRange: kakaoUserInfo.kakao_account.age_range,
-                    gender: kakaoUserInfo.kakao_account.gender,
-                };
-                const newUser = await this.authService.signUp(user, {
-                    provider: 'kakao',
-                    providerUserId: kakaoUserInfo.id.toString(),
-                    accessToken,
-                    refreshToken,
-                    accessTokenExpiresIn: new Date(Date.now() + accessTokenExpiresInSec * 1000),
-                    refreshTokenExpiresIn: new Date(Date.now() + refreshTokenExpiresInSec * 1000),
-                });
-
-                payload = {
-                    id: newUser.id,
-                    nickname: newUser.nickname,
-                    profileImage: newUser.profileImage,
-                };
-                isNewUser = true;
-            }
-
-            return {
-                success: true,
-                data: {
-                    payload,
-                    isNewUser,
-                },
-                status: 200,
-            };
-        } catch (error) {
-            if (isAxiosError(error)) {
-                console.error('OAuth callback error:', error.response?.data);
-                return {
-                    success: false,
-                    error: error.response?.data || ERROR_MSG.KAKAO_INTERNAL_ERROR,
-                    status: error.response?.status || 500,
-                };
-            }
-
-            return {
-                success: false,
-                error: ERROR_MSG.KAKAO_INTERNAL_ERROR,
-                status: 500,
-            };
-        }
-    }
-
     async logout({
         userId,
-        response,
     }: {
         userId: string;
-        response: Response;
     }): Promise<
         { success: true; message: string; status: number } | { success: false; error: string; status: number }
     > {
         try {
-            const result = await this.authService.logout({ userId, provider: 'kakao', response });
+            const result = await this.authService.logout({ userId, provider: 'kakao' });
             if (result.success === false) {
                 return result;
             }
@@ -161,9 +55,9 @@ export class KakaoAuthService {
         }
     }
 
-    async leave({ userId, reason, response }: { userId: string; reason: string; response: Response }) {
+    async leave({ userId, reason }: { userId: string; reason: string }) {
         try {
-            const result = await this.authService.leave({ userId, reason, provider: 'kakao', response });
+            const result = await this.authService.leave({ userId, reason, provider: 'kakao' });
             if (!result.success) {
                 return result;
             }
@@ -186,28 +80,6 @@ export class KakaoAuthService {
                 status: 500,
             };
         }
-    }
-
-    async getToken(code: string) {
-        const kakaoToken = await getKakaoToken(code);
-        const {
-            access_token: accessToken,
-            refresh_token: refreshToken,
-            expires_in: accessTokenExpiresInSec,
-            refresh_token_expires_in: refreshTokenExpiresInSec,
-        } = kakaoToken;
-
-        return {
-            accessToken,
-            refreshToken,
-            accessTokenExpiresInSec,
-            refreshTokenExpiresInSec,
-        };
-    }
-
-    async getUserInfo(kakaoAccessToken: string) {
-        const kakaoUserInfo = await getKakaoUserInfo(kakaoAccessToken);
-        return kakaoUserInfo;
     }
 
     async refresh({

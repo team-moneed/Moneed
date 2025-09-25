@@ -1,7 +1,8 @@
-import { prisma } from '@/database/client';
+import prisma from '@/prisma/client';
 import type { OAuthAccount } from '@prisma/client';
-import type { ProviderInfo } from '@moneed/auth';
 import type { Optional } from '@moneed/utility-types';
+import { KakaoTokenResponse } from '@/types/kakao';
+import type { InsertProviderParams } from '@/types/auth.types';
 
 export class ProviderRepository {
     private prisma = prisma;
@@ -34,7 +35,7 @@ export class ProviderRepository {
     }
 
     async updateTokenData(
-        provider: ProviderInfo,
+        provider: Pick<OAuthAccount, 'provider' | 'providerUserId'>,
         tokenData: Optional<
             Pick<OAuthAccount, 'accessToken' | 'refreshToken' | 'accessTokenExpiresIn' | 'refreshTokenExpiresIn'>,
             'refreshToken' | 'refreshTokenExpiresIn'
@@ -51,46 +52,36 @@ export class ProviderRepository {
         });
     }
 
-    async upsert(
-        userId: string,
-        providerData: Pick<
-            OAuthAccount,
-            | 'provider'
-            | 'providerUserId'
-            | 'accessToken'
-            | 'refreshToken'
-            | 'accessTokenExpiresIn'
-            | 'refreshTokenExpiresIn'
-        >,
-    ) {
-        const { provider, providerUserId, accessToken, refreshToken, accessTokenExpiresIn, refreshTokenExpiresIn } =
-            providerData;
-
-        return this.prisma.oAuthAccount.upsert({
+    async updateTokenInfo(userId: string, kakaoToken: KakaoTokenResponse): Promise<void> {
+        const user = await this.prisma.user.findUnique({
             where: {
-                provider_providerUserId: {
-                    provider,
-                    providerUserId,
-                },
+                id: userId,
             },
-            update: {
-                accessToken,
-                refreshToken,
-                accessTokenExpiresIn,
-                refreshTokenExpiresIn,
-            },
-            create: {
-                provider,
-                providerUserId,
-                accessToken,
-                refreshToken,
-                accessTokenExpiresIn,
-                refreshTokenExpiresIn,
-                user: {
-                    connect: {
-                        id: userId,
+            include: {
+                oauthAccounts: {
+                    where: {
+                        provider: 'kakao',
                     },
                 },
+            },
+        });
+
+        if (!user) {
+            throw new Error('User not found');
+        }
+
+        this.prisma.oAuthAccount.update({
+            where: {
+                provider_providerUserId: {
+                    provider: 'kakao',
+                    providerUserId: user.oauthAccounts[0].providerUserId,
+                },
+            },
+            data: {
+                accessToken: kakaoToken.access_token,
+                refreshToken: kakaoToken.refresh_token,
+                accessTokenExpiresIn: new Date(Date.now() + kakaoToken.expires_in * 1000),
+                refreshTokenExpiresIn: new Date(Date.now() + kakaoToken.refresh_token_expires_in * 1000),
             },
         });
     }
@@ -146,6 +137,19 @@ export class ProviderRepository {
             select: {
                 refreshToken: true,
                 refreshTokenExpiresIn: true,
+            },
+        });
+    }
+
+    async insertProvider(providerData: InsertProviderParams, userId: string): Promise<OAuthAccount> {
+        return this.prisma.oAuthAccount.create({
+            data: {
+                ...providerData,
+                user: {
+                    connect: {
+                        id: userId,
+                    },
+                },
             },
         });
     }

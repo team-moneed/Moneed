@@ -1,12 +1,20 @@
 import { UserRepository } from '@/repository/user.repository';
-import { OAuthAccount, User } from '@prisma/client';
+import type { User } from '@prisma/client';
 import { ProviderRepository } from '@/repository/provider.repository';
-import { RequiredUserInfo, UserInfo } from '@/database/types';
 import { NicknameService } from '@/service/nickname.service';
-import { ProviderInfo, Providers } from '@moneed/auth';
 import LeaveReasonRepository from '@/repository/leaveReason.repository';
 import { ERROR_MSG } from '@/constants/error';
-import { Response } from 'express';
+import type {
+    CheckExistingUserParams,
+    CheckExistingUserResult,
+    SignInParams,
+    SignUpParams,
+    LogoutParams,
+    LogoutResult,
+    LeaveParams,
+    LeaveResult,
+} from '@/types/auth.types';
+import { generateRandomImage } from '@/utils/random';
 
 export class AuthService {
     private userRepository: UserRepository;
@@ -19,49 +27,24 @@ export class AuthService {
         this.nicknameService = new NicknameService();
     }
 
-    createDefaultProfileImage(): string {
-        const randomNumber = Math.floor(Math.random() * 15) + 1;
-        return `/profile/profile-${randomNumber}.svg`;
-    }
-
-    async checkExistingUser({
-        userInfo,
-        provider,
-    }: {
-        userInfo: UserInfo;
-        provider: ProviderInfo;
-    }): Promise<{ user: User; isExisting: true } | { user: null; isExisting: false }> {
-        const existingUserByProvider = await this.userRepository.findByProvider({
-            provider: provider.provider,
-            providerUserId: provider.providerUserId,
+    async checkExistingUser({ provider, providerUserId }: CheckExistingUserParams): Promise<CheckExistingUserResult> {
+        const existingUser = await this.userRepository.findByProvider({
+            provider: provider,
+            providerUserId: providerUserId,
         });
 
-        if (existingUserByProvider) {
-            return { user: existingUserByProvider, isExisting: true };
-        }
-
-        const existingUserByUserInfo = await this.userRepository.findByUserInfo(userInfo);
-
-        if (existingUserByUserInfo) {
-            return { user: existingUserByUserInfo, isExisting: true };
+        if (existingUser) {
+            return { user: existingUser, isExisting: true };
         }
 
         return { user: null, isExisting: false };
     }
 
-    async signIn(
-        userId: string,
-        providerData: Pick<
-            OAuthAccount,
-            | 'provider'
-            | 'providerUserId'
-            | 'accessToken'
-            | 'refreshToken'
-            | 'accessTokenExpiresIn'
-            | 'refreshTokenExpiresIn'
-        >,
-    ): Promise<User> {
-        await this.providerRepository.upsert(userId, providerData);
+    async signIn({ userId, kakaoToken }: SignInParams): Promise<User> {
+        await Promise.all([
+            this.providerRepository.updateTokenInfo(userId, kakaoToken),
+            this.userRepository.updateLastLoginAt(userId),
+        ]);
         const user = await this.userRepository.findById(userId);
         if (!user) {
             throw new Error('User not found');
@@ -69,42 +52,20 @@ export class AuthService {
         return user;
     }
 
-    async signUp(
-        user: Omit<RequiredUserInfo, 'nickname'>,
-        providerData: Pick<
-            OAuthAccount,
-            | 'provider'
-            | 'providerUserId'
-            | 'accessToken'
-            | 'refreshToken'
-            | 'accessTokenExpiresIn'
-            | 'refreshTokenExpiresIn'
-        >,
-    ): Promise<User> {
-        // 랜덤 닉네임 생성
+    async signUp(providerData: SignUpParams): Promise<User> {
         const uniqueNickname = await this.nicknameService.generateUniqueNickname();
+        const profileImage = generateRandomImage();
 
-        // 사용자 데이터에 생성된 닉네임 추가
-        const userWithNickname: RequiredUserInfo = {
-            ...user,
+        const user = await this.userRepository.insertUser({
             nickname: uniqueNickname,
-        };
+            profileImage: profileImage,
+        });
 
-        return this.userRepository.create(providerData, userWithNickname);
+        await this.providerRepository.insertProvider(providerData, user.id);
+        return user;
     }
 
-    async logout({
-        userId,
-        provider,
-        response,
-    }: {
-        userId: string;
-        provider: Providers;
-        response: Response;
-    }): Promise<
-        | { success: true; data: { accessToken: string; providerUserId: string }; status: number }
-        | { success: false; error: string; status: number }
-    > {
+    async logout({ userId, provider }: LogoutParams): Promise<LogoutResult> {
         const providerInfo = await this.providerRepository.findProviderInfo(userId, provider);
         if (!providerInfo) {
             return {
@@ -132,20 +93,8 @@ export class AuthService {
         };
     }
 
-    async leave({
-        userId,
-        reason,
-        provider,
-        response,
-    }: {
-        userId: string;
-        reason: string;
-        provider: Providers;
-        response: Response;
-    }): Promise<
-        | { success: true; data: { accessToken: string; providerUserId: string }; status: number }
-        | { success: false; error: string; status: number }
-    > {
+    async leave({ userId, reason, provider }: LeaveParams): Promise<LeaveResult> {
+        console.log('leave', userId, reason, provider);
         const leaveReasonRepository = new LeaveReasonRepository();
         const providerInfo = await this.providerRepository.findProviderInfo(userId, provider);
 
@@ -165,7 +114,6 @@ export class AuthService {
             };
         }
 
-        // 카카오 연결 해제 시도
         await this.userRepository.delete(userId);
         await leaveReasonRepository.createLeaveReason(reason);
         return {

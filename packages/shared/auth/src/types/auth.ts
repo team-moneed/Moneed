@@ -15,13 +15,6 @@ export type DecodedToken = User & {
     expiresAt: Date;
 };
 
-export type ProviderInfo = {
-    provider: string;
-    providerUserId: string;
-};
-
-export type Providers = 'kakao';
-
 export type SessionResult =
     | { data: TokenPayload; error: null }
     | { data: null; error: Error | JWTExpired | JWTInvalid };
