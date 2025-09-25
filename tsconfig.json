@@ -20,11 +20,6 @@
         ],
         "baseUrl": "."
     },
-    "include": [
-        "apps/*/src/**/*",
-        "packages/*/src/**/*",
-        "packages/shared/utils/error.ts",
-        "apps/kakao-proxy-server/prisma"
-    ],
+    "include": ["apps/*/src/**/*", "packages/*/src/**/*", "packages/shared/utils/error.ts"],
     "exclude": ["node_modules", "dist"]
 }
