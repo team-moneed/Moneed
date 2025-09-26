@@ -5,12 +5,15 @@ import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { PATH } from '@/shared/config';
 import useUserStore from '@/entities/user/model/user.store';
 import { useEffect } from 'react';
+import { useShallow } from 'zustand/react/shallow';
 
 export default function AuthCallbackPage() {
     const router = useRouter();
     const searchParams = useSearchParams();
     const tempCode = searchParams?.get('tempCode');
-    const setUser = useUserStore(state => state.setUser);
+    const { setUser, setProvider } = useUserStore(
+        useShallow(state => ({ setUser: state.setUser, setProvider: state.setProvider })),
+    );
 
     const { data, error, isLoading } = useTempCodeAuth(tempCode || '');
 
@@ -22,7 +25,12 @@ export default function AuthCallbackPage() {
             const saveTokens = async () => {
                 try {
                     await TokenUtils.setTokens(access_token, refresh_token);
-                    setUser(payload);
+                    setUser({
+                        id: payload.id,
+                        nickname: payload.nickname,
+                        profileImage: payload.profileImage,
+                    });
+                    setProvider(payload.provider);
 
                     // 성공 시 적절한 페이지로 리다이렉트
                     if (isNewUser) {

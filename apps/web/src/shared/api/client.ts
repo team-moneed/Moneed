@@ -55,7 +55,7 @@ const getAxiosInstance = (config: AxiosRequestConfig): AxiosInstance => {
                     return instance.request(originalRequest);
                 } catch (retryError) {
                     console.error(ERROR_MSG.TOKEN_REFRESH_FAILED, retryError);
-                    useUserStore.getState().clearUser();
+                    useUserStore.getState().clearUserInfo();
                     window.location.href = `/onboarding?reason=${REASON_CODES.EXPIRED_SESSION}`;
                 }
             }

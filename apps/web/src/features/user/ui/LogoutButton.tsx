@@ -11,12 +11,12 @@ import { Provider, ProviderType } from '@moneed/auth';
 
 export default function LogoutButton() {
     const showSnackbar = useSnackbarStore(state => state.showSnackbar);
-    const clearUser = useUserStore(state => state.clearUser);
+    const clearUserInfo = useUserStore(state => state.clearUserInfo);
     const { mutate: mutateLogout, isPending } = useMutation({
         mutationFn: ({ provider }: { provider: ProviderType }) => logout({ provider }),
         onSuccess: async () => {
             await TokenUtils.clearTokens();
-            clearUser();
+            clearUserInfo();
             window.location.href = `/onboarding?reason=${REASON_CODES.LOGOUT}`;
         },
         onError: () => {
