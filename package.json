@@ -46,5 +46,8 @@
     },
     "dependencies": {
         "@prisma/client": "^6.8.2"
+    },
+    "prisma": {
+        "seed": "tsx prisma/post.seed.ts"
     }
 }
