@@ -7,15 +7,16 @@ import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { cn } from '@/shared/utils/style';
 import { useMutation } from '@tanstack/react-query';
 import useUserStore from '@/entities/user/model/user.store';
+import { Provider, ProviderType } from '@moneed/auth';
 
 export default function LogoutButton() {
     const showSnackbar = useSnackbarStore(state => state.showSnackbar);
-    const clearUser = useUserStore(state => state.clearUser);
+    const clearUserInfo = useUserStore(state => state.clearUserInfo);
     const { mutate: mutateLogout, isPending } = useMutation({
-        mutationFn: ({ provider }: { provider: 'kakao' }) => logout({ provider }),
+        mutationFn: ({ provider }: { provider: ProviderType }) => logout({ provider }),
         onSuccess: async () => {
             await TokenUtils.clearTokens();
-            clearUser();
+            clearUserInfo();
             window.location.href = `/onboarding?reason=${REASON_CODES.LOGOUT}`;
         },
         onError: () => {
@@ -30,7 +31,7 @@ export default function LogoutButton() {
     const handleLogout = async () => {
         const isLogout = window.confirm('로그아웃 하시겠습니까?');
         if (isLogout) {
-            mutateLogout({ provider: 'kakao' });
+            mutateLogout({ provider: Provider.KAKAO });
         }
     };
 

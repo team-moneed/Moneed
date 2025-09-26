@@ -1,27 +1,10 @@
 'use client';
-import { leave } from '@/features/user/api/auth';
-import { REASON_CODES } from '@/shared/config/snackbar';
-import Button from '@/shared/ui/Button/Button';
-import { useMutation } from '@tanstack/react-query';
 import LeaveReasonDropdown from '@/features/user/ui/LeaveReasonDropdown';
 import { useState } from 'react';
-import { LEAVE_REASON } from '@/shared/config/leaveReason';
-import { TokenUtils } from '@/shared/utils/tokenUtils';
+import LeaveButton from '@/features/leave/ui/LeaveButton';
 
 export default function LeavePage() {
     const [selectedReason, setSelectedReason] = useState(0);
-
-    const { mutate: leaveKakao } = useMutation({
-        mutationFn: (reason: string) => leave({ provider: 'kakao', reason }),
-        onSuccess: async () => {
-            await TokenUtils.clearTokens();
-            window.location.href = `/?reason=${REASON_CODES.LEAVE}`;
-        },
-        onError: error => {
-            console.error('탈퇴 오류:', error);
-            alert('탈퇴 처리 중 오류가 발생했습니다. 다시 시도해주세요.');
-        },
-    });
 
     return (
         <div className='flex flex-col gap-[30rem] items-center justify-between h-full w-full sm:pt-[10rem] pt-[1rem] sm:pb-[4.8rem] pb-[2.4rem]'>
@@ -42,14 +25,7 @@ export default function LeavePage() {
                 <p className='w-full text-center text-[1.2rem] leading-[135%] text-moneed-gray-8'>
                     지금 탈퇴하면, 모든 기록이 사라져요
                 </p>
-                <Button
-                    variant='danger'
-                    disabled={selectedReason === 0}
-                    className='text-[1.6rem] font-bold leading-[140%] py-[1.8rem] w-full mt-[1rem]'
-                    onClick={() => leaveKakao(LEAVE_REASON[selectedReason].reason || '')}
-                >
-                    Moneed 회원 탈퇴하기
-                </Button>
+                <LeaveButton selectedReason={selectedReason} />
             </div>
         </div>
     );

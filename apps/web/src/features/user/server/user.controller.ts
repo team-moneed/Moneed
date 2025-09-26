@@ -3,7 +3,7 @@ import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, TOKEN_KEY } from '@/shared/config';
 import UserService from './user.service';
 import { UpdateUserProfileRequest } from '@/features/user';
-import { getCookie } from '@/shared/utils/cookie.server';
+import { clearCookie, getCookie } from '@/shared/utils/cookie.server';
 import { verifyToken } from '@moneed/auth';
 import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 
@@ -75,6 +75,7 @@ export async function getUserInfo() {
         const user = await userService.getUserInfo({ userId });
 
         if (!user) {
+            await clearCookie();
             return NextResponse.json({ error: ERROR_MSG.USER_NOT_FOUND }, { status: 404 });
         }
 
