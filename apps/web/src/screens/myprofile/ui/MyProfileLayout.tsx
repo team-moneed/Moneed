@@ -7,7 +7,7 @@ export default function MyProfileLayout({ children }: { children: React.ReactNod
 
     return (
         <>
-            <header className='sticky top-0 z-10 bg-white flex lg:hidden items-center justify-between px-[4rem] pb-[1.8rem] pt-[3rem]'>
+            <header className='sticky top-0 z-10 bg-white flex items-center justify-between px-[4rem] pb-[1.8rem] pt-[3rem]'>
                 <button onClick={() => openModal(<ProfileEditCancleModalContent />)}>
                     <img
                         className='cursor-pointer w-[2.4rem] h-[2.4rem]'
