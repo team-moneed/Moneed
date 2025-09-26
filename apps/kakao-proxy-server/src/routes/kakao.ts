@@ -3,11 +3,14 @@ import { KakaoAuthService } from '@/service/kakaoAuth.service';
 import { verifyRequestTokens } from '@/utils/session';
 import { createToken, Provider } from '@moneed/auth';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG } from '@/constants/error';
+import { ERROR_MSG } from '@/constants/message';
 import { generateTempCode, consumeTempCode } from '@/utils/tempCode';
-import { fetchKakaoToken, fetchKakaoUserInfo } from '@/api/kakao.api';
+import { fetchKakaoToken, fetchKakaoUserInfo, leaveKakao } from '@/api/kakao.api';
 import { AuthService } from '@/service/auth.service';
 import { User } from '@prisma/client';
+import { ProviderRepository } from '@/repository/provider.repository';
+import { AxiosError } from 'axios';
+import { UserRepository } from '@/repository/user.repository';
 
 const router = express.Router();
 
@@ -175,22 +178,34 @@ router.post('/leave', async (req, res, next) => {
             throw sessionResult.error;
         }
         const userId = sessionResult.data.id;
-        const { reason } = req.body;
 
-        const kakaoAuthService = new KakaoAuthService();
-        const result = await kakaoAuthService.leave({ userId, reason });
+        const providerRepository = new ProviderRepository();
+        const userRepository = new UserRepository();
 
-        if (result.success) {
-            return res.status(result.status).json({
-                message: result.message,
-            });
-        } else {
-            throw new ResponseError(result.status, result.error);
+        // 1. provider 조회 (토큰, providerUserId)
+        const token = await providerRepository.getToken(Provider.KAKAO, userId);
+        const provider = await providerRepository.getProviderUserId(Provider.KAKAO, userId);
+        if (!token || !provider) {
+            throw new ResponseError(400, ERROR_MSG.KAKAO_PROVIDER_INFO_NOT_FOUND);
         }
+        // 2. 카카오 탈퇴
+        await leaveKakao({ accessToken: token.accessToken, providerUserId: provider.providerUserId });
+
+        // 3. 카카오 계정과 연결된 회원 계정 탈퇴
+        await userRepository.delete(userId);
+
+        return res.status(200).json({
+            message: '회원탈퇴 성공',
+        });
     } catch (error) {
         console.error('회원탈퇴 오류:', error);
         if (error instanceof ResponseError) {
             return res.status(error.code).json({ message: error.message });
+        }
+        if (error instanceof AxiosError) {
+            return res
+                .status(error.response?.status || 500)
+                .json({ message: error.response?.data || ERROR_MSG.INTERNAL_SERVER_ERROR });
         }
         next(error);
     }
@@ -202,7 +217,6 @@ router.post('/refresh', async (req, res, next) => {
         if (sessionResult.error) {
             throw sessionResult.error;
         }
-        console.log('sessionResult', sessionResult);
         const userId = sessionResult.data.id;
 
         const kakaoAuthService = new KakaoAuthService();

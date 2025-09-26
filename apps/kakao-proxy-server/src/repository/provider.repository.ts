@@ -154,4 +154,32 @@ export class ProviderRepository {
             },
         });
     }
+
+    async getToken(provider: string, userId: string) {
+        const providerUserId = await this.getProviderUserId(provider, userId);
+        return this.prisma.oAuthAccount.findFirst({
+            where: {
+                provider,
+                providerUserId: providerUserId?.providerUserId,
+            },
+            select: {
+                accessToken: true,
+                refreshToken: true,
+                accessTokenExpiresIn: true,
+                refreshTokenExpiresIn: true,
+            },
+        });
+    }
+
+    async getProviderUserId(provider: string, userId: string) {
+        return this.prisma.oAuthAccount.findFirst({
+            where: {
+                provider,
+                user: { id: userId },
+            },
+            select: {
+                providerUserId: true,
+            },
+        });
+    }
 }

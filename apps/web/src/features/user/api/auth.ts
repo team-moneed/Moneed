@@ -7,11 +7,6 @@ export const logout = async ({ provider }: { provider: ProviderType }) => {
     return res;
 };
 
-export const leave = async ({ provider }: { provider: ProviderType }) => {
-    const res = await proxy.post<{ ok: boolean; reason?: string }>(`/api/auth/${provider}/leave`);
-    return res;
-};
-
 export const refresh = async ({ provider, refreshToken }: { provider: ProviderType; refreshToken: string | null }) => {
     const res = await proxy.post<RefreshTokenDTO>(
         `/api/auth/${provider}/refresh`,

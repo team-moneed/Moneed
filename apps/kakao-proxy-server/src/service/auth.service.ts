@@ -2,8 +2,7 @@ import { UserRepository } from '@/repository/user.repository';
 import type { User } from '@prisma/client';
 import { ProviderRepository } from '@/repository/provider.repository';
 import { NicknameService } from '@/service/nickname.service';
-import LeaveReasonRepository from '@/repository/leaveReason.repository';
-import { ERROR_MSG } from '@/constants/error';
+import { ERROR_MSG } from '@/constants/message';
 import type {
     CheckExistingUserParams,
     CheckExistingUserResult,
@@ -11,8 +10,6 @@ import type {
     SignUpParams,
     LogoutParams,
     LogoutResult,
-    LeaveParams,
-    LeaveResult,
 } from '@/types/auth.types';
 import { generateRandomImage } from '@/utils/random';
 
@@ -83,39 +80,6 @@ export class AuthService {
             };
         }
 
-        return {
-            success: true,
-            data: {
-                accessToken: providerInfo.accessToken,
-                providerUserId: providerInfo.providerUserId,
-            },
-            status: 200,
-        };
-    }
-
-    async leave({ userId, reason, provider }: LeaveParams): Promise<LeaveResult> {
-        console.log('leave', userId, reason, provider);
-        const leaveReasonRepository = new LeaveReasonRepository();
-        const providerInfo = await this.providerRepository.findProviderInfo(userId, provider);
-
-        if (!providerInfo) {
-            return {
-                success: false,
-                error: ERROR_MSG.KAKAO_PROVIDER_INFO_NOT_FOUND,
-                status: 400,
-            };
-        }
-
-        if (!providerInfo.accessToken) {
-            return {
-                success: false,
-                error: ERROR_MSG.KAKAO_ACCESS_TOKEN_NOT_FOUND,
-                status: 401,
-            };
-        }
-
-        await this.userRepository.delete(userId);
-        await leaveReasonRepository.createLeaveReason(reason);
         return {
             success: true,
             data: {

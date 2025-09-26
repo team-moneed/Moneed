@@ -1,8 +1,8 @@
-import { Provider, type TokenPayload } from '@moneed/auth';
+import { Provider } from '@moneed/auth';
 import { AuthService } from '@/service/auth.service';
 import { AxiosError } from 'axios';
-import { ERROR_MSG, SUCCESS_MSG } from '@/constants/error';
-import { leaveKakao, logoutKakao, refreshKakaoToken } from '@/api/kakao.api';
+import { ERROR_MSG, SUCCESS_MSG } from '@/constants/message';
+import { logoutKakao, refreshKakaoToken } from '@/api/kakao.api';
 import { ProviderRepository } from '@/repository/provider.repository';
 import { KakaoRefreshTokenResponse } from '@/types/kakao';
 
@@ -47,33 +47,6 @@ export class KakaoAuthService {
                     status: 200,
                 };
             }
-            return {
-                success: false,
-                error: ERROR_MSG.KAKAO_INTERNAL_ERROR,
-                status: 500,
-            };
-        }
-    }
-
-    async leave({ userId, reason }: { userId: string; reason: string }) {
-        try {
-            const result = await this.authService.leave({ userId, reason, provider: Provider.KAKAO });
-            if (!result.success) {
-                return result;
-            }
-
-            await leaveKakao({
-                accessToken: result.data.accessToken,
-                providerUserId: result.data.providerUserId,
-            });
-
-            return {
-                success: result.success,
-                message: '탈퇴 성공',
-                status: result.status,
-            };
-        } catch (error) {
-            console.error('Kakao leave error:', error, userId);
             return {
                 success: false,
                 error: ERROR_MSG.KAKAO_INTERNAL_ERROR,
