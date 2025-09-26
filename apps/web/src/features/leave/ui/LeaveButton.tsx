@@ -11,7 +11,7 @@ export default function LeaveButton({ selectedReason }: { selectedReason: number
     const { leaveMutation } = useLeave();
     const handleLeave = async () => {
         if (!provider) return;
-        leaveMutation(provider);
+        await leaveMutation(provider);
         await submitLeaveReason(LEAVE_REASON[selectedReason].reason || '');
         window.location.href = `/?reason=${REASON_CODES.LEAVE}`;
     };
