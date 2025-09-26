@@ -19,6 +19,19 @@ export type SignUpParams = Pick<
     'provider' | 'providerUserId' | 'accessToken' | 'refreshToken' | 'accessTokenExpiresIn' | 'refreshTokenExpiresIn'
 >;
 
+export type InsertUserProviderParams = {
+    userData: Pick<User, 'nickname' | 'profileImage'>;
+    providerData: Pick<
+        OAuthAccount,
+        | 'provider'
+        | 'providerUserId'
+        | 'accessToken'
+        | 'refreshToken'
+        | 'accessTokenExpiresIn'
+        | 'refreshTokenExpiresIn'
+    >;
+};
+
 export interface LogoutParams {
     userId: string;
     provider: ProviderType;

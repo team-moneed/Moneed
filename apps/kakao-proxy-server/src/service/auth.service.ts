@@ -53,12 +53,14 @@ export class AuthService {
         const uniqueNickname = await this.nicknameService.generateUniqueNickname();
         const profileImage = generateRandomImage();
 
-        const user = await this.userRepository.insertUser({
-            nickname: uniqueNickname,
-            profileImage: profileImage,
+        const user = await this.userRepository.insertUserProvider({
+            userData: {
+                nickname: uniqueNickname,
+                profileImage: profileImage,
+            },
+            providerData: providerData,
         });
 
-        await this.providerRepository.insertProvider(providerData, user.id);
         return user;
     }
 
