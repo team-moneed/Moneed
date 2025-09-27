@@ -1,6 +1,6 @@
 import { useEffect } from 'react';
 import useUserStore from '@/entities/user/model/user.store';
-import { exchangeTempCode } from '@/features/oauth-login/api';
+import { exchangeTempCode } from '@/features/login/api';
 import { setTokensInCookies } from '@/shared/utils/token.actions';
 import { PATH } from '@/shared/config';
 import { useRouter } from 'next/navigation';

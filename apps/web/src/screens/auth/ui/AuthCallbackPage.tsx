@@ -1,5 +1,5 @@
 'use client';
-import { useExchangeTempCodeAndRedirect } from '@/features/oauth-login/hook';
+import { useExchangeTempCodeAndRedirect } from '@/features/login/hook';
 import { use } from 'react';
 
 export default function AuthCallbackPage({ searchParams }: { searchParams: Promise<{ tempCode: string }> }) {

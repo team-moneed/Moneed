@@ -1,5 +1,5 @@
 'use client';
-import OAuthLoginButton from '@/features/oauth-login/ui/OAuthLoginButton';
+import OAuthLoginButton from '@/features/login/ui/OAuthLoginButton';
 import KakaoLogo from '@/screens/onboarding/ui/KakaoLogo';
 
 export default function KakaoLoginButton() {
