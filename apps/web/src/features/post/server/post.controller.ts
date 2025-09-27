@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from 'next/server';
 import { PostService } from './post.service';
 import { StockRepository } from '@/features/stock/server/repository';
-import { getCookie } from '@/shared/utils/cookie.server';
+import TokenCookie from '@/shared/utils/token.cookie';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
 import { verifyToken } from '@moneed/auth';
@@ -117,7 +117,7 @@ export async function createPost(req: NextRequest) {
         const symbol = formData.get('symbol') as string;
         const thumbnailImage = formData.get('thumbnailImage') as File;
 
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

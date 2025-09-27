@@ -3,13 +3,13 @@ import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, TOKEN_KEY } from '@/shared/config';
 import UserService from './user.service';
 import { UpdateUserProfileRequest } from '@/features/user';
-import { clearCookie, getCookie } from '@/shared/utils/cookie.server';
+import TokenCookie from '@/shared/utils/token.cookie';
 import { verifyToken } from '@moneed/auth';
 import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 
 export async function getUserPosts() {
     try {
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -33,7 +33,7 @@ export async function getUserPosts() {
 
 export async function getUserComments() {
     try {
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -57,7 +57,7 @@ export async function getUserComments() {
 
 export async function getUserInfo() {
     try {
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -75,7 +75,7 @@ export async function getUserInfo() {
         const user = await userService.getUserInfo({ userId });
 
         if (!user) {
-            await clearCookie();
+            await TokenCookie.clearCookie();
             return NextResponse.json({ error: ERROR_MSG.USER_NOT_FOUND }, { status: 404 });
         }
 
@@ -90,7 +90,7 @@ export async function getUserInfo() {
 
 export async function updateUserProfile(request: Request) {
     try {
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
