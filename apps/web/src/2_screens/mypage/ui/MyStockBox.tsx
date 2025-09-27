@@ -1,0 +1,56 @@
+'use client';
+import type { Stock } from '@/5_entities/stock';
+import { toUSD } from '@/6_shared/utils/parser';
+import { cn } from '@/6_shared/utils/style';
+import Link from 'next/link';
+import { ReactNode } from 'react';
+
+type MyStockProps = {
+    stock: Stock;
+    children?: ReactNode;
+    className?: string;
+    href: string;
+};
+
+const MyStockBox = ({ children, stock, href }: MyStockProps) => {
+    return (
+        <>
+            <Link
+                className='flex justify-between p-[.8rem] rounded-[.8rem] hover:bg-moneed-white cursor-pointer transition-colors`'
+                href={href}
+            >
+                <div className='flex items-center gap-[.6rem] flex-1'>
+                    <div className='rounded-full overflow-hidden size-[2rem] md:size-7 flex-shrink-0'>
+                        <img src={stock.logoUrl} alt={stock.nameKo} className='w-full h-full object-cover' />
+                    </div>
+                    <div className='rounded-[.8rem] bg-moneed-gray-4 py-[.2rem] px-[.4rem]'>
+                        <span className='text-[1.2rem] font-normal leading-[135%] text-moneed-gray-9'>
+                            {stock.symbol}
+                        </span>
+                    </div>
+                    <h3 className='flex-shrink-1 text-[1.2rem] md:text-[1.4rem] font-semibold md:leading-[140%] leading-[135%] text-moneed-black line-clamp-1 '>
+                        {stock.nameKo}
+                    </h3>
+                </div>
+                <div className='flex items-center gap-[.6rem]'>
+                    <div className='text-[1.2rem] md:text-[1.4rem] font-semibold leading-[135%] md:leading-[140%] text-moneed-black'>
+                        {toUSD(stock.price)}
+                    </div>
+                    <div
+                        className={cn(
+                            'text-[1.2rem] md:text-[1.4rem] font-semibold leading-[135%] md:leading-[140%] rounded-[.8rem] p-[.4rem]',
+                            (stock.sign === '1' || stock.sign === '2') && 'text-moneed-red',
+                            stock.sign === '3' && 'text-moneed-black',
+                            (stock.sign === '4' || stock.sign === '5') && 'text-moneed-blue',
+                        )}
+                    >
+                        {stock.changeRate} %
+                    </div>
+                </div>
+            </Link>
+            {children}
+        </>
+    );
+};
+
+export default MyStockBox;

@@ -1,1 +1,1 @@
-export { default } from '@/screens/auth/ui/AuthCallbackLoading';
+export { default } from '@/2_screens/auth/ui/AuthCallbackLoading';

@@ -1,11 +1,11 @@
-import TokenCookie from '@/shared/utils/token.cookie';
-import { PostService } from '@/features/post/server';
+import TokenCookie from '@/6_shared/utils/token.cookie';
+import { PostService } from '@/4_features/post/server';
 import { NextRequest, NextResponse } from 'next/server';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
+import { ERROR_MSG, SUCCESS_MSG } from '@/6_shared/config/message';
 import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 import { verifyToken } from '@moneed/auth';
-import { TOKEN_KEY } from '@/shared/config';
+import { TOKEN_KEY } from '@/6_shared/config';
 
 export const dynamic = 'force-dynamic';
 

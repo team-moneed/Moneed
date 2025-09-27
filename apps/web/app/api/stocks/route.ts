@@ -1,6 +1,6 @@
 import type { Stock } from '@prisma/client';
 import { NextRequest, NextResponse } from 'next/server';
-import { StockRepository } from '@/features/stock/server/repository';
+import { StockRepository } from '@/4_features/stock/server/repository';
 
 export async function GET(request: NextRequest) {
     try {

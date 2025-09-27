@@ -1,12 +1,12 @@
-import MainNews from '@/screens/home/ui/MainNews';
-import MainShortforms from '@/screens/home/ui/MainShortforms';
-import Top3 from '@/screens/home/ui/Top3';
+import MainNews from '@/2_screens/home/ui/MainNews';
+import MainShortforms from '@/2_screens/home/ui/MainShortforms';
+import Top3 from '@/2_screens/home/ui/Top3';
 import Link from 'next/link';
-import { SnackbarTrigger } from '@/shared/ui/Snackbar';
-import { PATH } from '@/shared/config';
-import Footer from '@/shared/ui/layout/Footer';
-import RootNav from '@/shared/ui/layout/RootNav';
-import BottomNav from '@/shared/ui/layout/BottomNav';
+import { SnackbarTrigger } from '@/6_shared/ui/Snackbar';
+import { PATH } from '@/6_shared/config';
+import Footer from '@/6_shared/ui/layout/Footer';
+import RootNav from '@/6_shared/ui/layout/RootNav';
+import BottomNav from '@/6_shared/ui/layout/BottomNav';
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ reason: string }> }) {
     const reason = (await searchParams).reason;

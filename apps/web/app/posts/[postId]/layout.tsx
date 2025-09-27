@@ -1,1 +1,1 @@
-export { default } from '@/screens/post-detail/ui/PostDetailLayout';
+export { default } from '@/2_screens/post-detail/ui/PostDetailLayout';

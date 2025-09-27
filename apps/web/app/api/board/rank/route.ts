@@ -1,5 +1,5 @@
 import { NextRequest } from 'next/server';
-import { PostService } from '@/features/post/server';
+import { PostService } from '@/4_features/post/server';
 import { NextResponse } from 'next/server';
 
 export async function GET(request: NextRequest) {

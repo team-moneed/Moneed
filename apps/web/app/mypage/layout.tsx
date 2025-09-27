@@ -1,1 +1,1 @@
-export { default } from '@/screens/mypage/ui/MypageLayout';
+export { default } from '@/2_screens/mypage/ui/MypageLayout';

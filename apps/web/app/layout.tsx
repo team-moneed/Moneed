@@ -1,10 +1,10 @@
 import { Metadata, Viewport } from 'next';
 // import Script from 'next/script';
-import '@/app/styles/globals.css';
-import ModalProvider from '@/app/provider/ModalProvider';
-import { SnackbarProvider } from '@/shared/ui/Snackbar';
-import QueryClientProvider from '@/app/provider/QueryClientProvider';
-import ReactQueryDevtools from '@/app/provider/ReactQueryDevtools';
+import '@/1_app/styles/globals.css';
+import ModalProvider from '@/1_app/provider/ModalProvider';
+import { SnackbarProvider } from '@/6_shared/ui/Snackbar';
+import QueryClientProvider from '@/1_app/provider/QueryClientProvider';
+import ReactQueryDevtools from '@/1_app/provider/ReactQueryDevtools';
 
 export const metadata: Metadata = {
     title: 'Moneed',
