@@ -19,13 +19,3 @@ export const refresh = async ({ provider, refreshToken }: { provider: ProviderTy
     );
     return res.data;
 };
-
-export const exchangeTempCode = async ({ tempCode }: { tempCode: string }) => {
-    const res = await proxy.post<{
-        access_token: string;
-        refresh_token: string;
-        payload: TokenPayload;
-        isNewUser: boolean;
-    }>('/api/auth/kakao/exchange', { tempCode });
-    return res;
-};
