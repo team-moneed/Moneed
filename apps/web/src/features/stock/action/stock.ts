@@ -2,7 +2,7 @@
 
 import { getOverseasStockByCondition } from '@/features/stock/server';
 import { StockService } from '@/features/stock/server';
-import { getCookie } from '@/shared/utils/cookie.server';
+import TokenCookie from '@/shared/utils/token.cookie';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/shared/config/message';
 import { redirect } from 'next/navigation';
@@ -43,7 +43,7 @@ export const getSelectedStockSymbols = async (): Promise<
     | { success: false; data: null; error: { message: string; status: number } }
 > => {
     try {
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -96,7 +96,7 @@ export const selectStockAction = async (
 ): Promise<{ message: string } | void> => {
     let success = false;
     try {
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

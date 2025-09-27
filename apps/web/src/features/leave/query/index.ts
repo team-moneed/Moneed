@@ -1,15 +1,17 @@
 import useUserStore from '@/entities/user/model/user.store';
 import { leave } from '@/features/leave/api';
-import { TokenUtils } from '@/shared/utils/tokenUtils';
+import TokenLocalStorage from '@/shared/utils/token.localstorage';
 import { useMutation } from '@tanstack/react-query';
 import { ProviderType } from '@moneed/auth';
+import { clearTokensFromCookies } from '@/shared/utils/token.actions';
 
 export const useLeave = () => {
     const clearUserInfo = useUserStore(state => state.clearUserInfo);
     const { mutateAsync: leaveMutation } = useMutation({
         mutationFn: (provider: ProviderType) => leave({ provider }),
         onSuccess: async () => {
-            await TokenUtils.clearTokens();
+            TokenLocalStorage.clearTokens();
+            await clearTokensFromCookies();
             clearUserInfo();
         },
         onError: error => {

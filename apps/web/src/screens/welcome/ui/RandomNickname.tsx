@@ -3,13 +3,13 @@
 import type { TokenPayload } from '@moneed/auth';
 import { decodeJwt } from 'jose';
 import { useEffect, useState } from 'react';
-import { TokenUtils } from '@/shared/utils/tokenUtils';
+import TokenLocalStorage from '@/shared/utils/token.localstorage';
 
 export default function RandomNickname() {
     const [nickname, setNickname] = useState<string>('');
 
     useEffect(() => {
-        const accessToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
+        const accessToken = TokenLocalStorage.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
         if (!accessToken) {
             return;
         }

@@ -1,1 +1,1 @@
-export * from './auth.actions';
+export * from '../../../shared/utils/token.actions';

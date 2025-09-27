@@ -1,17 +1,16 @@
 import { LEAVE_REASON } from '@/shared/config/leaveReason';
 import Button from '@/shared/ui/Button/Button';
 import { useLeave } from '../query';
-import { useShallow } from 'zustand/react/shallow';
 import useUserStore from '@/entities/user/model/user.store';
 import { submitLeaveReason } from '../server';
 import { REASON_CODES } from '@/shared/config';
 
 export default function LeaveButton({ selectedReason }: { selectedReason: number }) {
-    const provider = useUserStore(useShallow(state => state.provider));
+    const user = useUserStore(state => state.user);
     const { leaveMutation } = useLeave();
     const handleLeave = async () => {
-        if (!provider) return;
-        await leaveMutation(provider);
+        if (!user) return;
+        await leaveMutation(user.provider);
         await submitLeaveReason(LEAVE_REASON[selectedReason].reason || '');
         window.location.href = `/?reason=${REASON_CODES.LEAVE}`;
     };

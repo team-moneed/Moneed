@@ -1,6 +1,6 @@
 import { NextResponse } from 'next/server';
 import UserService from '@/features/user/server/user.service';
-import { getCookie } from '@/shared/utils/cookie.server';
+import TokenCookie from '@/shared/utils/token.cookie';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
 import { verifyToken } from '@moneed/auth';
@@ -11,7 +11,7 @@ export const dynamic = 'force-dynamic';
 
 export async function POST(request: Request) {
     try {
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

@@ -3,7 +3,7 @@ import PostSection from '@/screens/post-detail/ui/PostSection';
 import CommentSection from '@/screens/post-detail/ui/CommentSection';
 import { fetchPost, fetchPostComments } from '@/features/post';
 import { verifyToken } from '@moneed/auth';
-import { getCookie } from '@/shared/utils/cookie.server';
+import TokenCookie from '@/shared/utils/token.cookie';
 import { TOKEN_KEY } from '@/shared/config';
 import SubNav from '@/shared/ui/layout/SubNav';
 import RootNav from '@/shared/ui/layout/RootNav';
@@ -17,7 +17,7 @@ export default async function PostDetailPage({
 }) {
     const { postId } = await params;
     const { reason } = await searchParams;
-    const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+    const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
     const sessionResult = await verifyToken({ jwt: accessToken ?? '', key: process.env.SESSION_SECRET! });
     const userId = sessionResult.data?.id;
     const post = await fetchPost({ postId: Number(postId), userId });

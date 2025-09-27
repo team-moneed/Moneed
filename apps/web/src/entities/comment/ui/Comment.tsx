@@ -5,9 +5,9 @@ import { PrimaryDropdown, PrimaryDropdownProps } from '@/shared/ui/Dropdown';
 import Image from 'next/image';
 import { Comment as TComment } from '@/entities/comment';
 import DateFormatter from '@/shared/ui/Dateformatter';
-import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { decodeJwt } from 'jose';
 import type { TokenPayload } from '@moneed/auth';
+import TokenLocalStorage from '@/shared/utils/token.localstorage';
 
 type CommentType = {
     comment: TComment;
@@ -33,7 +33,7 @@ const Comment = ({ comment, actions }: CommentType) => {
     };
 
     useEffect(() => {
-        const accessToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
+        const accessToken = TokenLocalStorage.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
         if (accessToken) {
             setDecodedToken(decodeJwt<TokenPayload>(accessToken));
         }

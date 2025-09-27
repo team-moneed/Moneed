@@ -133,6 +133,10 @@ const MyProfile = () => {
                         required: { value: true, message: '닉네임을 입력해주세요.' },
                         minLength: { value: 2, message: '닉네임은 2-10자까지 입력하실 수 있습니다.' },
                         maxLength: { value: 10, message: '닉네임은 2-10자까지 입력하실 수 있습니다.' },
+                        pattern: {
+                            value: /^[가-힣a-zA-Z0-9]+$/,
+                            message: '닉네임은 한글, 영문, 숫자만 사용할 수 있습니다.',
+                        },
                         onChange: e => handleChangeNickname(e.target.value),
                     })}
                     value={nickname}

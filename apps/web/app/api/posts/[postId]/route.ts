@@ -1,5 +1,5 @@
 import { PostService } from '@/features/post/server';
-import { getCookie } from '@/shared/utils/cookie.server';
+import TokenCookie from '@/shared/utils/token.cookie';
 import { NextRequest, NextResponse } from 'next/server';
 import { UpdatePostRequest } from '@/features/post/model/post.type';
 import { ResponseError } from '@moneed/utils';
@@ -28,7 +28,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ postId
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
     try {
         const { postId } = await params;
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -63,7 +63,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ post
             'prevThumbnailImageUrl',
         ) as UpdatePostRequest['prevThumbnailImageUrl'];
 
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

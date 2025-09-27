@@ -1,6 +1,6 @@
-import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { useEffect, useState } from 'react';
 import { TOKEN_KEY } from '../config';
+import TokenLocalStorage from '../utils/token.localstorage';
 
 export const useAuth = () => {
     const [accessToken, setAccessToken] = useState<string | null>(null);
@@ -8,11 +8,11 @@ export const useAuth = () => {
     const [isLoggedIn, setIsLoggedIn] = useState<boolean>(false);
 
     useEffect(() => {
-        const accessTokenCookie = TokenUtils.getToken(TOKEN_KEY.ACCESS_TOKEN);
-        const refreshTokenCookie = TokenUtils.getToken(TOKEN_KEY.REFRESH_TOKEN);
+        const accessTokenCookie = TokenLocalStorage.getToken(TOKEN_KEY.ACCESS_TOKEN);
+        const refreshTokenCookie = TokenLocalStorage.getToken(TOKEN_KEY.REFRESH_TOKEN);
         setAccessToken(accessTokenCookie);
         setRefreshToken(refreshTokenCookie);
-        setIsLoggedIn(TokenUtils.isAuthenticated());
+        setIsLoggedIn(TokenLocalStorage.isAuthenticated());
     }, []);
 
     return { accessToken, refreshToken, isLoggedIn };

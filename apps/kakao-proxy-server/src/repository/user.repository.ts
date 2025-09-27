@@ -1,6 +1,6 @@
 import prisma from '@/prisma/client';
 import type { OAuthAccount, User } from '@prisma/client';
-import type { InsertUserParams, InsertProviderParams, InsertUserProviderParams } from '@/types/auth.types';
+import type { InsertUserProviderParams } from '@/types/auth.types';
 
 export class UserRepository {
     private prisma = prisma;
