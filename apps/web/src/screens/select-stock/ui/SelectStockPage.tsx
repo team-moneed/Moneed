@@ -1,4 +1,4 @@
-import { getHotStocks, getSelectedStockSymbols } from '@/features/stock';
+import { getHotStocks, getSelectedStockSymbols } from '@/features/select-stock/server';
 import { SelectStockClientPage } from './SelectStockClientPage';
 import { PATH } from '@/shared/config';
 
@@ -18,7 +18,7 @@ export default async function SelectStockPage({ searchParams }: { searchParams: 
     return (
         <SelectStockClientPage
             stocks={stocks}
-            mySelectedStockSymbols={mySelectedStockSymbols}
+            mySelectedStocks={mySelectedStockSymbols}
             redirectUrl={url ?? PATH.MYPAGE}
         />
     );

@@ -5,11 +5,11 @@ import type { Stock } from '@/entities/stock';
 
 interface StockListProps {
     stocks: Stock[];
-    selectedSymbols: string[];
+    selectedStocks: string[];
     onStockToggle: (symbol: string) => void;
 }
 
-export function StockList({ stocks, selectedSymbols, onStockToggle }: StockListProps) {
+export function StockList({ stocks, selectedStocks, onStockToggle }: StockListProps) {
     return (
         <>
             {stocks.map(
@@ -20,7 +20,7 @@ export function StockList({ stocks, selectedSymbols, onStockToggle }: StockListP
                                 label={nameKo}
                                 icon={logoUrl ?? ''}
                                 onClick={() => onStockToggle(symbol)}
-                                active={selectedSymbols.includes(symbol)}
+                                active={selectedStocks.includes(symbol)}
                             />
                         </div>
                     ),
