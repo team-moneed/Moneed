@@ -81,10 +81,6 @@ export class StockService {
         return selectedStocks.map(stock => stock.stock.symbol);
     }
 
-    async selectStock(userId: string, stockSymbols: string[]) {
-        await this.stockRepository.selectStock(userId, stockSymbols);
-    }
-
     async getOverseasStockPrice(symbol: string) {
         return await getOverseasStockPrice({ symbol });
     }

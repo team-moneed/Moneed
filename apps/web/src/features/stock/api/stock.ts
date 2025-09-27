@@ -8,11 +8,6 @@ export async function getStocks({ count = 30, cursor = 0 }: { count?: number; cu
     return res.data;
 }
 
-export async function selectStock(stockSymbols: string[]) {
-    const res = await http.post(API_PATH.STOCKS_SELECT, { stockSymbols });
-    return res.data;
-}
-
 export async function getOverseasStockPrice({ symbol }: { symbol: string }) {
     const res = await http.get<OverseasStockPriceResponse>(API_PATH.STOCKS_PRICE_OVERSEAS, {
         params: { symbol },
