@@ -3,11 +3,12 @@
 import { logout } from '@/features/user/api/auth';
 import { REASON_CODES } from '@/shared/config/snackbar';
 import useSnackbarStore from '@/shared/store/useSnackbarStore';
-import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { cn } from '@/shared/utils/style';
 import { useMutation } from '@tanstack/react-query';
 import useUserStore from '@/entities/user/model/user.store';
 import { Provider, ProviderType } from '@moneed/auth';
+import { clearTokensFromCookies } from '@/shared/utils/token.actions';
+import TokenLocalStorage from '@/shared/utils/token.localstorage';
 
 export default function LogoutButton() {
     const showSnackbar = useSnackbarStore(state => state.showSnackbar);
@@ -15,7 +16,8 @@ export default function LogoutButton() {
     const { mutate: mutateLogout, isPending } = useMutation({
         mutationFn: ({ provider }: { provider: ProviderType }) => logout({ provider }),
         onSuccess: async () => {
-            await TokenUtils.clearTokens();
+            TokenLocalStorage.clearTokens();
+            await clearTokensFromCookies();
             clearUserInfo();
             window.location.href = `/onboarding?reason=${REASON_CODES.LOGOUT}`;
         },

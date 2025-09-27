@@ -5,11 +5,11 @@ import { useRouter } from 'next/navigation';
 import { Post } from '@/entities/post';
 import PostThumbnailCard from '@/entities/post/ui/PostThumbnailCard';
 import { useEffect, useState } from 'react';
-import { TokenUtils } from '@/shared/utils/tokenUtils';
 import type { TokenPayload } from '@moneed/auth';
 import { DYNAMIC_PATH } from '@/shared/config';
 import { decodeJwt } from 'jose';
 import { usePostComments } from '../query';
+import TokenLocalStorage from '@/shared/utils/token.localstorage';
 
 const PostThumbnail = ({ post }: { post: Post }) => {
     const [decodedToken, setDecodedToken] = useState<TokenPayload | null>(null);
@@ -30,7 +30,7 @@ const PostThumbnail = ({ post }: { post: Post }) => {
     };
 
     useEffect(() => {
-        const accessToken = TokenUtils.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
+        const accessToken = TokenLocalStorage.getToken(process.env.NEXT_PUBLIC_JWT_ACCESS_NAME || 'access_token');
         if (accessToken) {
             setDecodedToken(decodeJwt<TokenPayload>(accessToken));
         }

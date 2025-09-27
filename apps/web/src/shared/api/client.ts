@@ -5,6 +5,7 @@ import { AxiosInstance, AxiosError, InternalAxiosRequestConfig, AxiosResponse } 
 import { TokenUtils } from '@/shared/utils/tokenUtils';
 import { TOKEN_KEY } from '../config';
 import useUserStore from '@/entities/user/model/user.store';
+import TokenLocalStorage from '../utils/token.localstorage';
 
 const moneedBaseConfig = {
     withCredentials: true,
@@ -28,7 +29,7 @@ const getAxiosInstance = (config: AxiosRequestConfig): AxiosInstance => {
     // 요청 인터셉터: 액세스 토큰을 헤더에 자동 추가
     instance.interceptors.request.use(
         (config: InternalAxiosRequestConfig) => {
-            const accessToken = TokenUtils.getToken(TOKEN_KEY.ACCESS_TOKEN);
+            const accessToken = TokenLocalStorage.getToken(TOKEN_KEY.ACCESS_TOKEN);
             if (accessToken) {
                 config.headers.Authorization = `Bearer ${accessToken}`;
             }
