@@ -11,11 +11,7 @@
         "clean": "rimraf dist",
         "lint": "eslint src --ext .ts",
         "lint:fix": "eslint src --ext .ts --fix",
-        "type-check": "tsc --noEmit",
-        "db:generate": "prisma generate",
-        "db:push": "prisma db push",
-        "db:migrate": "prisma migrate dev",
-        "db:seed": "tsx prisma/post.seed.ts"
+        "type-check": "tsc --noEmit"
     },
     "dependencies": {
         "@moneed/auth": "*",

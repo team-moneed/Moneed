@@ -6,7 +6,7 @@ import { ProviderType } from '@moneed/auth';
 
 export const useLeave = () => {
     const clearUserInfo = useUserStore(state => state.clearUserInfo);
-    const { mutate: leaveMutation } = useMutation({
+    const { mutateAsync: leaveMutation } = useMutation({
         mutationFn: (provider: ProviderType) => leave({ provider }),
         onSuccess: async () => {
             await TokenUtils.clearTokens();

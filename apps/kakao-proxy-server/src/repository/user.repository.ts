@@ -1,6 +1,6 @@
 import prisma from '@/prisma/client';
 import type { OAuthAccount, User } from '@prisma/client';
-import type { InsertUserParams, InsertProviderParams } from '@/types/auth.types';
+import type { InsertUserProviderParams } from '@/types/auth.types';
 
 export class UserRepository {
     private prisma = prisma;
@@ -45,9 +45,14 @@ export class UserRepository {
         });
     }
 
-    async insertUser(userData: InsertUserParams): Promise<User> {
+    async insertUserProvider({ userData, providerData }: InsertUserProviderParams): Promise<User> {
         return this.prisma.user.create({
-            data: userData,
+            data: {
+                ...userData,
+                oauthAccounts: {
+                    create: providerData,
+                },
+            },
         });
     }
 

@@ -67,11 +67,11 @@ export class ProviderRepository {
             },
         });
 
-        if (!user) {
+        if (!user || user.oauthAccounts.length === 0) {
             throw new Error('User not found');
         }
 
-        this.prisma.oAuthAccount.update({
+        await this.prisma.oAuthAccount.update({
             where: {
                 provider_providerUserId: {
                     provider: Provider.KAKAO,
