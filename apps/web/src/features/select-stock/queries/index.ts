@@ -1,5 +1,5 @@
-import { getStocks } from '@/features/stock';
 import { useInfiniteQuery } from '@tanstack/react-query';
+import { getStocks } from '@/features/stock';
 
 export const useInfiniteStocks = ({ count = 20 }: { count?: number }) => {
     return useInfiniteQuery({

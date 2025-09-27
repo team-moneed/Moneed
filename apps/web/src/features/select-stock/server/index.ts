@@ -1,16 +1,17 @@
 'use server';
 
-import { getOverseasStockByCondition } from '@/features/stock/server';
-import { StockService } from '@/features/stock/server';
+import { MarketCode } from '@/entities/stock';
+import { getOverseasStockByCondition } from '@/features/stock/server/api';
+import { StockService } from '@/features/stock/server/service';
 import TokenCookie from '@/shared/utils/token.cookie';
 import { ResponseError } from '@moneed/utils';
 import { ERROR_MSG } from '@/shared/config/message';
-import { redirect } from 'next/navigation';
-import { revalidatePath } from 'next/cache';
-import { MarketCode } from '@/entities/stock';
 import { verifyToken } from '@moneed/auth';
 import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 import { TOKEN_KEY } from '@/shared/config';
+import { revalidatePath } from 'next/cache';
+import { redirect } from 'next/navigation';
+import { updateSelectedStocks } from './repository';
 
 /**
  * 시가총액 상위 주식 조회
@@ -106,8 +107,7 @@ export const selectStockAction = async (
         }
         const userId = sessionResult.data.id;
 
-        const stockService = new StockService();
-        await stockService.selectStock(userId, stockSymbols);
+        await updateSelectedStocks(userId, stockSymbols);
 
         success = true;
     } catch {

@@ -59,7 +59,6 @@ export const API_PATH = {
     // Stock APIs
     STOCKS: '/api/stocks',
     STOCKS_SELECTED: '/api/stocks/selected',
-    STOCKS_SELECT: '/api/stocks/select',
     STOCKS_PRICE_OVERSEAS: '/api/stocks/price/overseas',
     STOCKS_HOT: '/api/stocks/hot',
 
