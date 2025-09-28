@@ -11,7 +11,7 @@ export type Shorts = {
     updatedAt: Date;
 };
 
-type ThumbnailImage = {
+export type ThumbnailImage = {
     url: string;
     width: number;
     height: number;

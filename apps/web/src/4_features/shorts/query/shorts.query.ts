@@ -1,4 +1,4 @@
-import { fetchShorts, fetchShort } from '@/4_features/shorts/api/shorts.api';
+import { fetchShorts, fetchShort } from '@/5_entities/shorts/api/shorts.api';
 import { getMsUntilMidnight } from '@/6_shared/utils/date';
 import { useInfiniteQuery, useQuery, useSuspenseInfiniteQuery, useSuspenseQuery } from '@tanstack/react-query';
 

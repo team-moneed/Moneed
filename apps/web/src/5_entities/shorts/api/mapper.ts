@@ -1,9 +1,7 @@
 import { Shorts as PrismaShorts } from '@prisma/client';
-import { Shorts } from './type';
+import type { Shorts } from './type';
 
-// 서버에서 사용할 타입들
 type ShortsDTO = PrismaShorts;
-// 클라이언트에서 사용할 타입
 
 export const toShorts = (short: ShortsDTO): Shorts => {
     return {
