@@ -1,10 +1,10 @@
 import { Metadata, Viewport } from 'next';
-import Script from 'next/script';
-import '@/app/styles/globals.css';
-import ModalProvider from '@/app/provider/ModalProvider';
-import { SnackbarProvider } from '@/shared/ui/Snackbar';
-import QueryClientProvider from '@/app/provider/QueryClientProvider';
-import ReactQueryDevtools from '@/app/provider/ReactQueryDevtools';
+// import Script from 'next/script';
+import '@/1_app/styles/globals.css';
+import ModalProvider from '@/1_app/provider/ModalProvider';
+import { SnackbarProvider } from '@/6_shared/ui/Snackbar';
+import QueryClientProvider from '@/1_app/provider/QueryClientProvider';
+import ReactQueryDevtools from '@/1_app/provider/ReactQueryDevtools';
 
 export const metadata: Metadata = {
     title: 'Moneed',
@@ -21,14 +21,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <html lang='en'>
             <body>
                 {/* GTM noscript */}
-                <noscript>
+                {/* <noscript>
                     <iframe
                         src={`https://www.googletagmanager.com/ns.html?id=${process.env.GTM_KEY}`}
                         height='0'
                         width='0'
                         style={{ display: 'none', visibility: 'hidden' }}
                     ></iframe>
-                </noscript>
+                </noscript> */}
 
                 <div id='root' className='mx-auto h-screen max-w-512 flex flex-col px-8'>
                     <QueryClientProvider>
@@ -41,7 +41,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                 </div>
 
                 {/* GA 설치 */}
-                <Script
+                {/* <Script
                     async
                     src={`https://www.googletagmanager.com/gtag/js?id=${process.env.GA_ID}`}
                     strategy='afterInteractive'
@@ -55,10 +55,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             gtag('js', new Date());
             gtag('config', '${process.env.GA_ID}');
           `}
-                </Script>
+                </Script> */}
 
                 {/* GTM 설치 */}
-                <Script id='google-tag-manager' strategy='afterInteractive'>
+                {/* <Script id='google-tag-manager' strategy='afterInteractive'>
                     {`
             (function(w,d,s,l,i){
               w[l]=w[l]||[];
@@ -70,10 +70,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               f.parentNode.insertBefore(j,f);
             })(window,document,'script','dataLayer','${process.env.GTM_KEY}');
           `}
-                </Script>
+                </Script> */}
 
                 {/* Microsoft Clarity 설치 */}
-                <Script id='microsoft-clarity' strategy='afterInteractive'>
+                {/* <Script id='microsoft-clarity' strategy='afterInteractive'>
                     {`
             (function(c,l,a,r,i,t,y){
               c[a]=c[a]||[];
@@ -85,7 +85,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
               y.parentNode.insertBefore(i,y);
             })(window,document,'clarity','script','${process.env.CLARITY_TRACKING_ID}');
           `}
-                </Script>
+                </Script> */}
             </body>
         </html>
     );

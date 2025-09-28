@@ -1,4 +1,4 @@
-import { StockRepository } from '@/features/stock/server/repository';
+import { StockRepository } from '@/4_features/stock/server/repository';
 import { NextRequest, NextResponse } from 'next/server';
 
 export const dynamic = 'force-dynamic';

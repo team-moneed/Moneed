@@ -1,1 +1,1 @@
-export { default } from '@/screens/home/ui/HomePage';
+export { default } from '@/2_screens/home/ui/HomePage';

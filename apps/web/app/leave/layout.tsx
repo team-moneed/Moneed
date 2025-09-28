@@ -1,1 +1,1 @@
-export { default } from '@/screens/leave/ui/LeaveLayout';
+export { default } from '@/2_screens/leave/ui/LeaveLayout';

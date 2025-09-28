@@ -1,1 +1,1 @@
-export { default } from '@/screens/mycomment/ui/MyCommentLayout';
+export { default } from '@/2_screens/mycomment/ui/MyCommentLayout';
