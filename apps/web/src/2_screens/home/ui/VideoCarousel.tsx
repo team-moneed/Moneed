@@ -5,10 +5,10 @@ import useEmblaCarousel from 'embla-carousel-react';
 import NextButton from '@/6_shared/ui/Button/NextButton';
 import PrevButton from '@/6_shared/ui/Button/PrevButton';
 import { usePrevNextButtons } from '@/6_shared/hooks/usePrevNextButtons';
-import { useState } from 'react';
-import ShortformDetail from '@/2_screens/shortform/ui/ShortformDetail';
 import { cn } from '@/6_shared/utils/style';
-import type { Shorts } from '@prisma/client';
+import type { Shorts } from '@/4_features/shorts/api/type';
+import { useRouter } from 'next/navigation';
+import { DYNAMIC_PATH } from '@/6_shared/config';
 
 type PropType = {
     videos: Shorts[];
@@ -17,15 +17,9 @@ type PropType = {
 };
 const VideoCarousel = (props: PropType) => {
     const { videos, options } = props;
-    const [emblaRef, emblaApi] = useEmblaCarousel({
-        ...options,
-        loop: false,
-        // wrapAround: true,
-        // slidesToShow,
-    });
+    const [emblaRef, emblaApi] = useEmblaCarousel(options);
     const { nextBtnDisabled, onNextButtonClick, prevBtnDisabled, onPrevButtonClick } = usePrevNextButtons(emblaApi);
-    const [videoId, setVideoId] = useState<string | null>(null);
-    const video = videos.find(video => video.videoId === videoId);
+    const router = useRouter();
 
     return (
         <div className='relative lg:pr-[5.6rem]'>
@@ -36,7 +30,7 @@ const VideoCarousel = (props: PropType) => {
                             className='w-[calc(30%-1.6rem)] lg:w-[calc(20%-1.6rem)] shrink-0 cursor-pointer'
                             key={index}
                             style={{ aspectRatio: '9/16' }}
-                            onClick={() => setVideoId(video.videoId)}
+                            onClick={() => router.push(DYNAMIC_PATH.SHORTFORM_VIDEO(video.videoId))}
                         >
                             <div className='w-full h-full rounded-[.8rem] overflow-hidden'>
                                 <iframe
@@ -51,7 +45,6 @@ const VideoCarousel = (props: PropType) => {
                     ))}
                 </div>
             </div>
-            {video && <ShortformDetail video={video} setVideoId={setVideoId} />}
             <PrevButton
                 onClick={onPrevButtonClick}
                 disabled={prevBtnDisabled}

@@ -1,6 +1,6 @@
 'use client';
 
-import VideoCarousel from '@/6_shared/ui/Carousel/VideoCarousel';
+import VideoCarousel from '@/2_screens/home/ui/VideoCarousel';
 import { EmblaOptionsType } from 'embla-carousel';
 import { useSuspenseShorts } from '@/4_features/shorts/query/shorts.query';
 import withSuspense from '@/6_shared/ui/withSuspense';
@@ -9,9 +9,8 @@ import { ShortformCarouselSkeleton } from '@/2_screens/shortform/ui/ShortformSke
 const MainShortforms = () => {
     const VIDEOOPTIONS: EmblaOptionsType = {
         slidesToScroll: 1,
-        loop: true,
+        loop: false,
         align: 'start',
-        // draggable: true,
         containScroll: 'trimSnaps',
     };
 
