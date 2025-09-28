@@ -6,6 +6,7 @@ import { ReactNode } from 'react';
 import StockInfoBoxSkeleton from '../../../6_shared/ui/Skeletons/StockInfoBoxSkeleton';
 import { useSuspenseOverseasStockPrice } from '@/4_features/stock';
 import withSuspense from '@/6_shared/ui/withSuspense';
+import Image from 'next/image';
 
 type StockInfoProps = {
     infoBoxImgages?: string[] | string;
@@ -22,7 +23,7 @@ const StockInfoBox = ({ stock, children }: StockInfoProps) => {
             <div className='flex justify-between px-[1.2rem] py-[1.8rem] border border-solid border-moneed-gray-5 rounded-[1.6rem]'>
                 <div className='flex items-center gap-[.6rem]'>
                     <div className='rounded-full overflow-hidden aspect-square w-[3.6rem]'>
-                        <img src={stock.logoUrl} alt='stock logo' className='w-full h-full object-contain' />
+                        <Image src={stock.logoUrl} alt='stock logo' className='w-full h-full object-contain' />
                     </div>
                     <div>
                         <h3 className='text-[1.4rem] font-semibold leading-[140%] text-moneed-black'>{stock.nameKo}</h3>

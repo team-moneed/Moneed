@@ -3,6 +3,8 @@
 import Button from '@/6_shared/ui/Button/Button';
 import { useRouter, useSearchParams } from 'next/navigation';
 import { Suspense, useEffect, useState } from 'react';
+import Image from 'next/image';
+import errorcta from '/public/images/errorcta.svg';
 
 interface ErrorInfo {
     title: string;
@@ -89,7 +91,7 @@ function AuthError() {
     return (
         <div className='px-8 max-w-512 mx-auto'>
             <div className='flex justify-center items-center mt-[6.3rem]'>
-                <img src='/images/errorcta.svg' alt='error' className='w-116' />
+                <Image src={errorcta} alt='error' className='w-116' />
             </div>
             <div className='text-[2.4rem] text-moneed-black font-bold text-center mt-8 leading-[140%]'>
                 {errorInfo.title}

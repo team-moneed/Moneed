@@ -52,27 +52,4 @@ const getKisInstance = () => {
     return instance;
 };
 
-const getYoutubeInstance = () => {
-    const instance = axios.create({
-        baseURL: process.env.YOUTUBE_BASE_URL,
-    });
-
-    instance.interceptors.request.use(config => {
-        return config;
-    });
-
-    instance.interceptors.response.use(
-        async response => {
-            return response;
-        },
-        async error => {
-            console.error(error.response?.data);
-            return Promise.reject(error);
-        },
-    );
-
-    return instance;
-};
-
 export const kis = getKisInstance();
-export const youtube = getYoutubeInstance();

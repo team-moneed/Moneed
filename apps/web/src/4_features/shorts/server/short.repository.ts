@@ -1,38 +1,18 @@
 import 'server-only';
 import { prisma } from '@/6_shared/model';
-import { Shorts } from '@prisma/client';
 
 export class ShortRepository {
-    private readonly prisma = prisma;
-
-    async upsertShorts({ shorts }: { shorts: Shorts[] }) {
-        for (const short of shorts) {
-            await this.prisma.shorts.upsert({
-                where: {
-                    videoId: short.videoId,
-                },
-                update: {
-                    title: short.title,
-                },
-                create: {
-                    videoId: short.videoId,
-                    title: short.title,
-                },
-            });
-        }
-    }
-
     async getShorts({ cursor, limit }: { cursor: string | null; limit: number }) {
         if (!cursor) {
-            return await this.prisma.shorts.findMany({
+            return await prisma.shorts.findMany({
                 orderBy: {
-                    id: 'asc',
+                    id: 'desc',
                 },
                 take: limit,
             });
         }
 
-        const startRecord = await this.prisma.shorts.findFirst({
+        const startRecord = await prisma.shorts.findFirst({
             where: {
                 videoId: cursor,
             },
@@ -45,21 +25,21 @@ export class ShortRepository {
             return [];
         }
 
-        return await this.prisma.shorts.findMany({
+        return await prisma.shorts.findMany({
             where: {
                 id: {
                     gt: startRecord.id,
                 },
             },
             orderBy: {
-                id: 'asc',
+                id: 'desc',
             },
             take: limit,
         });
     }
 
     async getShortByVideoId({ videoId }: { videoId: string }) {
-        return await this.prisma.shorts.findUnique({
+        return await prisma.shorts.findUnique({
             where: {
                 videoId,
             },

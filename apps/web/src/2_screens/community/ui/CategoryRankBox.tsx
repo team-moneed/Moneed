@@ -3,6 +3,9 @@
 import { ReactNode } from 'react';
 import type { Stock } from '@/5_entities/stock';
 import { cn } from '@/6_shared/utils/style';
+import Image from 'next/image';
+import boxBg from '/public/images/box-bg.png';
+import iconUs from '/public/icon/icon-us.svg';
 
 type StockInfoProps = {
     stock: Stock;
@@ -15,7 +18,7 @@ const CategoryRankBox = ({ stock }: StockInfoProps) => {
         <>
             <div className='relative bg-moneed-black-3 border-moneed-gray-5 border-[.1rem] rounded-[1.6rem]'>
                 <i className='absolute block aspect-square w-24 top-[-.1rem] left-[-.1rem]'>
-                    <img src='/images/box-bg.png' alt='box-background' className='w-full' />
+                    <Image src={boxBg} alt='box-background' className='w-full' />
                 </i>
                 <div className='relative flex items-end gap-[.4rem] h-16 mb-[.4rem]'>
                     <div className='flex rounded-[1.6rem] w-16 h-16 shrink-0 justify-center items-center bg-moneed-black'>
@@ -35,8 +38,8 @@ const CategoryRankBox = ({ stock }: StockInfoProps) => {
                 </div>
                 <div className='relative flex my-[1.2rem] mx-[1.4rem] p-4 rounded-[1.2rem] border border-solid border-moneed-gray-5 gap-[.6rem] bg-moneed-white items-center justify-center'>
                     <div className='rounded-full overflow-hidden aspect-square w-[1.6rem]'>
-                        <img
-                            src={stock.logoUrl ?? '/icon/icon-us.svg'}
+                        <Image
+                            src={stock.logoUrl ?? iconUs}
                             alt={stock.nameKo}
                             className='w-full h-full object-cover'
                         />
