@@ -1,4 +1,7 @@
 // YouTube API 응답 타입 정의
+import { Shorts as PrismaShorts } from '@prisma/client';
+
+export type Shorts = Omit<PrismaShorts, 'id' | 'createdAt' | 'updatedAt'>;
 
 export interface YouTubeSearchResponse {
     kind: string;
@@ -6,7 +9,7 @@ export interface YouTubeSearchResponse {
     nextPageToken: string;
     regionCode: string;
     pageInfo: YouTubePageInfo;
-    items: YouTubeSearchResult[];
+    items: YoutubeVideoItem[];
 }
 
 export interface YouTubePageInfo {
@@ -14,7 +17,7 @@ export interface YouTubePageInfo {
     resultsPerPage: number;
 }
 
-export interface YouTubeSearchResult {
+export interface YoutubeVideoItem {
     kind: string;
     etag: string;
     id: YouTubeResourceId;
