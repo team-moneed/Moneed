@@ -1,7 +1,9 @@
+import Image from 'next/image';
+import { StaticImageData } from 'next/image';
 import { ReactNode } from 'react';
 
 type CardProps = {
-    cardImgages: string[] | string;
+    cardImgages: string[] | string | StaticImageData;
     title?: string;
     content?: string;
     date?: string;
@@ -16,8 +18,8 @@ const Card = ({ cardImgages, title, content, date, children, className = '', onC
     return (
         <div onClick={onClick} className={`cursor-pointer ${className}`}>
             {images.map((cardImgage, index) => (
-                <div key={cardImgage} className='aspect-350/228 lg:aspect-303/195 rounded-[1.6rem] overflow-hidden'>
-                    <img src={cardImgage} alt={`Card image ${index + 1}`} className='w-full h-full object-cover' />
+                <div key={index} className='aspect-350/228 lg:aspect-303/195 rounded-[1.6rem] overflow-hidden'>
+                    <Image src={cardImgage} alt={`Card image ${index + 1}`} className='w-full h-full object-cover' />
                 </div>
             ))}
 

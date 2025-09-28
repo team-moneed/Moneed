@@ -12,14 +12,14 @@ model User {
   nickname       String
   profileImage   String
   ageRange       String?
+  createdAt      DateTime        @default(now())
+  updatedAt      DateTime        @default(now()) @updatedAt
   birthday       String?
   birthyear      String?
   email          String?         @unique
   name           String?
-  gender         String?
-  createdAt      DateTime        @default(now())
-  updatedAt      DateTime        @default(now()) @updatedAt
   id             String          @id @default(cuid())
+  gender         String?
   role           Role            @default(USER)
   lastLoginAt    DateTime        @default(now())
   chat_message   chat_message[]
@@ -48,9 +48,9 @@ model Post {
   createdAt      DateTime    @default(now())
   updatedAt      DateTime?   @default(now()) @updatedAt
   userId         String
-  stockSymbol    String
   thumbnailImage String?
   score          Float       @default(0)
+  stockSymbol    String
   comments       Comment[]
   postLikes      PostLike[]
   postViews      PostViews[]
@@ -106,7 +106,7 @@ model OAuthAccount {
   accessToken           String
   refreshToken          String
   id                    String   @id @default(cuid())
-  userId                String   
+  userId                String
   provider              String
   accessTokenExpiresIn  DateTime
   refreshTokenExpiresIn DateTime
@@ -117,9 +117,6 @@ model OAuthAccount {
 }
 
 model Stock {
-  nameKo         String          // 한국어 이름
-  nameEn         String          // 영어 이름
-  nation         String          // 국가명
   id             Int             @id @default(autoincrement())
   logoUrl        String
   refUrl         String?
@@ -127,6 +124,9 @@ model Stock {
   subSector      String
   summary        String
   symbol         String          @unique
+  nameEn         String
+  nameKo         String
+  nation         String
   posts          Post[]
   selectedStocks SelectedStock[]
 
@@ -134,11 +134,11 @@ model Stock {
 }
 
 model SelectedStock {
-  userId  String
+  userId      String
+  id          Int    @id @default(autoincrement())
   stockSymbol String
-  id      Int    @id @default(autoincrement())
-  stock   Stock  @relation(fields: [stockSymbol], references: [symbol])
-  user    User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  stock       Stock  @relation(fields: [stockSymbol], references: [symbol])
+  user        User   @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@unique([userId, stockSymbol])
   @@map("selected_stocks")
@@ -166,28 +166,28 @@ model chat_message {
   users     User      @relation(fields: [senderId], references: [id], onDelete: Cascade)
 }
 
-enum Role {
-  ADMIN
-  USER
-}
-
 model ServerTokens {
-  id        Int      @id @default(autoincrement())
-  tokenKey    String   @unique
-  tokenValue  String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
+  id         Int      @id @default(autoincrement())
+  createdAt  DateTime @default(now())
+  updatedAt  DateTime @default(now()) @updatedAt
+  tokenKey   String   @unique
+  tokenValue String
 
   @@map("server_tokens")
 }
 
 model Shorts {
-  id Int @id @default(autoincrement())
-  videoId        String      @unique
-  title     String
-  createdAt DateTime @default(now())
-  updatedAt DateTime @default(now()) @updatedAt
-  thumbnailImage Json @default("{}")
+  id             Int      @id @default(autoincrement())
+  videoId        String   @unique
+  title          String
+  createdAt      DateTime @default(now())
+  updatedAt      DateTime @default(now()) @updatedAt
+  thumbnailImage String   @default("")
 
   @@map("shorts")
+}
+
+enum Role {
+  ADMIN
+  USER
 }

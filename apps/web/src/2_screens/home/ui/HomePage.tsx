@@ -7,6 +7,12 @@ import { PATH } from '@/6_shared/config';
 import Footer from '@/6_shared/ui/layout/Footer';
 import RootNav from '@/6_shared/ui/layout/RootNav';
 import BottomNav from '@/6_shared/ui/layout/BottomNav';
+import { Suspense } from 'react';
+import { ShortformCarouselSkeleton } from '@/2_screens/shortform/ui/ShortformSkeleton';
+import iconArrowRight from '/public/icon/icon-arrow-right.svg';
+import Image from 'next/image';
+import smarttalkMobile from '/public/images/smarttalk_m.svg';
+import smarttalkPc from '/public/images/smarttalk_pc.svg';
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ reason: string }> }) {
     const reason = (await searchParams).reason;
@@ -27,22 +33,24 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ r
                                 더보기
                             </Link>
                             <div className='shrink-0 w-[1.8rem] h-[1.8rem]'>
-                                <img src='/icon/icon-arrow-right.svg' alt='more-button' />
+                                <Image src={iconArrowRight} alt='more-button' />
                             </div>
                         </button>
                     </div>
-                    <MainShortforms />
+                    <Suspense fallback={<ShortformCarouselSkeleton count={10} />}>
+                        <MainShortforms />
+                    </Suspense>
                 </section>
 
                 <section className='aspect-350/106 rounded-[.8rem] overflow-hidden lg:aspect-941/151'>
                     <Link href={PATH.SMARTTALK}>
-                        <img
-                            src='/images/smarttalk_m.svg'
+                        <Image
+                            src={smarttalkMobile}
                             alt='smarttalk-mobile-banner'
                             className='w-full h-full object-cover lg:hidden'
                         />
-                        <img
-                            src='/images/smarttalk_pc.svg'
+                        <Image
+                            src={smarttalkPc}
                             alt='smarttalk-pc-banner'
                             className='hidden w-full h-full object-cover lg:block'
                         />

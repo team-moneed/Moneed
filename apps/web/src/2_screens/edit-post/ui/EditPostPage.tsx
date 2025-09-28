@@ -11,6 +11,7 @@ import Image from 'next/image';
 import EditPostSkeleton from '@/6_shared/ui/Skeletons/EditPostSkeleton';
 import { useSuspensePost } from '@/4_features/post/query';
 import { DYNAMIC_PATH } from '@/6_shared/config';
+import iconSubmitPost from '/public/icon/icon-submit-post.svg';
 
 export interface UpdatePostField {
     title: string;
@@ -136,7 +137,7 @@ const EditPostContent = ({ postId }: { postId: string }) => {
                             <div className='absolute flex gap-x-[9px] bottom-16 z-10'>
                                 {previewImage && (
                                     <div className='relative size-[6rem]'>
-                                        <img
+                                        <Image
                                             src={previewImage}
                                             alt='thumbnail-preview'
                                             className='object-cover w-full h-full'
@@ -160,11 +161,7 @@ const EditPostContent = ({ postId }: { postId: string }) => {
                         className='rounded-full overflow-hidden aspect-square w-[3.6rem] bg-moneed-gray-6 cursor-pointer hover:bg-moneed-brand'
                         type='submit'
                     >
-                        <img
-                            src='/icon/icon-submit-post.svg'
-                            alt='submit'
-                            className='w-full h-full object-cover p-[.6rem]'
-                        />
+                        <Image src={iconSubmitPost} alt='submit' className='w-full h-full object-cover p-[.6rem]' />
                     </button>
                 </div>
             </form>

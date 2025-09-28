@@ -3,6 +3,8 @@
 import Button from '@/6_shared/ui/Button/Button';
 import { useRouter } from 'next/navigation';
 import { useEffect } from 'react';
+import Image from 'next/image';
+import errorcta from '/public/images/errorcta.svg';
 
 export default function ErrorPage({ error, reset }: { error: Error & { digest?: string }; reset: () => void }) {
     const router = useRouter();
@@ -13,7 +15,7 @@ export default function ErrorPage({ error, reset }: { error: Error & { digest?: 
     return (
         <div className='px-8 max-w-320 mx-auto'>
             <div className='flex justify-center items-center mt-[6.3rem]'>
-                <img src='/images/errorcta.svg' alt='error' className='w-116' />
+                <Image src={errorcta} alt='error' className='w-116' />
             </div>
             <div className='text-[2.4rem] text-moneed-black font-bold text-center mt-8 leading-[140%]'>
                 {error.name}

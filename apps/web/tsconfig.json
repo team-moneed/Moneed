@@ -24,6 +24,6 @@
         },
         "moduleResolution": "bundler"
     },
-    "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next-env.d.ts", "dist/types/**/*.ts"],
+    "include": ["**/*.ts", "**/*.tsx", ".next/types/**/*.ts", "next-env.d.ts"],
     "exclude": ["./node_modules", "./next"]
 }
