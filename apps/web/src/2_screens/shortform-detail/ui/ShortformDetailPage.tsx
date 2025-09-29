@@ -8,7 +8,7 @@ import { useIntersectionObserver } from '@/6_shared/hooks/useIntersectionObserve
 import { PATH } from '@/6_shared/config';
 
 // TODO: 추후 현재 쇼츠 자동 재생 로직 추가
-function ShortformVideoPage() {
+function ShortformDetailPage() {
     const params = useParams();
     const videoId = params?.videoId as string;
     const router = useRouter();
@@ -90,4 +90,4 @@ function ShortformVideoPage() {
     );
 }
 
-export default ShortformVideoPage;
+export default ShortformDetailPage;

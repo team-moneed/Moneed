@@ -2,39 +2,24 @@ import 'server-only';
 import { prisma } from '@/6_shared/model';
 
 export class ShortRepository {
-    async getShorts({ cursor, limit }: { cursor: string | null; limit: number }) {
-        if (!cursor) {
-            return await prisma.shorts.findMany({
-                orderBy: {
-                    id: 'desc',
-                },
-                take: limit,
-            });
-        }
-
-        const startRecord = await prisma.shorts.findFirst({
-            where: {
-                videoId: cursor,
+    async getShorts({ count }: { count: number }) {
+        return await prisma.shorts.findMany({
+            orderBy: {
+                id: 'desc',
             },
-            select: {
-                id: true,
-            },
+            take: count,
         });
+    }
 
-        if (!startRecord) {
-            return [];
-        }
-
+    async getShortsWithCursor({ count, cursor }: { count: number; cursor: number }) {
         return await prisma.shorts.findMany({
             where: {
-                id: {
-                    gt: startRecord.id,
-                },
+                id: { lt: cursor },
             },
             orderBy: {
                 id: 'desc',
             },
-            take: limit,
+            take: count,
         });
     }
 
@@ -42,6 +27,17 @@ export class ShortRepository {
         return await prisma.shorts.findUnique({
             where: {
                 videoId,
+            },
+        });
+    }
+
+    async getShortsId(videoId: string) {
+        return await prisma.shorts.findUnique({
+            where: {
+                videoId,
+            },
+            select: {
+                id: true,
             },
         });
     }
