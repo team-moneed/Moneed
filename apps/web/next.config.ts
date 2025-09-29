@@ -2,19 +2,23 @@ import type { NextConfig } from 'next';
 
 const nextConfig: NextConfig = {
     eslint: {
-        dirs: ['src'],
+        dirs: ['src', 'app'],
     },
     devIndicators: false,
     transpilePackages: ['@moneed/db', '@moneed/auth', '@moneed/utils', '@moneed/utility-types'],
     images: {
-        remotePatterns: process.env.AWS_BUCKET_URL
-            ? [
-                  {
-                      protocol: 'https',
-                      hostname: process.env.AWS_BUCKET_URL,
-                  },
-              ]
-            : [],
+        localPatterns: [
+            {
+                pathname: 'public/**',
+            },
+        ],
+        remotePatterns: [
+            new URL(`https://${process.env.AWS_BUCKET_URL || ''}`),
+            {
+                protocol: 'https',
+                hostname: '**.ytimg.com',
+            },
+        ],
     },
 };
 

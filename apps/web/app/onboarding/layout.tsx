@@ -1,1 +1,1 @@
-export { default } from '@/screens/onboarding/ui/OnBoardingLayout';
+export { default } from '@/2_screens/onboarding/ui/OnBoardingLayout';

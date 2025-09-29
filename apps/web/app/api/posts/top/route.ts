@@ -1,1 +1,1 @@
-export { getTopPosts as GET } from '@/features/post/server/post.controller';
+export { getTopPosts as GET } from '@/4_features/post/server/post.controller';

@@ -5,7 +5,14 @@ export type User = {
     id: string;
     nickname: string;
     profileImage: string;
+    provider: ProviderType;
 };
+
+export const Provider = {
+    KAKAO: 'kakao',
+} as const;
+
+export type ProviderType = (typeof Provider)[keyof typeof Provider];
 
 export type TokenPayload = User & JWTPayload;
 
@@ -14,13 +21,6 @@ export type DecodedToken = User & {
     iat: number;
     expiresAt: Date;
 };
-
-export type ProviderInfo = {
-    provider: string;
-    providerUserId: string;
-};
-
-export type Providers = 'kakao';
 
 export type SessionResult =
     | { data: TokenPayload; error: null }

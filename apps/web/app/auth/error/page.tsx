@@ -1,1 +1,1 @@
-export { default } from '@/screens/auth/ui/AuthErrorPage';
+export { default } from '@/2_screens/auth/ui/AuthErrorPage';

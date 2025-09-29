@@ -1,2 +1,2 @@
 'use client';
-export { default } from '@/screens/auth/ui/AuthCallbackError';
+export { default } from '@/2_screens/auth/ui/AuthCallbackError';

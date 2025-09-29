@@ -1,1 +1,1 @@
-export { default } from '@/screens/community/ui/CommunityLayout';
+export { default } from '@/2_screens/community/ui/CommunityLayout';

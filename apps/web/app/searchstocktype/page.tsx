@@ -1,1 +1,1 @@
-export { default } from '@/screens/search-stock/ui/SearchStockPage';
+export { default } from '@/2_screens/search-stock/ui/SearchStockPage';

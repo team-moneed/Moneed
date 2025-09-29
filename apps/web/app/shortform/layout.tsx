@@ -1,1 +1,1 @@
-export { default } from '@/screens/shortform/ui/ShortformLayout';
+export { default } from '@/2_screens/shortform/ui/ShortformLayout';
