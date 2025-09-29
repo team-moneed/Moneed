@@ -1,5 +1,3 @@
-import MainNews from '@/2_screens/home/ui/MainNews';
-import MainShortforms from '@/2_screens/home/ui/MainShortforms';
 import Top3 from '@/2_screens/home/ui/Top3';
 import Link from 'next/link';
 import { SnackbarTrigger } from '@/6_shared/ui/Snackbar';
@@ -7,12 +5,10 @@ import { PATH } from '@/6_shared/config';
 import Footer from '@/6_shared/ui/layout/Footer';
 import RootNav from '@/6_shared/ui/layout/RootNav';
 import BottomNav from '@/6_shared/ui/layout/BottomNav';
-import { Suspense } from 'react';
-import { ShortformCarouselSkeleton } from '@/2_screens/shortform/ui/ShortformSkeleton';
-import iconArrowRight from '/public/icon/icon-arrow-right.svg';
 import Image from 'next/image';
 import smarttalkMobile from '/public/images/smarttalk_m.svg';
 import smarttalkPc from '/public/images/smarttalk_pc.svg';
+import ShortformSection from './ShortformSection';
 
 export default async function Home({ searchParams }: { searchParams: Promise<{ reason: string }> }) {
     const reason = (await searchParams).reason;
@@ -22,25 +18,7 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ r
             <RootNav />
             <BottomNav />
             <div className='pb-[8rem] flex flex-col gap-[1.2rem] lg:gap-[4.4rem]'>
-                <section>
-                    <div className='flex items-center gap-[.8rem] mb-[1.8rem] justify-between'>
-                        <h2 className='text-moneed-black sm:text-h2'>HOT 숏폼</h2>
-                        <button className='flex items-center gap-[.8rem] self-stretch'>
-                            <Link
-                                className='text-[1.4rem] font-semibold leading-[135%] text-moneed-gray-8'
-                                href={PATH.SHORTFORM}
-                            >
-                                더보기
-                            </Link>
-                            <div className='shrink-0 w-[1.8rem] h-[1.8rem]'>
-                                <Image src={iconArrowRight} alt='more-button' />
-                            </div>
-                        </button>
-                    </div>
-                    <Suspense fallback={<ShortformCarouselSkeleton count={10} />}>
-                        <MainShortforms />
-                    </Suspense>
-                </section>
+                <ShortformSection />
 
                 <section className='aspect-350/106 rounded-[.8rem] overflow-hidden lg:aspect-941/151'>
                     <Link href={PATH.SMARTTALK}>
@@ -73,12 +51,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ r
                     <Top3 />
                 </section>
 
-                <section>
+                {/* <section>
                     <div className='flex items-center gap-[.8rem] mb-[1.8rem]'>
                         <h2 className='text-moneed-black sm:text-h2'>주요 뉴스</h2>
                     </div>
                     <MainNews />
-                </section>
+                </section> */}
             </div>
             <Footer />
             <SnackbarTrigger reason={reason} />

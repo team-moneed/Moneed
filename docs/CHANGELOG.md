@@ -25,6 +25,123 @@ MONEED 프로젝트의 모든 주요 변경사항이 이 파일에 기록됩니�
 
 ---
 
+## [1.2.0] - 2025-01-27
+
+### 추가됨
+
+#### 📺 YouTube API 및 Shorts 기능 개선
+
+- **YouTube API 리팩토링**: iframe 대신 썸네일 이미지 우선 로딩으로 네트워크 페이로드 감소
+- **새로운 컴포넌트 추가**:
+    - `ShortsCard.tsx` - 공통 YouTube shorts 컴포넌트
+    - `ShortsIframe.tsx` - YouTube iframe 컴포넌트
+    - `ShortformSection.tsx` - 새로운 섹션 컴포넌트
+
+#### 🎨 UI/UX 개선
+
+- **홈페이지 구조 개선**: 스크롤 캐로셀 구조 리팩토링
+
+---
+
+## [1.1.0] - 2025-09-28
+
+### 추가됨
+
+#### 🏗️ 아키텍처 대규모 개편
+
+- **FSD 계층 구조 완전 적용**: Feature-Sliced Design 패턴에 맞춰 모든 폴더명에 숫자 접두사 추가
+    - `src/app/` → `src/1_app/`
+    - `src/screens/` → `src/2_screens/`
+    - `src/features/` → `src/4_features/`
+    - `src/entities/` → `src/5_entities/`
+    - `src/shared/` → `src/6_shared/`
+- **새로운 기능 모듈 추가**:
+    - `4_features/leave/` - 회원탈퇴 기능 모듈화
+    - `4_features/login/` - 로그인 기능 모듈화
+    - `4_features/update-youtube-shorts/` - YouTube shorts 업데이트 기능 분리
+    - `5_entities/shorts/` - shorts 엔티티 레이어로 이동
+
+#### 🔐 인증 시스템 대규모 리팩토링
+
+- **OAuth 인증 시스템 개선**: 카카오 로그인 시스템 완전 리팩토링
+- **토큰 관리 시스템 개선**:
+    - `TokenLocalStorage` 클래스 추가
+    - `token.cookie.ts`, `token.localstorage.ts` 모듈화
+    - `token.actions.ts` 서버 액션 통합
+- **Provider 타입 개선**: `Provider` enum을 `ProviderType`으로 변경
+- **인증 API 리팩토링**: auth API 구조 개선 및 타입 안전성 강화
+
+#### 📺 YouTube API 및 Shorts 기능 개선
+
+- **YouTube API 리팩토링**: 처음부터 iframe을 불러오는 대신 썸네일 이미지만 표시함으로써 네트워크 페이로드 감소 및 썸네일 초기 로딩 속도 개선
+- **Shorts 구조 개선**: 4_features에서 5_entities로 아키텍처 리팩토링
+- **새로운 컴포넌트 추가**:
+    - `ShortsIframe.tsx` - YouTube iframe 컴포넌트
+    - `ShortsThumbnail.tsx` - 썸네일 최적화 컴포넌트
+- **홈페이지 구조 개선**: 스크롤 캐로셀 구조 리팩토링
+
+#### 🎨 UI/UX 개선
+
+- **이미지 최적화**: next/Image 사용으로 정적 이미지 최적화
+- **프로필 관리 개선**: 닉네임 유효성 검증 로직 추가
+- **사용자 스토어 개선**: 사용자 스토어 및 쿠키 관리 기능 개선
+
+### 변경됨
+
+#### 🔄 구조적 변경
+
+- **디렉토리 구조 대규모 리팩토링**:
+    - 모든 폴더에 FSD 계층 번호 접두사 추가
+    - `src/screens/` → `src/2_screens/` 구조로 변경
+    - `src/features/` → `src/4_features/` 구조로 변경
+    - `src/entities/` → `src/5_entities/` 구조로 변경
+    - `src/shared/` → `src/6_shared/` 구조로 변경
+- **데이터베이스 스키마 개선**: `schema.prisma` 파일 루트 디렉토리로 이동
+- **User 모델 개선**: User 모델 필드를 옵셔널로 수정 및 마이그레이션
+
+#### 🔧 개발 환경 개선
+
+- **토큰 관리 시스템 통합**: TokenManager와 TokenUtils 통합으로 중복 로직 제거
+- **컴포넌트 구조 개선**: 기능별 디렉토리 구조로 재정리하여 유지보수성 향상
+- **서버 액션 적용**: select-stock 슬라이스에 Server Action 적용 및 기존 라우트 핸들러 제거 (`apps/web/app/api/stocks/select/route.ts`)
+
+#### 🎨 컴포넌트 개선
+
+- **OAuth 로그인 버튼 리팩토링**: `KakaoLoginButton` 컴포넌트 리팩토링 및 OAuth 로직 분리
+- **회원탈퇴 로직 개선**: 회원탈퇴 프로세스 개선
+- **주식 선택 기능 개선**: select-stock 기능 모듈화 및 개선
+
+### 제거됨
+
+#### 🧹 불필요한 파일 정리
+
+- **tsbuildinfo 파일 제거**: 356KB 크기의 tsbuildinfo 파일 제거
+- **사용하지 않는 SVG 파일들 제거**:
+    - `smarttalk_*.svg` 파일들 (6개 파일)
+    - `errorcta.svg`, `box-bg.png` 등
+- **구글 애널리틱스 스크립트 제거**: 현재 사용하지 않는 GA 스크립트 제거
+- **중복 컴포넌트 제거**: 기존 레이아웃 컴포넌트들의 중복 제거
+- **사용하지 않는 유틸리티 제거**: 더 이상 사용하지 않는 유틸리티 함수들 정리
+- **사용하지 않는 서비스 제거**: shorts 관련 중복 서비스 파일들 정리
+- **타입 정의 정리**: 중복되거나 사용하지 않는 타입 정의들 제거
+- **파일 이름 수정**: 파일명 정정 및 경로 수정
+
+### 기술적 개선
+
+#### 🏗️ 아키텍처
+
+- **FSD 패턴 점진적 적용**: Feature-Sliced Design 아키텍처 점진적 적용
+- **도메인 중심 설계**: 비즈니스 로직을 도메인별로 분리하여 응집도 향상
+- **레이어 분리**: Presentation, Business Logic, Data Access 레이어 명확한 분리
+
+#### ⚙️ 성능
+
+- **번들 크기 최적화**: 불필요한 코드 제거로 번들 크기 대폭 감소 (31,506줄 삭제)
+- **API 호출 최적화**: 중복 API 호출 제거 및 캐싱 개선
+- **이미지 최적화**: next/Image 사용으로 이미지 로딩 성능 개선
+
+---
+
 ## [1.0.0] - 2025-01-XX
 
 ### 추가됨

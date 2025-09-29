@@ -1,7 +1,7 @@
 import LogoLink from '../Link/LogoLink';
 import NavLinks from '../Link/NavLinks';
 import MyPageLink from '../Link/MyPageLink';
-import NotiButton from '../Button/NotiButton';
+// import NotiButton from '../Button/NotiButton';
 import WritePostLink from '../Link/WritePostLink';
 import { cn } from '@/6_shared/utils/style';
 
@@ -26,7 +26,7 @@ export default function RootNav({ className }: RootNavProps) {
                 </div>
                 <div className='flex items-center gap-[2.4rem] flex-shrink-0'>
                     <MyPageLink />
-                    <NotiButton />
+                    {/* <NotiButton /> */}
                     <WritePostLink />
                 </div>
             </header>

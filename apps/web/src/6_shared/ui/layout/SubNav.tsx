@@ -1,6 +1,6 @@
 'use client';
 
-import NotiButton from '../Button/NotiButton';
+// import NotiButton from '../Button/NotiButton';
 import GoBackButton from '../Button/GoBackButton';
 import { cn } from '@/6_shared/utils/style';
 
@@ -21,9 +21,7 @@ export default function SubNav({ title, className }: SubNavProps) {
                 <GoBackButton />
             </div>
             <h1 className='text-center text-[1.6rem] font-semibold text-moneed-gray-9'>{title}</h1>
-            <div>
-                <NotiButton />
-            </div>
+            <div>{/* <NotiButton /> */}</div>
         </header>
     );
 }
