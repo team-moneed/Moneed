@@ -11,6 +11,7 @@ import { useRouter } from 'next/navigation';
 import { DYNAMIC_PATH } from '@/6_shared/config';
 import ShortsThumbnail from '@/5_entities/shorts/ui/ShortsThumbnail';
 import ShortsIframe from '@/5_entities/shorts/ui/ShortsIframe';
+import { useState } from 'react';
 
 type PropType = {
     videos: Shorts[];
@@ -22,6 +23,7 @@ const VideoCarousel = (props: PropType) => {
     const [emblaRef, emblaApi] = useEmblaCarousel(options);
     const { nextBtnDisabled, onNextButtonClick, prevBtnDisabled, onPrevButtonClick } = usePrevNextButtons(emblaApi);
     const router = useRouter();
+    const [hoverVideoId, setHoverVideoId] = useState<string | null>(null);
 
     return (
         <div className='relative lg:pr-[5.6rem]'>
@@ -33,6 +35,8 @@ const VideoCarousel = (props: PropType) => {
                             key={video.id}
                             style={{ aspectRatio: '9/16' }}
                             onClick={() => router.push(DYNAMIC_PATH.SHORTFORM_VIDEO(video.videoId))}
+                            onMouseEnter={() => setHoverVideoId(video.videoId)}
+                            onMouseLeave={() => setHoverVideoId(null)}
                         >
                             <div className='group w-full h-full rounded-[.8rem] overflow-hidden'>
                                 <ShortsThumbnail
@@ -44,6 +48,7 @@ const VideoCarousel = (props: PropType) => {
                                     videoId={video.videoId}
                                     title={video.title}
                                     className='group-hover:block hidden transition-all duration-300'
+                                    isHovered={hoverVideoId === video.videoId}
                                 />
                             </div>
                         </div>
