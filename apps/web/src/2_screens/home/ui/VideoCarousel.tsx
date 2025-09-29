@@ -9,9 +9,8 @@ import { cn } from '@/6_shared/utils/style';
 import type { Shorts } from '@/5_entities/shorts/api/type';
 import { useRouter } from 'next/navigation';
 import { DYNAMIC_PATH } from '@/6_shared/config';
-import ShortsThumbnail from '@/5_entities/shorts/ui/ShortsThumbnail';
-import ShortsIframe from '@/5_entities/shorts/ui/ShortsIframe';
 import { useState } from 'react';
+import ShortsCard from '@/5_entities/shorts/ui/ShortsCard';
 
 type PropType = {
     videos: Shorts[];
@@ -38,19 +37,7 @@ const VideoCarousel = (props: PropType) => {
                             onMouseEnter={() => setHoverVideoId(video.videoId)}
                             onMouseLeave={() => setHoverVideoId(null)}
                         >
-                            <div className='group w-full h-full rounded-[.8rem] overflow-hidden'>
-                                <ShortsThumbnail
-                                    thumbnailImage={video.thumbnailImage}
-                                    title={video.title}
-                                    className='group-hover:hidden transition-all duration-300'
-                                />
-                                <ShortsIframe
-                                    videoId={video.videoId}
-                                    title={video.title}
-                                    className='group-hover:block hidden transition-all duration-300'
-                                    isHovered={hoverVideoId === video.videoId}
-                                />
-                            </div>
+                            <ShortsCard video={video} isHovered={hoverVideoId === video.videoId} />
                         </div>
                     ))}
                 </div>
