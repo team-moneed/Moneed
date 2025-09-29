@@ -1,6 +1,6 @@
 import { RefreshTokenDTO } from '../model';
 import { proxy } from '@/6_shared/api/client';
-import { ProviderType, TokenPayload } from '@moneed/auth';
+import { ProviderType } from '@moneed/auth';
 
 export const logout = async ({ provider }: { provider: ProviderType }) => {
     const res = await proxy.post(`/api/auth/${provider}/logout`);
