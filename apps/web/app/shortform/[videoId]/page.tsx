@@ -1,1 +1,1 @@
-export { default } from '@/2_screens/shortform/ui/ShortformVideoPage';
+export { default } from '@/2_screens/shortform-detail/ui/ShortformDetailPage';

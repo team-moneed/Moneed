@@ -27,11 +27,6 @@ export default function ShortformPage() {
         },
     });
 
-    // 동영상 클릭 핸들러
-    const handleVideoClick = (videoId: string) => {
-        router.push(DYNAMIC_PATH.SHORTFORM_VIDEO(videoId));
-    };
-
     return (
         <div className='h-full overflow-y-auto px-[1.8rem] lg:px-0 max-w-512 mx-auto'>
             <div className='grid grid-cols-2 lg:grid-cols-4 gap-y-[1.6rem] gap-x-[1.6rem] mt-4 md:gap-y-[1.6rem] mb-[.6rem]'>
@@ -39,7 +34,7 @@ export default function ShortformPage() {
                     <div
                         key={video.videoId}
                         className='overflow-hidden rounded-lg cursor-pointer'
-                        onClick={() => handleVideoClick(video.videoId)}
+                        onClick={() => router.push(DYNAMIC_PATH.SHORTFORM_VIDEO(video.videoId))}
                         onMouseEnter={() => setHoverVideoId(video.videoId)}
                         onMouseLeave={() => setHoverVideoId(null)}
                     >
