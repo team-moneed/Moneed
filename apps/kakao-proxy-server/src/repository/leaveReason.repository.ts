@@ -1,4 +1,4 @@
-import { prisma } from '@/database/client';
+import prisma from '@/prisma/client';
 
 class LeaveReasonRepository {
     async createLeaveReason(reason: string) {

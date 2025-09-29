@@ -1,1 +1,1 @@
-export { default } from '@/screens/mypost/ui/MyPostPage';
+export { default } from '@/2_screens/mypost/ui/MyPostPage';

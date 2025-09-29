@@ -5,32 +5,32 @@ export interface KakaoUserInfo {
     connected_at: string;
     synched_at: string;
     properties: {
-        nickname: string;
-        profile_image: string;
-        thumbnail_image: string;
+        nickname?: string;
+        profile_image?: string;
+        // thumbnail_image: string;
     };
     kakao_account: {
         profile: {
-            nickname: string;
-            thumbnail_image_url: string;
-            profile_image_url: string;
+            nickname?: string;
+            // thumbnail_image_url: string;
+            profile_image_url?: string;
         };
-        age_range: string;
-        gender: 'male' | 'female';
-        name: string;
-        email: string;
-        birthyear: string;
-        birthday: string;
+        // age_range: string;
+        // gender: 'male' | 'female';
+        // name: string;
+        // email: string;
+        // birthyear: string;
+        // birthday: string;
     };
 }
 
 export interface KakaoTokenResponse {
     access_token: string;
-    token_type: string;
     refresh_token: string;
     expires_in: number;
-    scope: string;
     refresh_token_expires_in: number;
+    token_type: string;
+    scope: string;
     id_token: string;
 }
 

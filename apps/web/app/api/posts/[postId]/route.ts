@@ -1,12 +1,12 @@
-import { PostService } from '@/features/post/server';
-import { getCookie } from '@/shared/utils/cookie.server';
+import { PostService } from '@/4_features/post/server';
+import TokenCookie from '@/6_shared/utils/token.cookie';
 import { NextRequest, NextResponse } from 'next/server';
-import { UpdatePostRequest } from '@/features/post/model/post.type';
+import { UpdatePostRequest } from '@/4_features/post/model/post.type';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG, SUCCESS_MSG } from '@/shared/config/message';
+import { ERROR_MSG, SUCCESS_MSG } from '@/6_shared/config/message';
 import { ERROR_MSG as AUTH_ERROR_MSG } from '@moneed/auth';
 import { verifyToken } from '@moneed/auth';
-import { TOKEN_KEY } from '@/shared/config';
+import { TOKEN_KEY } from '@/6_shared/config';
 
 export const dynamic = 'force-dynamic';
 
@@ -28,7 +28,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ postId
 export async function DELETE(_: NextRequest, { params }: { params: Promise<{ postId: string }> }) {
     try {
         const { postId } = await params;
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }
@@ -63,7 +63,7 @@ export async function PUT(req: NextRequest, { params }: { params: Promise<{ post
             'prevThumbnailImageUrl',
         ) as UpdatePostRequest['prevThumbnailImageUrl'];
 
-        const accessToken = await getCookie(TOKEN_KEY.ACCESS_TOKEN);
+        const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
         if (!accessToken) {
             throw new ResponseError(401, AUTH_ERROR_MSG.NO_ACCESS_TOKEN);
         }

@@ -1,10 +1,16 @@
 import express from 'express';
 import { KakaoAuthService } from '@/service/kakaoAuth.service';
 import { verifyRequestTokens } from '@/utils/session';
-import { createToken } from '@moneed/auth';
+import { createToken, Provider } from '@moneed/auth';
 import { ResponseError } from '@moneed/utils';
-import { ERROR_MSG } from '@/constants/error';
+import { ERROR_MSG } from '@/constants/message';
 import { generateTempCode, consumeTempCode } from '@/utils/tempCode';
+import { fetchKakaoToken, fetchKakaoUserInfo, leaveKakao } from '@/api/kakao.api';
+import { AuthService } from '@/service/auth.service';
+import { User } from '@prisma/client';
+import { ProviderRepository } from '@/repository/provider.repository';
+import { AxiosError } from 'axios';
+import { UserRepository } from '@/repository/user.repository';
 
 const router = express.Router();
 
@@ -18,18 +24,23 @@ router.get('/login', async (req, res, next) => {
 
         const state = encodeURIComponent(process.env.KAKAO_STATE_TOKEN!);
         const nonce = encodeURIComponent(process.env.KAKAO_NONCE!);
-        const scope = [
-            'openid',
-            'profile_nickname',
-            'profile_image',
-            'gender',
-            'age_range',
-            'account_email',
-            'name',
-            'birthday',
-            'birthyear',
-        ];
-        const url = `${KAKAO_AUTH_BASE}/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&scope=${scope.join(',')}&state=${state}&nonce=${nonce}`;
+        // const scope = [
+        //     'openid',
+        //     'profile_nickname',
+        //     'profile_image',
+        //     'gender',
+        //     'age_range',
+        //     'account_email',
+        //     'name',
+        //     'birthday',
+        //     'birthyear',
+        // ];
+        /**
+         * 동의항목 추가 신청 통과 시 위 주석 해제 후 사용 (현재는 기본 동의항목만 사용)
+         * @docs https://developers.kakao.com/docs/latest/ko/app-setting/app#app-permission
+         */
+        // const scope = ['openid', 'profile_nickname', 'profile_image'];
+        const url = `${KAKAO_AUTH_BASE}/oauth/authorize?response_type=code&client_id=${REST_API_KEY}&redirect_uri=${REDIRECT_URI}&state=${state}&nonce=${nonce}`;
         return res.redirect(url);
     } catch (error) {
         next(error);
@@ -53,43 +64,78 @@ router.get('/callback', async (req, res, next) => {
             return res.redirect(`${baseUrl}/auth/error?error=invalid_state`);
         }
 
-        const kakaoAuthService = new KakaoAuthService();
-        const result = await kakaoAuthService.login({ code: code as string });
+        // const kakaoAuthService = new KakaoAuthService();
+        const authService = new AuthService();
+        // const result = await kakaoAuthService.login({ code: code as string });
 
-        if (result.success) {
-            const key = process.env.SESSION_SECRET;
-            if (!key) {
-                console.error(ERROR_MSG.SESSION_SECRET_NOT_SET);
-                throw new ResponseError(500, ERROR_MSG.INTERNAL_SERVER_ERROR);
-            }
-            const accessToken = await createToken({
-                payload: result.data.payload,
-                duration: process.env.JWT_ACCESS_EXPIRES_IN || '24h',
-                key,
-            });
-            const refreshToken = await createToken({
-                payload: result.data.payload,
-                duration: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
-                key,
-            });
+        // 1. 카카오 액세스 토큰 요청
+        const kakaoToken = await fetchKakaoToken(code as string);
+        // 2. 카카오 유저 정보 조회
+        const kakaoUserInfo = await fetchKakaoUserInfo(kakaoToken.access_token);
+        // 3. 기존 유저인지 확인
+        const existingUser = await authService.checkExistingUser({
+            provider: Provider.KAKAO,
+            providerUserId: kakaoUserInfo.id.toString(),
+        });
 
-            // 임시 코드 생성하여 토큰들 저장
-            const tempCode = generateTempCode({
-                accessToken,
-                refreshToken,
-                payload: result.data.payload,
-                isNewUser: result.data.isNewUser,
+        let user: User | undefined;
+        // 3-1. 기존 유저일 경우 로그인
+        if (existingUser.isExisting) {
+            user = await authService.signIn({
+                userId: existingUser.user.id,
+                kakaoToken,
             });
-
-            return res.redirect(`${baseUrl}/auth/callback?tempCode=${tempCode}`);
         } else {
-            return res.redirect(`${baseUrl}/auth/error?error=${result.error}`);
+            // 3-2. 기존 유저가 아닐 경우 회원가입
+            user = await authService.signUp({
+                provider: Provider.KAKAO,
+                providerUserId: kakaoUserInfo.id.toString(),
+                accessToken: kakaoToken.access_token,
+                refreshToken: kakaoToken.refresh_token,
+                accessTokenExpiresIn: new Date(Date.now() + kakaoToken.expires_in * 1000),
+                refreshTokenExpiresIn: new Date(Date.now() + kakaoToken.refresh_token_expires_in * 1000),
+            });
         }
+
+        // 4. 토큰 생성
+        const key = process.env.SESSION_SECRET;
+        const payload = {
+            id: user.id,
+            nickname: user.nickname,
+            profileImage: user.profileImage,
+            provider: Provider.KAKAO,
+        };
+        if (!key) {
+            console.error(ERROR_MSG.SESSION_SECRET_NOT_SET);
+            throw new ResponseError(500, ERROR_MSG.INTERNAL_SERVER_ERROR);
+        }
+        const accessToken = await createToken({
+            payload,
+            duration: process.env.JWT_ACCESS_EXPIRES_IN || '24h',
+            key,
+        });
+        const refreshToken = await createToken({
+            payload,
+            duration: process.env.JWT_REFRESH_EXPIRES_IN || '30d',
+            key,
+        });
+
+        // 5. 임시 코드 생성
+        const tempCode = generateTempCode({
+            accessToken,
+            refreshToken,
+            payload: payload,
+            isNewUser: !existingUser.isExisting,
+        });
+
+        // 6. 리다이렉트
+        return res.redirect(`${baseUrl}/auth/callback?tempCode=${tempCode}`);
     } catch (error) {
         if (error instanceof ResponseError) {
             return res.status(error.code).json({ message: error.message });
         }
-        next(error);
+        console.error('카카오 로그인 오류:', error);
+        return res.status(500).json({ message: ERROR_MSG.INTERNAL_SERVER_ERROR });
     }
 });
 
@@ -104,7 +150,7 @@ router.post('/logout', async (req, res, next) => {
         const userId = sessionResult.data.id;
 
         const kakaoAuthService = new KakaoAuthService();
-        const result = await kakaoAuthService.logout({ userId, response: res });
+        const result = await kakaoAuthService.logout({ userId });
 
         if (result.success) {
             return res.status(result.status).json({
@@ -132,22 +178,34 @@ router.post('/leave', async (req, res, next) => {
             throw sessionResult.error;
         }
         const userId = sessionResult.data.id;
-        const { reason } = req.body;
 
-        const kakaoAuthService = new KakaoAuthService();
-        const result = await kakaoAuthService.leave({ userId, reason, response: res });
+        const providerRepository = new ProviderRepository();
+        const userRepository = new UserRepository();
 
-        if (result.success) {
-            return res.status(result.status).json({
-                message: result.message,
-            });
-        } else {
-            throw new ResponseError(result.status, result.error);
+        // 1. provider 조회 (토큰, providerUserId)
+        const token = await providerRepository.getToken(Provider.KAKAO, userId);
+        const provider = await providerRepository.getProviderUserId(Provider.KAKAO, userId);
+        if (!token || !provider) {
+            throw new ResponseError(400, ERROR_MSG.KAKAO_PROVIDER_INFO_NOT_FOUND);
         }
+        // 2. 카카오 탈퇴
+        await leaveKakao({ accessToken: token.accessToken, providerUserId: provider.providerUserId });
+
+        // 3. 카카오 계정과 연결된 회원 계정 탈퇴
+        await userRepository.delete(userId);
+
+        return res.status(200).json({
+            message: '회원탈퇴 성공',
+        });
     } catch (error) {
         console.error('회원탈퇴 오류:', error);
         if (error instanceof ResponseError) {
             return res.status(error.code).json({ message: error.message });
+        }
+        if (error instanceof AxiosError) {
+            return res
+                .status(error.response?.status || 500)
+                .json({ message: error.response?.data || ERROR_MSG.INTERNAL_SERVER_ERROR });
         }
         next(error);
     }
@@ -159,7 +217,6 @@ router.post('/refresh', async (req, res, next) => {
         if (sessionResult.error) {
             throw sessionResult.error;
         }
-
         const userId = sessionResult.data.id;
 
         const kakaoAuthService = new KakaoAuthService();

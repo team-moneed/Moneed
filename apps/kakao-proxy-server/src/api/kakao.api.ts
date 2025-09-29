@@ -6,7 +6,7 @@ const kakaoUserInfoUrl = 'https://kapi.kakao.com/v2/user/me';
 const kakaoLogoutUrl = 'https://kapi.kakao.com/v1/user/logout';
 const kakaoLeaveUrl = 'https://kapi.kakao.com/v1/user/unlink';
 
-export const getKakaoToken = async (code: string) => {
+export const fetchKakaoToken = async (code: string) => {
     try {
         const data = {
             grant_type: 'authorization_code',
@@ -48,7 +48,7 @@ export const refreshKakaoToken = async (refreshToken: string) => {
     return res.data;
 };
 
-export const getKakaoUserInfo = async (accessToken: string) => {
+export const fetchKakaoUserInfo = async (accessToken: string) => {
     try {
         const res = await axios.get<KakaoUserInfo>(kakaoUserInfoUrl, {
             headers: {

@@ -1,2 +1,2 @@
 'use client';
-export { default } from '@/screens/error/ui/ErrorPage';
+export { default } from '@/2_screens/error/ui/ErrorPage';
