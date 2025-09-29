@@ -13,7 +13,7 @@ export async function GET(_: NextRequest, { params }: { params: Promise<{ videoI
         }
 
         const shortService = new ShortService();
-        const short = await shortService.getShortByVideoId({ videoId });
+        const short = await shortService.getSingleShorts({ videoId });
 
         if (!short) {
             return NextResponse.json({ error: ERROR_MSG.SHORT_NOT_FOUND }, { status: 404 });

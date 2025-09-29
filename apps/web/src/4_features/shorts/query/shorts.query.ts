@@ -15,7 +15,7 @@ export const useShort = ({ videoId = '' }: { videoId?: string }) => {
 
 export const useShorts = ({ videoId = '', limit = 10 }: { videoId?: string; limit?: number }) => {
     return useQuery({
-        queryKey: ['shorts', videoId, limit],
+        queryKey: ['shorts', videoId],
         queryFn: () => fetchShorts({ cursor: videoId, limit }),
         staleTime: untilMidnight,
         gcTime: untilMidnight,
@@ -24,7 +24,7 @@ export const useShorts = ({ videoId = '', limit = 10 }: { videoId?: string; limi
 
 export const useSuspenseShorts = ({ videoId = '', limit = 10 }: { videoId?: string; limit?: number }) => {
     return useSuspenseQuery({
-        queryKey: ['shorts', videoId, limit],
+        queryKey: ['shorts', videoId],
         queryFn: () => fetchShorts({ cursor: videoId, limit }),
         staleTime: untilMidnight,
         gcTime: untilMidnight,
@@ -33,8 +33,8 @@ export const useSuspenseShorts = ({ videoId = '', limit = 10 }: { videoId?: stri
 
 export const useInfiniteShorts = ({ cursor = '', limit = 20 }: { cursor?: string; limit?: number }) => {
     return useInfiniteQuery({
-        queryKey: ['infinite-shorts', cursor, limit],
-        queryFn: ({ pageParam = cursor }) => fetchShorts({ cursor: pageParam, limit }),
+        queryKey: ['shorts'],
+        queryFn: ({ pageParam }) => fetchShorts({ cursor: pageParam, limit }),
         initialPageParam: cursor,
         getNextPageParam: lastPage => (lastPage.length > 0 ? lastPage.at(-1)?.videoId : undefined),
         select: data => data.pages.flatMap(page => page),
@@ -45,8 +45,8 @@ export const useInfiniteShorts = ({ cursor = '', limit = 20 }: { cursor?: string
 
 export const useSuspenseInfiniteShorts = ({ cursor = '', limit = 20 }: { cursor?: string; limit?: number }) => {
     return useSuspenseInfiniteQuery({
-        queryKey: ['infinite-shorts', cursor, limit],
-        queryFn: ({ pageParam = cursor }) => fetchShorts({ cursor: pageParam, limit }),
+        queryKey: ['shorts'],
+        queryFn: ({ pageParam }) => fetchShorts({ cursor: pageParam, limit }),
         initialPageParam: cursor,
         getNextPageParam: lastPage => (lastPage.length > 0 ? lastPage.at(-1)?.videoId : undefined),
         select: data => data.pages.flatMap(page => page),
