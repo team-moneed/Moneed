@@ -1,5 +1,3 @@
-import MainNews from '@/2_screens/home/ui/MainNews';
-
 import Top3 from '@/2_screens/home/ui/Top3';
 import Link from 'next/link';
 import { SnackbarTrigger } from '@/6_shared/ui/Snackbar';
@@ -53,12 +51,12 @@ export default async function Home({ searchParams }: { searchParams: Promise<{ r
                     <Top3 />
                 </section>
 
-                <section>
+                {/* <section>
                     <div className='flex items-center gap-[.8rem] mb-[1.8rem]'>
                         <h2 className='text-moneed-black sm:text-h2'>주요 뉴스</h2>
                     </div>
                     <MainNews />
-                </section>
+                </section> */}
             </div>
             <Footer />
             <SnackbarTrigger reason={reason} />

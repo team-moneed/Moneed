@@ -25,6 +25,24 @@ MONEED 프로젝트의 모든 주요 변경사항이 이 파일에 기록됩니�
 
 ---
 
+## [1.2.0] - 2025-01-27
+
+### 추가됨
+
+#### 📺 YouTube API 및 Shorts 기능 개선
+
+- **YouTube API 리팩토링**: iframe 대신 썸네일 이미지 우선 로딩으로 네트워크 페이로드 감소
+- **새로운 컴포넌트 추가**:
+    - `ShortsCard.tsx` - 공통 YouTube shorts 컴포넌트
+    - `ShortsIframe.tsx` - YouTube iframe 컴포넌트
+    - `ShortformSection.tsx` - 새로운 섹션 컴포넌트
+
+#### 🎨 UI/UX 개선
+
+- **홈페이지 구조 개선**: 스크롤 캐로셀 구조 리팩토링
+
+---
+
 ## [1.1.0] - 2025-09-28
 
 ### 추가됨

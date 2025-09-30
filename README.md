@@ -14,44 +14,33 @@
 - [주요 기능](#주요-기능)
 - [기술 스택](#기술-스택)
 - [프로젝트 구조](#프로젝트-구조)
-- [시작하기](#시작하기)
-- [API 문서](#api-문서)
 
 ## 🚀 프로젝트 소개
 
 **Moneed**는 주식 투자자들을 위한 종합적인 커뮤니티 플랫폼입니다. 사용자들이 주식 정보를 공유하고, 투자 의견을 나누며, 실시간으로 시장 동향을 파악할 수 있도록 돕습니다.
 
-### 🎯 핵심 가치
-
-- **투명성**: 정확하고 신뢰할 수 있는 주식 정보 제공
-- **커뮤니티**: 투자자들 간의 활발한 정보 공유와 소통
-- **접근성**: 누구나 쉽게 사용할 수 있는 직관적인 인터페이스
-- **실시간성**: 최신 시장 동향과 주식 데이터 제공
-
 ## ✨ 주요 기능
 
 ### 🏠 커뮤니티
+<img width="1000" alt="커뮤니티 페이지" src="https://github.com/user-attachments/assets/8e15599d-b641-4a79-8e11-7c2cca895fa9" />
 
 - **Top 5**: 가장 인기 있는 종목 실시간 랭킹
 - **지금 뜨는 종목**: 급상승 주식 추천
-- **핫한 투표**: 커뮤니티 투표를 통한 시장 심리 파악
+- **핫한 투표**: 커뮤니티 투표를 통한 시장 심리 파악 (예정)
 - **인기 급상승 게시글**: 가장 활발한 토론 게시물
-
-### 📈 주식 정보
-
-- **실시간 주가 데이터**: 한국투자증권 API 연동
-- **종목별 커뮤니티**: 특정 주식에 대한 전용 토론 공간
-- **회사 정보**: 상세한 기업 분석 및 재무 데이터
-- **투표 시스템**: 종목에 대한 커뮤니티 의견 수집
+- **기업 데이터**: 기업 소개 및 실시간 주가 및 변동률 표시
 
 ### 💬 게시판
+<img width="1000" alt="게시글 페이지" src="https://github.com/user-attachments/assets/fd7df2c9-9e83-4a39-ad29-f99de6bf0dda" />
 
-- **게시글 작성/수정/삭제**: 풍부한 텍스트 에디터 지원
-- **댓글 시스템**: 실시간 댓글 및 대댓글 기능
-- **좋아요/조회수**: 게시글 인기도 측정
+- **게시글 작성/수정/삭제**: 게시글 CRUD
+- **댓글 시스템**: 실시간 댓글 기능
+- **좋아요**: 게시글 좋아요 기능 
 - **이미지 업로드**: AWS S3 연동 파일 저장
+- **랭킹 시스템**: [랭킹 알고리즘](https://dkswnkk.tistory.com/738) 기반 인기 급상승 게시글 표시
 
 ### 👤 사용자 관리
+<img width="1000" alt="마이 페이지" src="https://github.com/user-attachments/assets/72531c77-aeb1-4ce8-a77c-161689002f7a" />
 
 - **카카오 OAuth 로그인**: 간편한 소셜 로그인
 - **프로필 관리**: 닉네임, 프로필 이미지 설정
@@ -59,9 +48,10 @@
 - **회원 탈퇴**: 개인정보 보호를 위한 안전한 탈퇴
 
 ### 🎬 쇼츠 (Shorts)
+<img width="1000" alt="숏폼 페이지" src="https://github.com/user-attachments/assets/e5a40e0a-255c-4786-a873-4889aa111be0" />
 
-- **동영상 콘텐츠**: YouTube API 연동 영상 추천
-- **일일 업데이트**: 매일 새로운 투자 관련 영상 제공
+- **동영상 콘텐츠**: YouTube API 연동을 통한 투자 관련 영상 제공
+- **Cron Job을 이용한 일일 업데이트**(예정)
 
 ## 🛠 기술 스택
 
@@ -73,21 +63,18 @@
 - **State Management**: Zustand
 - **Data Fetching**: TanStack Query (React Query)
 - **Form Handling**: React Hook Form
-- **UI Components**: Custom Component Library
 
 ### Backend
 
 - **Web App**: Next.js API Routes
 - **Proxy Server**: Express.js (카카오 OAuth 처리)
 - **Language**: TypeScript
-- **Authentication**: JWT with Jose
-- **Session Management**: Custom JWT Implementation
+- **Authentication**: JWT
 
 ### Database & ORM
 
 - **Database**: PostgreSQL (Supabase)
-- **ORM**: Prisma
-- **Migrations**: Prisma Migrate
+- **ORM**: Prisma ORM
 
 ### External APIs
 
@@ -101,16 +88,13 @@
 - **Frontend**: Vercel
 - **Backend**: AWS EC2
 - **CI/CD**: GitHub Actions
-- **Container**: Docker
-- **Registry**: GitHub Container Registry
-- **Monitoring**: Google Analytics, Microsoft Clarity
 
 ### Development Tools
 
 - **Package Manager**: Yarn (Workspaces)
 - **Code Quality**: ESLint, Prettier
 - **Git Hooks**: Husky, lint-staged
-- **Type Checking**: TypeScript
+- **Type Checking**: TypeScript 
 
 ## 📁 프로젝트 구조
 
@@ -124,148 +108,61 @@ Moneed/
 │   │   │   ├── posts/             # 게시글 페이지
 │   │   │   ├── auth/              # 인증 페이지
 │   │   │   └── ...
-│   │   ├── src/                   # 소스 코드
-│   │   │   ├── entities/          # 도메인 엔티티
-│   │   │   ├── features/          # 기능별 모듈
-│   │   │   ├── screens/           # 페이지 컴포넌트
-│   │   │   ├── shared/            # 공유 컴포넌트/유틸
-│   │   │   └── app/               # 앱 설정
-│   │   └── prisma/                # 데이터베이스 스키마
+│   │   └── src/                   # 소스 코드
+│   │       ├── entities/          # 도메인 엔티티
+│   │       ├── features/          # 기능별 모듈
+│   │       ├── screens/           # 페이지 컴포넌트
+│   │       ├── shared/            # 공유 컴포넌트/유틸
+│   │       └── app/               # 앱 설정
 │   └── kakao-proxy-server/        # 카카오 OAuth 프록시 서버
-│       ├── src/
-│       │   ├── api/               # 외부 API 호출
-│       │   ├── middleware/        # Express 미들웨어
-│       │   ├── routes/            # API 라우트
-│       │   ├── service/           # 비즈니스 로직
-│       │   ├── repository/        # 데이터 접근 계층
-│       │   └── utils/             # 유틸리티 함수
-│       └── prisma/                # 데이터베이스 스키마
+│       └── src/
+│           ├── api/               # 외부 API 호출
+│           ├── middleware/        # Express 미들웨어
+│           ├── routes/            # API 라우트
+│           ├── service/           # 비즈니스 로직
+│           ├── repository/        # 데이터 접근 계층
+│           └── utils/             # 유틸리티 함수
 ├── packages/                      # 공유 패키지들
 │   └── shared/
 │       ├── auth/                  # 인증 관련 유틸
 │       ├── utils/                 # 공통 유틸리티
 │       └── utility-types/         # 타입 정의
 ├── docs/                          # 문서
-│   ├── DEPLOYMENT.md              # 배포 가이드
-│   └── monorepo_plan.md           # 모노레포 계획서
+│   └── CHANGELOG.md              # 배포 변경 내역
 └── vercel.json                    # Vercel 설정
 ```
 
 ### 아키텍처 다이어그램
 
+```mermaid
+flowchart TD
+    Client[Client]
+
+    subgraph Vercel["Vercel"]
+        Next[Next.js 서버]
+    end
+
+    subgraph EC2["AWS EC2"]
+        Express[Express 서버]
+    end
+
+    Client --> Next
+    Client --> Express
+
+    Next --> |API 호출| 한국투자증권[한국투자증권 API 서버]
+    Next --> |API 호출| Youtube[Youtube API 서버]
+    Next --> |파일 업로드| S3[AWS S3]
+    Next --> |DB 연동| Supabase[Supabase]
+    Next --> Express
+
+    Express --> |API 호출| Kakao[Kakao API 서버]
+
 ```
-┌─────────────────┐    ┌─────────────────┐    ┌─────────────────┐
-│   사용자 브라우저 │ ── │   Vercel (웹앱)  │ ── │  AWS EC2 (API)  │
-└─────────────────┘    └─────────────────┘    └─────────────────┘
-                              │                        │
-                              │                        │
-                       ┌─────────────────┐    ┌─────────────────┐
-                       │  GitHub Actions │    │  PostgreSQL DB  │
-                       │     (CI/CD)     │    │   (Supabase)    │
-                       └─────────────────┘    └─────────────────┘
-                              │
-                       ┌─────────────────┐
-                       │  External APIs  │
-                       │ • 한국투자증권    │
-                       │ • YouTube API   │
-                       │ • 카카오 OAuth   │
-                       │ • AWS S3        │
-                       └─────────────────┘
-```
-
-## 🚀 시작하기
-
-### 사전 요구사항
-
-- Node.js 20 이상
-- Yarn 패키지 매니저
-- PostgreSQL 데이터베이스 (Supabase 권장)
-- 카카오 개발자 계정
-- 한국투자증권 API 계정
-- YouTube API 키
-- AWS 계정 (S3, EC2)
-
-### 설치 및 실행
-
-1. **저장소 클론**
-
-```bash
-git clone https://github.com/your-username/moneed.git
-cd moneed
-```
-
-2. **의존성 설치**
-
-```bash
-yarn install
-```
-
-3. **환경변수 설정**
-
-```bash
-# 웹 앱 환경변수
-cp env-templates/web.env.template apps/web/.env
-
-# 카카오 프록시 서버 환경변수
-cp env-templates/kakao-proxy.env.template apps/kakao-proxy-server/.env
-```
-
-4. **공유 패키지 빌드**
-
-```bash
-yarn build:packages
-```
-
-5. **데이터베이스 설정**
-
-```bash
-# Prisma 클라이언트 생성
-yarn db:generate
-
-# 데이터베이스 마이그레이션
-yarn db:migrate
-
-# 시드 데이터 생성 (선택사항)
-yarn db:seed
-```
-
-6. **개발 서버 실행**
-
-```bash
-# 전체 애플리케이션 실행
-yarn dev
-
-# 개별 실행
-yarn dev:web        # 웹 앱만 (포트 3000)
-yarn dev:kakao      # 프록시 서버만 (포트 8000)
-```
-
-### 개발 서버 접속
-
-- **웹 애플리케이션**: http://localhost:3000
-- **카카오 프록시 서버**: http://localhost:8000
-- **헬스체크**: http://localhost:8000/health
-
-## 📚 API 문서
-
-### 웹 애플리케이션 API
-
-- **게시글 API**: `/api/posts/*`
-- **댓글 API**: `/api/comments/*`
-- **사용자 API**: `/api/users/*`
-- **주식 API**: `/api/stocks/*`
-- **쇼츠 API**: `/api/shorts/*`
-
-### 카카오 프록시 서버 API
-
-- **카카오 OAuth**: `/api/auth/kakao/*`
-- **헬스체크**: `/health`
 
 ### 개발 가이드라인
 
 - [Conventional Commits](https://www.conventionalcommits.org/) 규칙을 따릅니다
 - 코드 작성 전 ESLint 및 Prettier 설정을 확인하세요
-- 새로운 기능 추가 시 테스트를 작성하세요
 - 커밋 메시지는 한국어로 작성합니다
 
 ## 📞 문의
