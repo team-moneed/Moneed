@@ -22,8 +22,8 @@ export const REASONS: Record<string, SnackbarConfig> = {
     },
     logout: { message: '로그아웃 되었습니다.', variant: 'action', position: 'top' },
     leave: { message: '탈퇴가 완료되었습니다.', variant: 'action', position: 'top' },
-    post_created: { message: '게시글이 작성되었습니다.', variant: 'action', position: 'bottom' },
-    post_deleted: { message: '게시글이 삭제되었습니다.', variant: 'action', position: 'bottom' },
-    post_updated: { message: '게시글이 수정되었습니다.', variant: 'action', position: 'bottom' },
-    profile_updated: { message: '프로필이 변경되었습니다.', variant: 'action', position: 'bottom' },
+    post_created: { message: '게시글이 작성되었습니다.', variant: 'action', position: 'top' },
+    post_deleted: { message: '게시글이 삭제되었습니다.', variant: 'action', position: 'top' },
+    post_updated: { message: '게시글이 수정되었습니다.', variant: 'action', position: 'top' },
+    profile_updated: { message: '프로필이 변경되었습니다.', variant: 'action', position: 'top' },
 };
