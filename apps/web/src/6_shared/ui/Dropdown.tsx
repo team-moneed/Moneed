@@ -8,7 +8,7 @@ type DropdownProps = {
 };
 
 const Dropdown = ({ children, onClose }: DropdownProps) => {
-    const dropdownRef = useRef<HTMLDivElement>(null);
+    const dropdownRef = useRef<HTMLDivElement | null>(null);
 
     useEffect(() => {
         const handleOutsideClick = (e: MouseEvent) => {

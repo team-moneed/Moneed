@@ -4,7 +4,7 @@ import useSnackbarStore, { generateId } from '@/6_shared/store/useSnackbarStore'
 import { cva } from 'class-variance-authority';
 import { SnackbarConfig } from '@/6_shared/model/snackbar.type';
 import { cn } from '@/6_shared/utils/style';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import { useEffect, useState } from 'react';
 import { REASONS } from '@/6_shared/config/snackbar';
 
@@ -54,13 +54,17 @@ export function SnackbarProvider() {
 
     if (!portalRoot) return null;
 
-    return ReactDOM.createPortal(
-        <div className='flex items-center justify-center'>
-            {snackbars.map(snackbar => (
-                <SnackbarItem key={snackbar.id} snackbar={snackbar} />
-            ))}
-        </div>,
-        portalRoot,
+    return (
+        <>
+            {createPortal(
+                <div className='flex items-center justify-center'>
+                    {snackbars.map(snackbar => (
+                        <SnackbarItem key={snackbar.id} snackbar={snackbar} />
+                    ))}
+                </div>,
+                portalRoot,
+            )}
+        </>
     );
 }
 
