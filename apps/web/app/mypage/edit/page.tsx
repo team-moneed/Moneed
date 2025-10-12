@@ -2,14 +2,12 @@
 
 import EditProfileForm from '@/4_features/edit-profile/ui/EditProfileForm';
 import { useSuspenseUserInfo } from '@/4_features/edit-profile/model/query';
-import { use, useEffect } from 'react';
-import { REASONS } from '@/6_shared/config/snackbar';
-import useSnackbarStore from '@/6_shared/store/useSnackbarStore';
+import { use } from 'react';
 import { SnackbarTrigger } from '@/6_shared/ui/Snackbar';
 
-// export const dynamic = 'force-dynamic';
+export const dynamic = 'force-dynamic';
 
-const MyProfile = ({ searchParams }: { searchParams: Promise<{ reason: string }> }) => {
+const EditProfile = ({ searchParams }: { searchParams: Promise<{ reason: string }> }) => {
     const { data: user } = useSuspenseUserInfo();
     const { reason } = use(searchParams);
 
@@ -21,4 +19,4 @@ const MyProfile = ({ searchParams }: { searchParams: Promise<{ reason: string }>
     );
 };
 
-export default MyProfile;
+export default EditProfile;
