@@ -12,6 +12,10 @@ import Button from '@/6_shared/ui/Button/Button';
 import { DYNAMIC_PATH, PATH } from '@/6_shared/config';
 import { CreatePostForm } from '@/5_entities/post/model/post.type';
 import { PostMapper } from '@/5_entities/post';
+import ImagePreview from '@/4_features/write-post/ui/ImagePreview';
+import { compressImage, COMPRESSION_OPTIONS } from '@/6_shared/utils/optimizeImage';
+import Image from 'next/image';
+import iconSubmitPost from 'public/icon/icon-submit-post.svg';
 
 // TODO: 리팩토링 필요 (searchStockType 페이지로 꼭 이동해야 할까?)
 const WritePost = () => {
@@ -73,6 +77,15 @@ const WritePost = () => {
     const handleDeleteFile = () => {
         setImage(null);
         setPreviewImage(null);
+    };
+
+    const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const optimizedImage = await compressImage(file, COMPRESSION_OPTIONS.THUMBNAIL);
+            setImage(optimizedImage);
+            setPreviewImage(URL.createObjectURL(optimizedImage));
+        }
     };
 
     const handleFocus = (field: string) => {
@@ -167,30 +180,8 @@ const WritePost = () => {
                 <div
                     className={`h-[5.2rem] bg-white flex items-center justify-between transition-all duration-300 bottom-0 w-full`}
                 >
-                    <ImageUploader
-                        setImage={setImage}
-                        setPreviewUrl={setPreviewImage}
-                        preview={
-                            <div className='absolute flex gap-x-[9px] bottom-16 z-10'>
-                                {previewImage && (
-                                    <div className='relative size-[6rem]'>
-                                        <img
-                                            src={previewImage}
-                                            alt='thumbnail-preview'
-                                            className='object-cover w-full h-full'
-                                        />
-                                        <button
-                                            type='button'
-                                            onClick={() => handleDeleteFile()}
-                                            className='absolute top-0 right-0 bg-red-500 text-white rounded-full w-[20px] h-[20px] flex items-center justify-center'
-                                        >
-                                            x
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        }
-                    />
+                    <ImageUploader onChange={handleUploadFile} />
+                    {previewImage && <ImagePreview previewImage={previewImage} handleDeleteFile={handleDeleteFile} />}
                     <div className='text-right text-[1.4rem] text-moneed-gray-7 w-full mx-4'>
                         {content.length} / 1000자
                     </div>
@@ -198,11 +189,7 @@ const WritePost = () => {
                         className='rounded-full overflow-hidden aspect-square w-[3.6rem] bg-moneed-gray-6 cursor-pointer hover:bg-moneed-brand'
                         type='submit'
                     >
-                        <img
-                            src='/icon/icon-submit-post.svg'
-                            alt='submit'
-                            className='w-full h-full object-cover p-[.6rem]'
-                        />
+                        <Image src={iconSubmitPost} alt='submit' className='w-full h-full object-cover p-[.6rem]' />
                     </button>
                 </div>
             </form>

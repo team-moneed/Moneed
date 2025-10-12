@@ -45,6 +45,11 @@ export default function ShortformPage() {
                 ))}
             </div>
             {isFetchingNextPage && <ShortformPageSkeleton count={20} />}
+            {!hasNextPage && (
+                <div className='w-full h-96 flex items-center justify-center text-moneed-gray-500 text-2xl'>
+                    마지막 페이지입니다.
+                </div>
+            )}
             <div ref={ref} className='h-[1px]' />
         </div>
     );

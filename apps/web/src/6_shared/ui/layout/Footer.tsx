@@ -15,7 +15,7 @@ export default function Footer() {
     // 모바일 & 데스크톱 두 경우 모두 Footer를 표시하면 안되는 경로
     const hideFooterPaths = [
         REGEXP_PATH.SELECTSTOCKTYPE,
-        REGEXP_PATH.MYPROFILE,
+        REGEXP_PATH.EDITPROFILE,
         REGEXP_PATH.WRITEPOST,
         REGEXP_PATH.EDITPOST,
     ];

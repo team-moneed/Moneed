@@ -6,7 +6,7 @@ interface UseThrottleOptions {
 
 export function useThrottle<T extends (...args: any[]) => any>(callback: T, options: UseThrottleOptions) {
     const { delay } = options;
-    const timeoutRef = useRef<NodeJS.Timeout>();
+    const timeoutRef = useRef<NodeJS.Timeout | null>(null);
 
     const throttledCallback = useCallback(
         (...args: Parameters<T>) => {

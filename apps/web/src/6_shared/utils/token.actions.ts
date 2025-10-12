@@ -24,6 +24,7 @@ export async function setTokensInCookies(accessToken: string, refreshToken: stri
             path: '/',
             maxAge: 30 * 24 * 60 * 60, // 30일
         });
+        console.log('쿠키 저장 성공');
     } catch (error) {
         console.warn('쿠키 저장 실패:', error);
     }

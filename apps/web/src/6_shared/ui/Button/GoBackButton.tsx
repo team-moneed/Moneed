@@ -1,5 +1,7 @@
 import { ComponentPropsWithRef } from 'react';
 import { useRouter } from 'next/navigation';
+import Image from 'next/image';
+import arrowBackIcon from 'public/icon/icon-arrow-back.svg';
 
 type PropType = ComponentPropsWithRef<'button'>;
 
@@ -18,7 +20,7 @@ export default function GoBackButton(props: PropType) {
             onClick={handleGoBack}
             {...restProps}
         >
-            <img src='/icon/icon-arrow-back.svg' alt='뒤로가기' className='w-full h-full object-cover' />
+            <Image src={arrowBackIcon} alt='뒤로가기' className='w-full h-full object-cover' />
             {children}
         </button>
     );

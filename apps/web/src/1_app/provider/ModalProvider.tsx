@@ -1,7 +1,7 @@
 'use client';
 import { ModalContext, useModal } from '@/6_shared/hooks/useModal';
 import { ReactNode, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 
 export default function ModalProvider({ children }: { children: ReactNode }) {
     const [isOpen, setIsOpen] = useState(false);
@@ -18,10 +18,10 @@ export default function ModalProvider({ children }: { children: ReactNode }) {
     };
 
     return (
-        <ModalContext.Provider value={{ isOpen, content, openModal, closeModal }}>
+        <ModalContext value={{ isOpen, content, openModal, closeModal }}>
             {children}
             {isOpen && <Modal />}
-        </ModalContext.Provider>
+        </ModalContext>
     );
 }
 
@@ -34,13 +34,17 @@ function Modal() {
         }
     };
 
-    return ReactDOM.createPortal(
-        <div
-            className='fixed inset-0 bg-gray-900/50 flex items-center justify-center z-50'
-            onClick={handleBackdropClick}
-        >
-            {content}
-        </div>,
-        document.body,
+    return (
+        <>
+            {createPortal(
+                <div
+                    className='fixed inset-0 bg-gray-900/50 flex items-center justify-center z-50'
+                    onClick={handleBackdropClick}
+                >
+                    {content}
+                </div>,
+                document.body,
+            )}
+        </>
     );
 }

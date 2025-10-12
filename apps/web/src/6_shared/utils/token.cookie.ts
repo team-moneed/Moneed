@@ -26,6 +26,7 @@ export default class TokenCookie {
         cookieStore.delete(TOKEN_KEY.REFRESH_TOKEN);
     };
 
+    // 삭제 예정
     static async verifyRequestCookies(): Promise<SessionResult> {
         const accessToken = await TokenCookie.getCookie(TOKEN_KEY.ACCESS_TOKEN);
 

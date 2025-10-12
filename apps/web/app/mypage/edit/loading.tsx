@@ -1,6 +1,6 @@
 import Button from '@/6_shared/ui/Button/Button';
 
-export const MyProfileSkeleton = () => {
+const MyProfileSkeleton = () => {
     return (
         <div className='w-full max-w-[480px] px-6 mx-auto'>
             <div className='flex justify-center items-center rounded-full aspect-square w-56 mx-auto mt-24 relative'>
@@ -32,3 +32,7 @@ export const MyProfileSkeleton = () => {
         </div>
     );
 };
+
+export default function Loading() {
+    return <MyProfileSkeleton />;
+}
