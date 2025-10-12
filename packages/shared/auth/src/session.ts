@@ -1,6 +1,7 @@
 import { SignJWT, jwtVerify } from 'jose';
 import { SessionResult, TokenPayload } from './types/auth';
 import { JWSInvalid, JWTExpired } from 'jose/errors';
+import { ERROR_MSG } from './constants/error';
 
 const getEncodedKey = (key: string) => {
     return new TextEncoder().encode(key);
@@ -63,8 +64,14 @@ export async function createToken({
     return token;
 }
 
-export async function verifyToken({ jwt, key }: { jwt: string; key: string }): Promise<SessionResult> {
+export async function verifyToken({ jwt, key }: { jwt: string | null; key: string }): Promise<SessionResult> {
     try {
+        if (!jwt) {
+            return {
+                data: null,
+                error: new Error(ERROR_MSG.JWT_IS_NULL),
+            };
+        }
         const payload = await decrypt<TokenPayload>(jwt, key);
         return {
             data: payload,
