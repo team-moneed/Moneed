@@ -5,6 +5,12 @@ import { User } from '@prisma/client';
 export class UserRepository {
     private prisma = prisma;
 
+    async findById(userId: string): Promise<User | null> {
+        return this.prisma.user.findUnique({
+            where: { id: userId },
+        });
+    }
+
     async findFirst({ field, value }: { field: 'id' | 'nickname'; value: string }): Promise<User | null> {
         return this.prisma.user.findFirst({
             where: {

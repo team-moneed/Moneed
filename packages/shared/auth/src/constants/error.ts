@@ -6,4 +6,5 @@ export const ERROR_MSG = {
     NO_ACCESS_TOKEN: '액세스 토큰이 없습니다',
     NO_REFRESH_TOKEN: '리프레시 토큰이 없습니다',
     UNAUTHORIZED: '권한이 없습니다',
+    JWT_IS_NULL: 'JWT가 없습니다.',
 } as const;

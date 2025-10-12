@@ -42,6 +42,8 @@ const CategoryRankBox = ({ stock }: StockInfoProps) => {
                             src={stock.logoUrl ?? iconUs}
                             alt={stock.nameKo}
                             className='w-full h-full object-cover'
+                            width={24}
+                            height={24}
                         />
                     </div>
                     <span className='font-normal leading-[140%] text-[1.4rem] text-moneed-black'>{stock.nameKo}</span>

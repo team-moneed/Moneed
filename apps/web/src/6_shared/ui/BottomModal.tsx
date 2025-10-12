@@ -1,7 +1,7 @@
 'use client';
 
 import { ReactNode, useEffect, useState } from 'react';
-import ReactDOM from 'react-dom';
+import { createPortal } from 'react-dom';
 import { cn } from '@/6_shared/utils/style';
 
 type BottomModalProps = {
@@ -37,36 +37,38 @@ const BottomModal = ({ imageSrc, title, description, buttons, onClose, className
         e.stopPropagation();
     };
 
-    return ReactDOM.createPortal(
+    return (
         <>
-            <div
-                onClick={handleOutsideClick}
-                className={`fixed inset-0 bg-gray-900/50 z-50 flex items-end sm:items-center justify-center transition-opacity duration-300 ${
-                    isVisible ? 'opacity-100' : 'opacity-0'
-                }`}
-            >
+            {createPortal(
                 <div
-                    onClick={handleInsideClick}
-                    className={cn(
-                        'bg-white w-200 h-176 px-[2rem] pt-[2.8rem] pb-[2.4rem] rounded-t-[1.6rem] sm:rounded-[1.6rem] shadow-lg transform transition-transform duration-300',
-                        isVisible ? 'translate-y-0' : 'translate-y-full',
-                        className,
-                    )}
+                    onClick={handleOutsideClick}
+                    className={`fixed inset-0 bg-gray-900/50 z-50 flex items-end sm:items-center justify-center transition-opacity duration-300 ${
+                        isVisible ? 'opacity-100' : 'opacity-0'
+                    }`}
                 >
-                    {imageSrc && (
-                        <img src={imageSrc} alt='모달 이미지' className='w-48 aspect-square  mb-[.8rem] mx-auto' />
-                    )}
+                    <div
+                        onClick={handleInsideClick}
+                        className={cn(
+                            'bg-white w-200 h-176 px-[2rem] pt-[2.8rem] pb-[2.4rem] rounded-t-[1.6rem] sm:rounded-[1.6rem] shadow-lg transform transition-transform duration-300',
+                            isVisible ? 'translate-y-0' : 'translate-y-full',
+                            className,
+                        )}
+                    >
+                        {imageSrc && (
+                            <img src={imageSrc} alt='모달 이미지' className='w-48 aspect-square  mb-[.8rem] mx-auto' />
+                        )}
 
-                    {title}
-                    {description}
+                        {title}
+                        {description}
 
-                    <div className='mt-[2.4rem] flex flex-col justify-center items-center w-full gap-[.8rem]'>
-                        {buttons}
+                        <div className='mt-[2.4rem] flex flex-col justify-center items-center w-full gap-[.8rem]'>
+                            {buttons}
+                        </div>
                     </div>
-                </div>
-            </div>
-        </>,
-        document.body,
+                </div>,
+                document.body,
+            )}
+        </>
     );
 };
 
