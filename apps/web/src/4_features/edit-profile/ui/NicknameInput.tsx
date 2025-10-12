@@ -33,7 +33,7 @@ export default function NicknameInput({ nickname, onChange }: NicknameInputProps
         checkDuplication(e.target.value);
         const input = e.currentTarget;
 
-        if (e.target.value.trim().length < 10 && input.validity.valid) {
+        if (e.target.value.trim().length >= 2 && e.target.value.trim().length <= 10 && input.validity.valid) {
             setIsValid(true);
             return;
         }
