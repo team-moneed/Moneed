@@ -30,7 +30,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
                     ></iframe>
                 </noscript> */}
 
-                <div id='root' className='mx-auto max-w-512'>
+                <div id='root' className='mx-auto max-w-512 h-full'>
                     <QueryClientProvider>
                         <ModalProvider>
                             {children}

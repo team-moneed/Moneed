@@ -12,6 +12,8 @@ import EditPostSkeleton from '@/6_shared/ui/Skeletons/EditPostSkeleton';
 import { useSuspensePost } from '@/4_features/post/query';
 import { DYNAMIC_PATH } from '@/6_shared/config';
 import iconSubmitPost from '/public/icon/icon-submit-post.svg';
+import { compressImage, COMPRESSION_OPTIONS } from '@/6_shared/utils/optimizeImage';
+import ImagePreview from '@/4_features/edit-post/ui/ImagePreview';
 
 export interface UpdatePostField {
     title: string;
@@ -24,6 +26,15 @@ const EditPostContent = ({ postId }: { postId: string }) => {
 
     const [image, setImage] = useState<File | string | null>(post.thumbnailImage ?? null);
     const [previewImage, setPreviewImage] = useState<string | null>(post.thumbnailImage ?? null);
+
+    const handleUploadFile = async (e: React.ChangeEvent<HTMLInputElement>) => {
+        const file = e.target.files?.[0];
+        if (file) {
+            const optimizedImage = await compressImage(file, COMPRESSION_OPTIONS.THUMBNAIL);
+            setImage(optimizedImage);
+            setPreviewImage(URL.createObjectURL(optimizedImage));
+        }
+    };
 
     const {
         register,
@@ -130,30 +141,8 @@ const EditPostContent = ({ postId }: { postId: string }) => {
                     className='w-full h-full flex-grow-1 py-[1.6rem] text-[1.6rem] font-normal leading-[140%] placeholder:text-moneed-gray-7 focus:outline-none resize-none'
                 />
                 <div className='h-[5.2rem] bg-white flex items-center justify-between transition-all duration-300 bottom-0 w-full'>
-                    <ImageUploader
-                        setImage={setImage}
-                        setPreviewUrl={setPreviewImage}
-                        preview={
-                            <div className='absolute flex gap-x-[9px] bottom-16 z-10'>
-                                {previewImage && (
-                                    <div className='relative size-[6rem]'>
-                                        <Image
-                                            src={previewImage}
-                                            alt='thumbnail-preview'
-                                            className='object-cover w-full h-full'
-                                        />
-                                        <button
-                                            type='button'
-                                            onClick={() => handleDeleteFile()}
-                                            className='absolute top-0 right-0 bg-red-500 text-white rounded-full w-[20px] h-[20px] flex items-center justify-center'
-                                        >
-                                            x
-                                        </button>
-                                    </div>
-                                )}
-                            </div>
-                        }
-                    />
+                    <ImageUploader onChange={handleUploadFile} />
+                    {previewImage && <ImagePreview previewImage={previewImage} handleDeleteFile={handleDeleteFile} />}
                     <div className='text-right text-[1.4rem] text-moneed-gray-7 w-full mx-4'>
                         {content.length} / 1000자
                     </div>
