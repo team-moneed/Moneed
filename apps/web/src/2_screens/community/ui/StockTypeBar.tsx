@@ -38,7 +38,7 @@ export default function StockTypeBar() {
         <div className='relative'>
             <div className='flex gap-4 mb-6 overflow-x-auto whitespace-nowrap items-center'>
                 <Link href={PATH.SELECTSTOCKTYPE} className='shrink-0'>
-                    <Icon iconUrl='/icon/icon-addcircle.svg' width={30} height={30} />
+                    <Icon iconUrl='/icon/plus-circle.svg' width={30} height={30} />
                 </Link>
                 <ChipLink label='전체' active={symbol ? false : true} href={PATH.COMMUNITY} />
                 {stocks?.map(stock => (
